@@ -1,0 +1,5 @@
+ 
+ Split tests: rms_n([delta mean]/sd) n={2,3,4,5}:
+ rms_n is the rms using the total samples split into n subsets
+  1   0.2340   0.2580   0.2563   0.2553  m_\chi (GeV)
+  2   0.1221   0.1410   0.1365   0.1396  log[<\sigma v> (10^{27} cm^3 s^{-1})]

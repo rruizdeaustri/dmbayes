@@ -1,0 +1,29 @@
+-------
+A FEW THINGS...
+-------
+Remember to change nestwrap.f90 around line 111 in the future for 10D background scans (see !CS comment)
+-------
+To be able to run Diver, population size NP has to be a multiple of both the number of point sources and the number of mpi processes
+-------
+To be able to compile GetPlots, add fermi_ptsrc.o to (PLOTFILES) in the Makefile on the svn
+-------
+There is a problem with system call in driver.f90 on HPC with mpif90... Does not impact Multinest and Driver though.
+------
+
+
+Follow up files :
+
+27modes_above_nullev.txt : 4 of the 31 modes found by MN RunI were dismissed by Null evidence : THE ONE WHICH IS USED IN MY RUNS.
+46PSafterMNRunIallmodes.txt : all 31 modes are kept for follow up in this one
+
+******Code modifications******
+Slightly changed the way to include mock point sources in fermi_ini.f90 to make it look more clear
+
+Changed GC_BG interpolation into a function stored in fermi_ini.f90 - also INTERPOLATION and INTERPOLATION1D subroutines have been moved to fermi_ini.f90 since they were needed by my GC_BG_map_rescaled function.
+
+hardcoded point sources found by MN first run and fitted by Diver first run to include them in the model for MN second run (now commented)
+
+changed diverwrap.f90 (line160 thereabout) so as to help individuals fall into allowed l,b range : points ouside the range no longer have all LogLike=LogZero but LogLike = LogZero*(1 + distance from allowed square in l,b space)
+**********
+
+Added a few test maps of the new BG function in for_the_record/figures/BG_function_tests/ : Data map with the new function for BG and with the old way of doing it, to check I have the same;  Model map when hardcoding the 26 point sources fitted by Diver, and a BG map when varying the BG parameters in the function, to check I have something different (more important background here, as I modified the BG parameters in order to increase the flux.)

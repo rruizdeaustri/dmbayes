@@ -1,0 +1,13 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:54 2016
+        MODULE DMHAYIELDF__genmod
+          INTERFACE 
+            FUNCTION DMHAYIELDF(MNEU,EMUTHR,CH,YIELDK,ISTAT)
+              REAL(KIND=8) :: MNEU
+              REAL(KIND=8) :: EMUTHR
+              INTEGER(KIND=4) :: CH
+              INTEGER(KIND=4) :: YIELDK
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DMHAYIELDF
+            END FUNCTION DMHAYIELDF
+          END INTERFACE 
+        END MODULE DMHAYIELDF__genmod

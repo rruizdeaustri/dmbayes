@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:25 2016
+        MODULE DSLOWCASE__genmod
+          INTERFACE 
+            SUBROUTINE DSLOWCASE(A)
+              CHARACTER(*) :: A
+            END SUBROUTINE DSLOWCASE
+          END INTERFACE 
+        END MODULE DSLOWCASE__genmod

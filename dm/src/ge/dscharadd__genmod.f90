@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:39 2016
+        MODULE DSCHARADD__genmod
+          INTERFACE 
+            SUBROUTINE DSCHARADD(STR,ADD)
+              CHARACTER(*) :: STR
+              CHARACTER(*) :: ADD
+            END SUBROUTINE DSCHARADD
+          END INTERFACE 
+        END MODULE DSCHARADD__genmod

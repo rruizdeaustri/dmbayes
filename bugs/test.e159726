@@ -1,0 +1,63 @@
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+--------------------------------------------------------------------------
+The OpenFabrics (openib) BTL failed to initialize while trying to
+allocate some locked memory.  This typically can indicate that the
+memlock limits are set too low.  For most HPC installations, the
+memlock limits should be set to "unlimited".  The failure occured
+here:
+
+  Local host:    node39.cluster.tld
+  OMPI source:   btl_openib_component.c:1066
+  Function:      ompi_free_list_init_ex_new()
+  Device:        mthca0
+  Memlock limit: 32768
+
+You may need to consult with your system administrator to get this
+problem fixed.  This FAQ entry on the Open MPI web site may also be
+helpful:
+
+    http://www.open-mpi.org/faq/?category=openfabrics#ib-locked-pages
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   node39.cluster.tld
+  Local device: mthca0
+--------------------------------------------------------------------------
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+[node47.cluster.tld:04894] 7 more processes have sent help message help-mpi-btl-openib.txt / init-fail-no-mem
+[node47.cluster.tld:04894] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[node47.cluster.tld:04894] 7 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+mpirun: killing job...
+
+mpirun: abort is already in progress...hit ctrl-c again to forcibly terminate
+
+--------------------------------------------------------------------------
+mpirun was unable to cleanly terminate the daemons on the nodes shown
+below. Additional manual cleanup may be required - please refer to
+the "orte-clean" tool for assistance.
+--------------------------------------------------------------------------
+	node46
+	node45
+	node44
+	node43
+	node42
+	node40
+	node41
+	node39
+	node38
+	node37

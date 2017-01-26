@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:09 2016
+        MODULE DSHRMUDIFF__genmod
+          INTERFACE 
+            FUNCTION DSHRMUDIFF(JPSI,EMU,DNSIGMA,ISTAT)
+              REAL(KIND=8) :: JPSI
+              REAL(KIND=8) :: EMU
+              REAL(KIND=8) :: DNSIGMA
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DSHRMUDIFF
+            END FUNCTION DSHRMUDIFF
+          END INTERFACE 
+        END MODULE DSHRMUDIFF__genmod

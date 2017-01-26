@@ -1,0 +1,32 @@
+
+
+- The IRFs verison is setup in the ini file
+ 
+- The number of pixels to convolve is set in the ini file.
+ What is the diff. between GC_outerPix and GC_corePix ?
+
+- Data are giving in fits format but I don't understand. The 
+data fix everything
+
+- What are the data in the sim (down)
+
+- The routine for syntetic data is called Initialize_Synthetic data 
+ and for PS is called Fermi_InitPtSrc in fermi_ini. There I have add a goto 
+ to add mick PSs by hand !!!!
+
+- The GC ROI is from -7.5 to 7.5: The energy limits for Ps is from 1 GeV to 100 GeV in the catalog 
+
+- But in the code are hardcored Ebottom and Etop ??? These are used 
+for the integrated flux.
+
+- Everything in terms of pixels, energy bins are given by the inits obs 
+file (readDM). Number of pixels is an input and the size is fixed (0.25)
+
+
+- Where/how are/go the observations ?
+ 
+*******************************
+
+- There is also the generation of mock data for the backgrounds associated 
+with the 3 grid point of the templates (fermi_initbg)
+

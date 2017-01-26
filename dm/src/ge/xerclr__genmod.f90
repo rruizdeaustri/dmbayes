@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE XERCLR__genmod
+          INTERFACE 
+            SUBROUTINE XERCLR
+            END SUBROUTINE XERCLR
+          END INTERFACE 
+        END MODULE XERCLR__genmod

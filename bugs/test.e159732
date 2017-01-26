@@ -1,0 +1,89 @@
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+--------------------------------------------------------------------------
+The OpenFabrics (openib) BTL failed to initialize while trying to
+allocate some locked memory.  This typically can indicate that the
+memlock limits are set too low.  For most HPC installations, the
+memlock limits should be set to "unlimited".  The failure occured
+here:
+
+  Local host:    node39.cluster.tld
+  OMPI source:   btl_openib_component.c:1066
+  Function:      ompi_free_list_init_ex_new()
+  Device:        mthca0
+  Memlock limit: 32768
+
+You may need to consult with your system administrator to get this
+problem fixed.  This FAQ entry on the Open MPI web site may also be
+helpful:
+
+    http://www.open-mpi.org/faq/?category=openfabrics#ib-locked-pages
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   node39.cluster.tld
+  Local device: mthca0
+--------------------------------------------------------------------------
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+[node47.cluster.tld:13345] 7 more processes have sent help message help-mpi-btl-openib.txt / init-fail-no-mem
+[node47.cluster.tld:13345] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[node47.cluster.tld:13345] 7 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+Jobs/sub_job.sh: line 5: 13352 Segmentation fault      (core dumped) ./bin/dmbayes_chord step1_chord_mps.ini >chains/log_chord.out
+[node46.cluster.tld][[16524,1],11][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node45.cluster.tld][[16524,1],18][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node44.cluster.tld][[16524,1],24][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node42.cluster.tld][[16524,1],45][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node43.cluster.tld][[16524,1],32][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)[node40.cluster.tld][[16524,1],48][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)[node41.cluster.tld][[16524,1],58][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node39.cluster.tld][[16524,1],64][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node37.cluster.tld][[16524,1],80][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)[node38.cluster.tld][[16524,1],78][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node46.cluster.tld][[16524,1],12][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node45.cluster.tld][[16524,1],19][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node44.cluster.tld][[16524,1],31][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node42.cluster.tld][[16524,1],47][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] 
+
+[node41.cluster.tld][[16524,1],63][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node39.cluster.tld][[16524,1],65][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node37.cluster.tld][[16524,1],82][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node38.cluster.tld][[16524,1],77][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+--------------------------------------------------------------------------
+mpirun has exited due to process rank 0 with PID 13346 on
+node node47.cluster.tld exiting without calling "finalize". This may
+have caused other processes in the application to be
+terminated by signals sent by mpirun (as reported here).
+--------------------------------------------------------------------------
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node45.cluster.tld][[16524,1],21][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node43.cluster.tld][[16524,1],35][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node40.cluster.tld][[16524,1],50][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node39.cluster.tld][[16524,1],71][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] 
+[node38.cluster.tld][[16524,1],73][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node45.cluster.tld][[16524,1],17][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node40.cluster.tld][[16524,1],51][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node45.cluster.tld][[16524,1],22][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node44.cluster.tld][[16524,1],28][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node43.cluster.tld][[16524,1],37][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node39.cluster.tld][[16524,1],69][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] 
+[node38.cluster.tld][[16524,1],76][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node43.cluster.tld][[16524,1],39][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] 
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+
+[node44.cluster.tld][[16524,1],27][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node43.cluster.tld][[16524,1],33][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node40.cluster.tld][[16524,1],52][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] 
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node40.cluster.tld][[16524,1],55][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node43.cluster.tld][[16524,1],38][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+[node40.cluster.tld][[16524,1],54][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] [node43.cluster.tld][[16524,1],36][btl_tcp_frag.c:216:mca_btl_tcp_frag_recv] mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)mca_btl_tcp_frag_recv: readv failed: Connection reset by peer (104)
+

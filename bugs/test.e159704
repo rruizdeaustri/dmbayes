@@ -1,0 +1,193 @@
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+--------------------------------------------------------------------------
+The OpenFabrics (openib) BTL failed to initialize while trying to
+allocate some locked memory.  This typically can indicate that the
+memlock limits are set too low.  For most HPC installations, the
+memlock limits should be set to "unlimited".  The failure occured
+here:
+
+  Local host:    node39.cluster.tld
+  OMPI source:   btl_openib_component.c:1066
+  Function:      ompi_free_list_init_ex_new()
+  Device:        mthca0
+  Memlock limit: 32768
+
+You may need to consult with your system administrator to get this
+problem fixed.  This FAQ entry on the Open MPI web site may also be
+helpful:
+
+    http://www.open-mpi.org/faq/?category=openfabrics#ib-locked-pages
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING: There was an error initializing an OpenFabrics device.
+
+  Local host:   node39.cluster.tld
+  Local device: mthca0
+--------------------------------------------------------------------------
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+libibverbs: Warning: RLIMIT_MEMLOCK is 32768 bytes.
+    This will severely limit memory registrations.
+[node47.cluster.tld:31344] 7 more processes have sent help message help-mpi-btl-openib.txt / init-fail-no-mem
+[node47.cluster.tld:31344] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+[node47.cluster.tld:31344] 7 more processes have sent help message help-mpi-btl-openib.txt / error in device init
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000507F56  feedback_module_m         278  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000508818  feedback_module_m         288  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000507F56  feedback_module_m         278  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000508818  feedback_module_m         288  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000507F56  feedback_module_m         278  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000508818  feedback_module_m         288  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000507F56  feedback_module_m         278  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: error (63): output conversion error, unit 6, file stdout
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA76E9  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE011314  Unknown               Unknown  Unknown
+dmbayes_chord      0000000000508818  feedback_module_m         288  feedback.f90
+dmbayes_chord      00000000004BB561  nested_sampling_m         265  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+forrtl: severe (408): fort: (3): Subscript #4 of the array BG_DATABASE has value 0 which is less than the lower bound of 1
+
+Image              PC                Routine            Line        Source             
+libintlc.so.5      00002AAAAEC4B9AA  Unknown               Unknown  Unknown
+libintlc.so.5      00002AAAAEC4A4A6  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAAE03803C  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8282  Unknown               Unknown  Unknown
+libifcoremt.so.5   00002AAAADFA8803  Unknown               Unknown  Unknown
+dmbayes_chord      000000000047C05C  fermi_bg_mp_gener         520  fermi_bg.f90
+dmbayes_chord      000000000049BEB2  calclike_mp_getlo         110  calclike.f90
+dmbayes_chord      00000000004B00CA  nestwrapper_mp_lo         161  nestwrap.f90
+dmbayes_chord      00000000004FDC06  calculate_module_          31  calculate.f90
+dmbayes_chord      00000000005005FC  chordal_modulesli         265  chordal_sampling.f90
+dmbayes_chord      0000000000500942  chordal_modulesli         281  chordal_sampling.f90
+dmbayes_chord      0000000000500942  chordal_modulesli         281  chordal_sampling.f90
+dmbayes_chord      0000000000500158  chordal_module_mp         232  chordal_sampling.f90
+dmbayes_chord      00000000004FF2ED  chordal_module_mp          81  chordal_sampling.f90
+dmbayes_chord      00000000004B9D3A  nested_sampling_m         371  nested_sampling.F90
+dmbayes_chord      00000000004AF7B1  nestwrapper_mp_ne          66  nestwrap.f90
+dmbayes_chord      00000000004B1918  MAIN__                    261  driver_chord.f90
+dmbayes_chord      000000000042D31C  Unknown               Unknown  Unknown
+libc.so.6          0000003072A1D8A4  Unknown               Unknown  Unknown
+dmbayes_chord      000000000042D229  Unknown               Unknown  Unknown
+--------------------------------------------------------------------------
+mpirun has exited due to process rank 1 with PID 31346 on
+node node47.cluster.tld exiting without calling "finalize". This may
+have caused other processes in the application to be
+terminated by signals sent by mpirun (as reported here).
+--------------------------------------------------------------------------

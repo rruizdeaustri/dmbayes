@@ -1,0 +1,11 @@
+Attached are a simulated count map cube and exposure map cube for an NFW 
+profile with a one year Fermi observation.  I used the same dark matter 
+model as before but required a similar total gamma-ray flux, which just 
+pumps up the annihilation cross-section.  This way the statistics should 
+be good enough.
+
+Here are the NFW parameters:
+r0 = 20 kpc
+rho_loc = 0.3 GeV/cm^3
+r_sun = 8 kpc
+(alpha,beta,gamma) = (1,3,1)

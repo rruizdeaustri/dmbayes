@@ -1,0 +1,260 @@
+DEFINE TeX_strings 1
+DEFINE default_font rm
+expand 0.8
+define x_gutter 0.9
+define y_gutter 0.9
+define lw_st 3 lweight $lw_st
+define lt_ref 0 define ct_ref  "black"
+define lt_mean 1 define ct_mean  "green"
+define lt_bf 2 define ct_bf  "blue"
+define lt_prof 3 define ct_prof  "blue"
+
+###### data loading  ########
+data "../../hpc_chains/bb_sim_rec.txt"
+read {ch0chisq 2  ch0y3 3 ch0y4 4 ch0y5 5 ch0y9 9 ch0y10 10 ch0y11 11 ch0y12 12 ch0y22 22}
+set ch0n =1,DIMEN(ch0chisq)
+set ch0m = ch0n % 10  set ch0nn = ch0n IF(ch0m == 0)
+set ch0chisqyy = 2*ch0chisq IF(ch0m == 0)
+set ch0yy3 = ch0y3 IF(ch0m == 0)
+set ch0yy4 = ch0y4 IF(ch0m == 0)
+set ch0yy5 = ch0y5 IF(ch0m == 0)
+set ch0yy9 = ch0y9 IF(ch0m == 0)
+set ch0yy10 = ch0y10 IF(ch0m == 0)
+set ch0yy11 = ch0y11 IF(ch0m == 0)
+set ch0yy12 = ch0y12 IF(ch0m == 0)
+set ch0yy22 = ch0y22 IF(ch0m == 0)
+device postfile ../bb_sim_rec/bb_sim_rec.chain_loc1.ps
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   1   4
+limits ch1nn ch1yy3
+ltype 0 ctype red con ch1nn ch1yy3
+ltype 0 ctype black
+ylabel m_\chi (GeV)
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.33800E+02    0.33800E+02 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.68366E+02    0.68366E+02 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.60794E+02    0.60794E+02 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy3 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   2   4
+limits ch1nn ch1yy4
+ltype 0 ctype red con ch1nn ch1yy4
+ltype 0 ctype black
+ylabel log[<\sigma v> (10^{27} cm^3 s^{-1})]
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.27520E+01    0.27520E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.22004E+01    0.22004E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.21381E+01    0.21381E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy4 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   1   3
+limits ch1nn ch1yy5
+ltype 0 ctype red con ch1nn ch1yy5
+ltype 0 ctype black
+ylabel BR_{b \bar{b}}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.92400E+00    0.92400E+00 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.70206E-01    0.70206E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.11080E-02    0.11080E-02 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy5 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   2   3
+limits ch1nn ch1yy9
+ltype 0 ctype red con ch1nn ch1yy9
+ltype 0 ctype black
+ylabel BR_{e^+ e^-}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {   -0.40000E+01   -0.40000E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.95309E-01    0.95309E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.32231E-01    0.32231E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy9 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   1   2
+limits ch1nn ch1yy10
+ltype 0 ctype red con ch1nn ch1yy10
+ltype 0 ctype black
+ylabel BR_{\mu^+ \mu^-}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {   -0.40000E+01   -0.40000E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.54049E-01    0.54049E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.93130E-02    0.93130E-02 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy10 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   2   2
+limits ch1nn ch1yy11
+ltype 0 ctype red con ch1nn ch1yy11
+ltype 0 ctype black
+ylabel BR_{c \bar{c}}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {   -0.40000E+01   -0.40000E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.20611E+00    0.20611E+00 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.26285E+00    0.26285E+00 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy11 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   1   1
+limits ch1nn ch1yy12
+ltype 0 ctype red con ch1nn ch1yy12
+ltype 0 ctype black
+ylabel BR_{g g}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {   -0.40000E+01   -0.40000E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.11281E-01    0.11281E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.52602E-04    0.52602E-04 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy12 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   2   4   2   1
+limits ch1nn ch1yy22
+ltype 0 ctype red con ch1nn ch1yy22
+ltype 0 ctype black
+ylabel BR_{\tau^+\tau^-}
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.76000E-01    0.76000E-01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.56304E+00    0.56304E+00 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.69444E+00    0.69444E+00 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {      1000      1000 } 
+vecminmax  ch1yy22 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+
+###### Legend  ########
+window 1 1 1 1 location 2500 32000 3500 32000 lim 0 1 0 1
+ltype 0 ctype black
+relocate  $(0.01+.00000E+00) .10000E+01
+putlabel 6 " CHAIN #"1
+ltype $lt_ref ctype $ct_ref
+relocate  $(0.01+.23000E+00) .10000E+01
+draw  $(0.01+.33000E+00) .10000E+01
+putlabel 6 "  Ref point"
+ltype $lt_mean ctype $ct_mean
+relocate  $(0.01+.46000E+00) .10000E+01
+draw  $(0.01+.56000E+00) .10000E+01
+putlabel 6 "  mean"
+ltype $lt_bf ctype $ct_bf
+relocate  $(0.01+.69000E+00) .10000E+01
+draw  $(0.01+.79000E+00) .10000E+01
+putlabel 6 "  best fit"

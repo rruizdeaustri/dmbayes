@@ -1,0 +1,88 @@
+<source_library title="GC sources">
+
+<source name="gc1" flux="4.1175846034e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.30709688"/>
+           </particle>
+           <celestial_dir ra="265.0865" dec="-30.9"/>
+        </spectrum>
+</source>
+
+
+<source name="gc2" flux="7.46574694512e-04">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.162174155"/>
+           </particle>
+           <celestial_dir ra="263.0193" dec="-29.9535"/>
+        </spectrum>
+</source>
+
+
+<source name="gc3" flux="2.20966678782e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.415963742"/>
+           </particle>
+           <celestial_dir ra="264.6488" dec="-26.9368"/>
+        </spectrum>
+</source>
+
+
+<source name="gc4" flux="1.11898091967e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.241245425"/>
+           </particle>
+           <celestial_dir ra="267.0956" dec="-29.2736"/>
+        </spectrum>
+</source>
+
+
+<source name="gc5" flux="2.3645606461e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.233349055"/>
+           </particle>
+           <celestial_dir ra="266.9183" dec="-28.3354"/>
+        </spectrum>
+</source>
+
+<source name="gc6" flux="2.12960925931e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.296132564"/>
+           </particle>
+           <celestial_dir ra="266.6909" dec="-32.5552"/>
+        </spectrum>
+</source>
+
+<source name="gc7" flux="4.14203333712e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.230562592"/>
+           </particle>
+           <celestial_dir ra="266.6174" dec="-28.818"/>
+        </spectrum>
+</source>
+
+<source name="gc8" flux="9.46220800583e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.256700257"/>
+           </particle>
+           <celestial_dir ra="266.4194" dec="-29.0139"/>
+        </spectrum>
+</source>
+
+<source name="gc9" flux="2.52730705103e-03">
+        <spectrum escale="MeV">
+           <particle name="gamma">
+              <power_law emin="100.0" emax="100000." gamma="2.280391645"/>
+           </particle>
+           <celestial_dir ra="266.0041" dec="-29.5325"/>
+        </spectrum>
+</source>
+
+</source_library>

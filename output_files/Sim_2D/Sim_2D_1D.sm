@@ -1,0 +1,124 @@
+DEFINE TeX_strings 1
+device postfile ../Sim_2D/Sim_2D_1D.ps
+DEFINE default_font rm
+define ex_st 1.5
+define lw_curves 8
+define ex_label 1.1
+define x_gutter 0.5
+define y_gutter 0.8
+location 2500 31000 3500 31000
+define lw_st 5 lweight $lw_st expand $ex_st
+define lt_pdf 2 define ct_pdf  "blue"
+define lt_mlike 1 define ct_mlike  "red"
+define lt_mchi 2 define ct_mchi  "green"
+define lt_prof 0 define ct_prof  "red"
+define lt_like 1 define ct_like  "black"
+define prof_ones_err "green" define prof_twos_err "red" 
+define pdf_ones_err "green" define pdf_twos_err "blue" 
+define lw_ones_err 18  define lw_twos_err 18 
+define ymax 1.3
+set yloc_pdf_err = 1.12
+define yloc_pdf_err (yloc_pdf_err)
+define yloc_prof_err 1.25
+window   1   2   1   2
+data "../../plot_data/Sim_2D/Sim_2D_p1.dat"
+read {x 1 pdf 2 prof 5}
+limits x 0 $ymax
+ltype $lt_pdf ctype $ct_pdf lweight $lw_curves
+ histogram x pdf
+ltype $lt_prof ctype $ct_prof lweight $lw_curves
+ histogram x prof
+ltype 0 ctype $ct_pdf lweight $($lw_curves/2)
+set xm = {    0.27373E+03    0.27373E+03 } 
+set ym = {-10000 10000}
+connect xm ym
+ctype $pdf_twos_err ltype 0 lweight  $lw_twos_err  
+set xs = {    0.20330E+03    0.36620E+03}
+set ys = {$!!yloc_pdf_err $!!yloc_pdf_err}
+con xs ys
+ctype $pdf_ones_err lweight $lw_ones_err 
+set xs = {    0.23336E+03    0.31345E+03}
+con xs ys
+lweight $lw_st
+ltype 0 ctype $ct_prof lweight $lw_curves
+set xbf = {    0.26635E+03 } 
+set ybf = {0}
+lweight 50 ptype 4 1 points xbf ybf lweight $lw_st 
+ltype 0
+ctype $prof_twos_err lweight $lw_twos_err 
+set xs = {    0.22010E+03    0.31618E+03}
+set ys = {$!!yloc_prof_err $!!yloc_prof_err}
+con xs ys lweight $lw_st
+ltype 0
+ctype $prof_ones_err lweight $lw_ones_err
+set xs = {    0.22010E+03    0.31618E+03}
+set ys = {$!!yloc_prof_err $!!yloc_prof_err}
+con xs ys lweight $lw_st
+ltype 0 ctype green
+set xrf = {    0.16750E+03 } 
+set yrf = {0}
+ptype 20 0 lweight 5 expand 5 points xrf yrf lweight $lw_st expand $ex_st 
+lweight $lw_st 
+ltype 0 ctype black
+xlabel m_\chi (GeV)
+box 1 3 3 3
+
+###### Next panel ########
+window   1   2   1   1
+data "../../plot_data/Sim_2D/Sim_2D_p2.dat"
+read {x 1 pdf 2 prof 5}
+limits x 0 $ymax
+ltype $lt_pdf ctype $ct_pdf lweight $lw_curves
+ histogram x pdf
+ltype $lt_prof ctype $ct_prof lweight $lw_curves
+ histogram x prof
+ltype 0 ctype $ct_pdf lweight $($lw_curves/2)
+set xm = {    0.26360E+01    0.26360E+01 } 
+set ym = {-10000 10000}
+connect xm ym
+ctype $pdf_twos_err ltype 0 lweight  $lw_twos_err  
+set xs = {    0.24406E+01    0.28327E+01}
+set ys = {$!!yloc_pdf_err $!!yloc_pdf_err}
+con xs ys
+ctype $pdf_ones_err lweight $lw_ones_err 
+set xs = {    0.25295E+01    0.27371E+01}
+con xs ys
+lweight $lw_st
+ltype 0 ctype $ct_prof lweight $lw_curves
+set xbf = {    0.26245E+01 } 
+set ybf = {0}
+lweight 50 ptype 4 1 points xbf ybf lweight $lw_st 
+ltype 0
+ctype $prof_twos_err lweight $lw_twos_err 
+set xs = {    0.25000E+01    0.27549E+01}
+set ys = {$!!yloc_prof_err $!!yloc_prof_err}
+con xs ys lweight $lw_st
+ltype 0
+ctype $prof_ones_err lweight $lw_ones_err
+set xs = {    0.25000E+01    0.27549E+01}
+set ys = {$!!yloc_prof_err $!!yloc_prof_err}
+con xs ys lweight $lw_st
+ltype 0 ctype green
+set xrf = {    0.23500E+01 } 
+set yrf = {0}
+ptype 20 0 lweight 5 expand 5 points xrf yrf lweight $lw_st expand $ex_st 
+lweight $lw_st 
+ltype 0 ctype black
+xlabel log[<\sigma v> (10^{27} cm^3 s^{-1})]
+box 1 3 3 3
+
+###### Next panel ########
+window 1 1 1 1 location 2500 32000 3500 32000 lim 0 1 0 1
+ltype $lt_pdf ctype $ct_pdf  expand $ex_label
+relocate  $(0.01+.00000E+00) .10000E+01
+draw  $(0.01+.70000E-01) .10000E+01
+putlabel 6 "  Posterior pdf"
+ltype $lt_prof ctype $ct_prof expand $ex_label
+relocate  $(0.01+.36000E+00) .10000E+01
+draw  $(0.01+.43000E+00) .10000E+01
+putlabel 6 "  Profile likelihood"
+ctype black expand $ex_label
+relocate  1.00 .10000E+01
+putlabel 4 " (Flat BR priors)"
+expand $ex_st
+quit

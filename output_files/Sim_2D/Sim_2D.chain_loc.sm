@@ -1,0 +1,90 @@
+DEFINE TeX_strings 1
+DEFINE default_font rm
+expand 1.1
+define lw_st 3 lweight $lw_st
+define lt_ref 0 define ct_ref  "black"
+define lt_mean 1 define ct_mean  "green"
+define lt_bf 2 define ct_bf  "blue"
+define lt_prof 3 define ct_prof  "blue"
+
+###### data loading  ########
+data "../../chains/Sim_2D.txt"
+read {ch0chisq 2  ch0y3 3 ch0y4 4}
+set ch0n =1,DIMEN(ch0chisq)
+set ch0m = ch0n % 10  set ch0nn = ch0n IF(ch0m == 0)
+set ch0chisqyy = 2*ch0chisq IF(ch0m == 0)
+set ch0yy3 = ch0y3 IF(ch0m == 0)
+set ch0yy4 = ch0y4 IF(ch0m == 0)
+device postfile ../Sim_2D/Sim_2D.chain_loc1.ps
+window 1 1 1 1 location 2500 31000 3500 30000
+window   1   2   1   2
+limits ch1nn ch1yy3
+ltype 0 ctype red con ch1nn ch1yy3
+ltype 0 ctype black
+ylabel m_\chi (GeV)
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.16750E+03    0.16750E+03 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.27373E+03    0.27373E+03 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.26635E+03    0.26635E+03 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {         0         0 } 
+vecminmax  ch1yy3 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+window 1 1 1 1 location 2500 31000 3500 30000
+window   1   2   1   1
+limits ch1nn ch1yy4
+ltype 0 ctype red con ch1nn ch1yy4
+ltype 0 ctype black
+ylabel log[<\sigma v> (10^{27} cm^3 s^{-1})]
+xlabel Step number 
+box 
+ltype $lt_ref ctype $ct_ref
+set yrf = {    0.23500E+01    0.23500E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight  $lw_st
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.26360E+01    0.26360E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.26245E+01    0.26245E+01 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {         0         0 } 
+vecminmax  ch1yy4 min max
+set yb = {$!!min $!!max}
+con xb yb 
+
+###### Next panel ########
+
+###### Legend  ########
+window 1 1 1 1 location 2500 32000 3500 32000 lim 0 1 0 1
+ltype 0 ctype black
+relocate  $(0.01+.00000E+00) .10000E+01
+putlabel 6 " CHAIN #"1
+ltype $lt_ref ctype $ct_ref
+relocate  $(0.01+.23000E+00) .10000E+01
+draw  $(0.01+.33000E+00) .10000E+01
+putlabel 6 "  Ref point"
+ltype $lt_mean ctype $ct_mean
+relocate  $(0.01+.46000E+00) .10000E+01
+draw  $(0.01+.56000E+00) .10000E+01
+putlabel 6 "  mean"
+ltype $lt_bf ctype $ct_bf
+relocate  $(0.01+.69000E+00) .10000E+01
+draw  $(0.01+.79000E+00) .10000E+01
+putlabel 6 "  best fit"

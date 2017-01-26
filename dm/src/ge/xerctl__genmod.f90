@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE XERCTL__genmod
+          INTERFACE 
+            SUBROUTINE XERCTL(MESSG1,NMESSG,NERR,LEVEL,KONTRL)
+              CHARACTER(LEN=20) :: MESSG1
+              INTEGER(KIND=4) :: NMESSG
+              INTEGER(KIND=4) :: NERR
+              INTEGER(KIND=4) :: LEVEL
+              INTEGER(KIND=4) :: KONTRL
+            END SUBROUTINE XERCTL
+          END INTERFACE 
+        END MODULE XERCTL__genmod

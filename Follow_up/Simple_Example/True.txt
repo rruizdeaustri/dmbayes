@@ -1,0 +1,23 @@
+l = 3.2
+b = 2.4
+log_N0 = -11.1
+E0 = 4000.
+alpha_PS = 2.1
+beta_PS = 0.0
+Inv_Ec = 0.0
+
+l = 1.4
+b = -4.3
+log_N0 = -9.5
+E0 = 1200.
+alpha_PS = 2.3
+beta_PS = 0.5
+Inv_Ec = 0.0011
+
+l = -2.4
+b = 5.9
+log_N0 = -9.6
+E0 = 3300.
+alpha_PS = 2.2
+beta_PS = 0.0
+Inv_Ec = 0.0000

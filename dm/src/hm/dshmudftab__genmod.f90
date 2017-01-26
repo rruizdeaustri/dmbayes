@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:06 2016
+        MODULE DSHMUDFTAB__genmod
+          INTERFACE 
+            FUNCTION DSHMUDFTAB(U,TYPE)
+              REAL(KIND=8) :: U
+              INTEGER(KIND=4) :: TYPE
+              REAL(KIND=8) :: DSHMUDFTAB
+            END FUNCTION DSHMUDFTAB
+          END INTERFACE 
+        END MODULE DSHMUDFTAB__genmod

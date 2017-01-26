@@ -1,0 +1,14 @@
+1D profile likelihood statistics 
+1D intervals from likelihood ratio test
+  1 m_\chi (GeV)             
+   Intervals at  68.00%:  [ 0.38199E+02 ,  0.48773E+02] [ 0.57233E+02 ,  0.73095E+02]
+   Intervals at  95.00%:  [ 0.38199E+02 ,  0.48773E+02] [ 0.57233E+02 ,  0.73095E+02]
+  2 log[<\sigma v> (10^{27} c
+   Intervals at  68.00%:  [ 0.19486E+01 ,  0.22668E+01]
+   Intervals at  95.00%:  [ 0.19486E+01 ,  0.22668E+01]
+  3 BR_{b \bar{b}}           
+   Intervals at  68.00%:  [ 0.36574E-01 ,  0.19168E+00]
+   Intervals at  95.00%:  [ 0.36574E-01 ,  0.19168E+00]
+ 20 BR_{\tau^+\tau^-}        
+   Intervals at  68.00%:  [ 0.80860E+00 ,  0.96348E+00]
+   Intervals at  95.00%:  [ 0.80860E+00 ,  0.96348E+00]

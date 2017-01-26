@@ -1,0 +1,8 @@
+Jan 23rd (RT)
+
+- the Makefile has been taken out of the SVN (as each of us will hava a local copy of it). There is a file source/Makefile_Example that you can use as an example. 
+
+- There are a number of machine-specific things that are hardcoded in the code (this will need to be changed at some point):
+* WCSLIB/wcs.h90  !     Length of the WCSPRM data structure (INTEGER array).
+* flatlib/src/flatCommon.f90:       character (len=strlen), parameter :: flatlib_rootdir = ... 
+* Atm it is not clear whether the pre-generated flatlib files (for the convolution) are machine-specific or not. To be investigated. 

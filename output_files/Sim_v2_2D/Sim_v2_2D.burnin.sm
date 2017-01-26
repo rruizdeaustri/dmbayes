@@ -1,0 +1,61 @@
+device postfile ../Sim_v2_2D/Sim_v2_2D.burnin.ps
+DEFINE TeX_strings 1
+DEFINE default_font rm
+expand 1.1
+define lw_st 3 lweight $lw_st
+define lt_ref 0 define ct_ref  "black"
+define lt_mean 1 define ct_mean  "green"
+define lt_bf 2 define ct_bf  "blue"
+define lt_prof 3 define ct_prof  "blue"
+
+###### data loading  ########
+data "../../chains/Sim_v2_2D.txt"
+read {ch0chisq 2  ch0y3 3 ch0y4 4}
+set ch0n =1,DIMEN(ch0chisq)
+set ch0m = ch0n % 10  set ch0nn = ch0n IF(ch0m == 0)
+set ch0chisqyy = 2*ch0chisq IF(ch0m == 0)
+set ch0yy3 = ch0y3 IF(ch0m == 0)
+set ch0yy4 = ch0y4 IF(ch0m == 0)
+window 1 1 1 1 location 2500 31000 3500 30000
+window   1   1   1   1
+limits ch1nn ch1chisqyy
+ltype 0 ctype red con ch1nn ch1chisqyy
+ltype 0 ctype black
+ylabel \chi^2
+xlabel Step number 
+box 
+ltype $lt_mean ctype $ct_mean
+set yrf = {    0.40586E+05    0.40586E+05 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf lweight $lw_st
+ltype $lt_bf ctype $ct_bf
+set yrf = {    0.40580E+05    0.40580E+05 } 
+set xrf = {-1E6 1E6}
+lweight $(3*$lw_st) con xrf yrf  lweight $lw_st
+ltype 0 ctype black
+set xb = {         0         0 } 
+set yb = {-1E6 1E6}
+con xb yb 
+
+###### chain number  ########
+ltype 0 ctype black
+lim 0 1 0 1 relocate 0.3 0.9 
+putlabel 6 " CHAIN #"1
+vecminmax  ch1chisq min max
+define minv (sprintf('%10.5f',(2*$min)))
+relocate 0.3 0.8 putlabel 6 "best-fit \chi^2 = "
+putlabel 6 $minv
+###### Next panel ########
+
+###### Legend  ########
+window 1 1 1 1 location 2500 32000 3500 32000 lim 0 1 0 1
+ltype $lt_mean ctype $ct_mean
+relocate  .10000E-01.10000E+01
+draw  .11000E+00.10000E+01
+putlabel 6 " global mean \chi^2 = "
+putlabel 6     40586.06641
+ltype $lt_bf ctype $ct_bf
+relocate  .10000E-01.97000E+00
+draw  .11000E+00.97000E+00
+putlabel 6 " global best fit \chi^2 = "
+putlabel 6     40580.08594

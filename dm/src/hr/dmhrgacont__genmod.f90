@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:08 2016
+        MODULE DMHRGACONT__genmod
+          INTERFACE 
+            FUNCTION DMHRGACONT(EGATH,JPSI,ISTAT)
+              REAL(KIND=8) :: EGATH
+              REAL(KIND=8) :: JPSI
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DMHRGACONT
+            END FUNCTION DMHRGACONT
+          END INTERFACE 
+        END MODULE DMHRGACONT__genmod

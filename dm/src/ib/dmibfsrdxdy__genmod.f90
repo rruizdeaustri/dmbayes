@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:15 2016
+        MODULE DMIBFSRDXDY__genmod
+          INTERFACE 
+            FUNCTION DMIBFSRDXDY(FSRCH,X,Y)
+              INTEGER(KIND=4) :: FSRCH
+              REAL(KIND=8) :: X
+              REAL(KIND=8) :: Y
+              REAL(KIND=8) :: DMIBFSRDXDY
+            END FUNCTION DMIBFSRDXDY
+          END INTERFACE 
+        END MODULE DMIBFSRDXDY__genmod

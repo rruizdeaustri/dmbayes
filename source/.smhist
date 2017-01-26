@@ -1,0 +1,12 @@
+define min 2.13
+define minv (sprintf(''%10.5f'',(2*$min)))
+define minv (sprintf(''%10.5f'',$!!(2*$min)))
+define minv (sprintf(''%10.5f'',!!$(2*$min)))
+define minv (sprintf(''%10.5f'',2*$min))
+define minv (sprintf(''%10.5f'',$(2*$min)))
+define minv (sprintf(''%10.5f'',$!!(2*$min)))
+define minv (sprintf(''%10.5f'',(2*!!$min)))
+define minv (sprintf(''%10.5f'',(2*$!!min)))
+define minv (sprintf('%10.5f',(2*$min)))
+echo $minv
+quit

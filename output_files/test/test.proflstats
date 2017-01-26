@@ -1,0 +1,26 @@
+1D profile likelihood statistics 
+1D intervals from likelihood ratio test
+  1 m_\chi (GeV)             
+   Intervals at  68.00%:  [ 0.57473E+02 ,  0.74673E+02]
+   Intervals at  95.00%:  [ 0.57473E+02 ,  0.74673E+02]
+  2 log[<\sigma v> (10^{27} c
+   Intervals at  68.00%:  [ 0.20708E+01 ,  0.22861E+01]
+   Intervals at  95.00%:  [ 0.20708E+01 ,  0.22861E+01]
+  3 BR_{b \bar{b}}           
+   Intervals at  68.00%:  [ 0.48353E-02 ,  0.89203E-01]
+   Intervals at  95.00%:  [ 0.48353E-02 ,  0.89203E-01]
+  7 BR_{e^+ e^-}             
+   Intervals at  68.00%:  [ 0.00000E+00 ,  0.19692E+00] [ 0.20812E+00 ,  0.21931E+00] [ 0.24170E+00 ,  0.25290E+00]
+   Intervals at  95.00%:  [ 0.00000E+00 ,  0.19692E+00] [ 0.20812E+00 ,  0.21931E+00] [ 0.24170E+00 ,  0.25290E+00]
+  8 BR_{\mu^+ \mu^-}         
+   Intervals at  68.00%:  [ 0.73013E-02 ,  0.34750E+00]
+   Intervals at  95.00%:  [ 0.73013E-02 ,  0.34750E+00]
+  9 BR_{c \bar{c}}           
+   Intervals at  68.00%:  [ 0.14881E+00 ,  0.39711E+00]
+   Intervals at  95.00%:  [ 0.14881E+00 ,  0.39711E+00]
+ 10 BR_{g g}                 
+   Intervals at  68.00%:  [ 0.31098E-02 ,  0.32642E-01]
+   Intervals at  95.00%:  [ 0.31098E-02 ,  0.32642E-01]
+ 20 BR_{\tau^+\tau^-}        
+   Intervals at  68.00%:  [ 0.43085E+00 ,  0.77505E+00]
+   Intervals at  95.00%:  [ 0.43085E+00 ,  0.77505E+00]

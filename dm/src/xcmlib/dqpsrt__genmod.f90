@@ -1,0 +1,14 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:30 2016
+        MODULE DQPSRT__genmod
+          INTERFACE 
+            SUBROUTINE DQPSRT(LIMIT,LAST,MAXERR,ERMAX,ELIST,IORD,NRMAX)
+              INTEGER(KIND=4) :: LAST
+              INTEGER(KIND=4) :: LIMIT
+              INTEGER(KIND=4) :: MAXERR
+              REAL(KIND=8) :: ERMAX
+              REAL(KIND=8) :: ELIST(LAST)
+              INTEGER(KIND=4) :: IORD(LAST)
+              INTEGER(KIND=4) :: NRMAX
+            END SUBROUTINE DQPSRT
+          END INTERFACE 
+        END MODULE DQPSRT__genmod

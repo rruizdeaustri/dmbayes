@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:09 2016
+        MODULE DSHRMUHALO__genmod
+          INTERFACE 
+            FUNCTION DSHRMUHALO(JPSI,ETH,DNSIGMA,ISTAT)
+              REAL(KIND=8) :: JPSI
+              REAL(KIND=8) :: ETH
+              REAL(KIND=8) :: DNSIGMA
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DSHRMUHALO
+            END FUNCTION DSHRMUHALO
+          END INTERFACE 
+        END MODULE DSHRMUHALO__genmod

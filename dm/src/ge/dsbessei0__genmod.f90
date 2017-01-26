@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:38 2016
+        MODULE DSBESSEI0__genmod
+          INTERFACE 
+            FUNCTION DSBESSEI0(X)
+              REAL(KIND=8) :: X
+              REAL(KIND=8) :: DSBESSEI0
+            END FUNCTION DSBESSEI0
+          END INTERFACE 
+        END MODULE DSBESSEI0__genmod

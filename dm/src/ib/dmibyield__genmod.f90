@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:22 2016
+        MODULE DMIBYIELD__genmod
+          INTERFACE 
+            FUNCTION DMIBYIELD(EGEV,YIELDK,ISTAT)
+              REAL(KIND=8) :: EGEV
+              INTEGER(KIND=4) :: YIELDK
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DMIBYIELD
+            END FUNCTION DMIBYIELD
+          END INTERFACE 
+        END MODULE DMIBYIELD__genmod

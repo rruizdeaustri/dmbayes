@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE DMSIGMAV__genmod
+          INTERFACE 
+            FUNCTION DMSIGMAV(PARTCH)
+              INTEGER(KIND=4) :: PARTCH
+              REAL(KIND=8) :: DMSIGMAV
+            END FUNCTION DMSIGMAV
+          END INTERFACE 
+        END MODULE DMSIGMAV__genmod

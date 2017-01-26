@@ -1,0 +1,61 @@
+#index file for the diffuse BG
+#Author: Charlotte Strege
+
+rootname = TestGridI
+#Number of grid parameters
+Ndim_grid = 1
+#Number of template parameters
+Ndim_templ = 9
+#Number of templates
+N_T = 13
+
+#Grid parameters:
+
+#Grid_Paramx   Name of the parameter   Number of points in that direction   {values of param associated with each point in grid}  
+Grid_Param1 =  xs    6	-69.9  -55.5  -49.6  -44.4  -38.8  -34.8  
+
+#ATemplate parameters
+#Templ_Paramx  Name of the parameter, Scaling type of parameter (Li: Linear, Sp: special, i.e. type of rescaling is hardcoded in the code, includes e.g. power-law parameters), Number of templates which are rescaled by the parameter, Templates which are rescaled by the parameter
+
+Templ_Param1 =  X_CO_1     Li  2  2 9
+Templ_Param2 =  X_CO_2     Li  2  3 10
+Templ_Param3 =  X_CO_3     Li  4  4 11 12 13
+Templ_Param4 =  index_e    Sp  4  1 2 3 4 
+Templ_Param5 =  norm_e     Li  4  1 2 3 4
+Templ_Param6 =  index_p    Sp  9  5 6 7 8 9 10 11 12 13
+Templ_Param7 =  norm_p     Li  9  5 6 7 8 9 10 11 12 13
+Templ_Param8 =  CR_alpha   Sp  9  5 6 7 8 9 10 11 12 13
+Templ_Param9 =  CR_beta    Sp  9  5 6 7 8 9 10 11 12 13
+
+#Templates
+
+#Template number  Meaning of the template
+# 1 Bremsstrahlung for HI and HII and ics
+# 2 Bremsstrahlung for H_2 from 0 - 1.5 kpc
+# 3 Bremsstrahlung for H_2 from 1.5 - 3 kpc
+# 4 Bremsstrahlung for H_2 from 3 - 30 kpc
+# 5 Pi^0 decay for HI and HII from 0 - 3 kpc
+# 6 Pi^0 decay for HI and HII from 3 - 5 kpc
+# 7 Pi^0 decay for HI and HII from 5 - 10 kpc
+# 8 Pi^0 decay for HI and HII from 10 - 30 kpc
+# 9 Pi^0 decay for H_2 from 0 - 1.5 kpc
+# 10 Pi^0 decay for H_2 from 1.5 - 3 kpc
+# 11 Pi^0 decay for H_2 from 3 - 5 kpc
+# 12 Pi^0 decay for H_2 from 5 - 10 kpc
+# 13 Pi^0 decay for H_2 from 10 - 30 kpc
+
+#Templates - center of distance bin (0 of course means there is no distance associated with this template)
+#We need this information for the rescaling using the CR parameters alpha and beta
+R1 = 0.0
+R2 = 0.75
+R3 = 2.25
+R4 = 16.5
+R5 = 1.5
+R6 = 4.0
+R7 = 7.5
+R8 = 20.0
+R9 = 0.75
+R10 = 2.25
+R11 = 4.0
+R12 = 7.5
+R13 = 20.0

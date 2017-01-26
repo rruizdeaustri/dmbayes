@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:10 2016
+        MODULE DSHRPBDIFF0__genmod
+          INTERFACE 
+            FUNCTION DSHRPBDIFF0(TP,SOLARMOD,HOW)
+              REAL(KIND=8) :: TP
+              INTEGER(KIND=4) :: SOLARMOD
+              INTEGER(KIND=4) :: HOW
+              REAL(KIND=8) :: DSHRPBDIFF0
+            END FUNCTION DSHRPBDIFF0
+          END INTERFACE 
+        END MODULE DSHRPBDIFF0__genmod

@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE XERSAV__genmod
+          INTERFACE 
+            SUBROUTINE XERSAV(MESSG,NMESSG,NERR,LEVEL,ICOUNT)
+              CHARACTER(*) :: MESSG
+              INTEGER(KIND=4) :: NMESSG
+              INTEGER(KIND=4) :: NERR
+              INTEGER(KIND=4) :: LEVEL
+              INTEGER(KIND=4) :: ICOUNT
+            END SUBROUTINE XERSAV
+          END INTERFACE 
+        END MODULE XERSAV__genmod

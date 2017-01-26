@@ -1,0 +1,10 @@
+Global N-dimensional likelihood statistics 
+Parameter values bounding the N-dim 68.00% and 95.00%  posterior regions
+  
+Best fit sample -2 * log(Like) =      1413.83630(= chi-square)
+  
+ parameter                      bestfit        lower 68.00%   upper 68.00%   lower 95.00%   upper 95.00%   tails
+  1 m_\chi (GeV)                0.582630E+02   0.350432E+02   0.799676E+02   0.350432E+02   0.799676E+02   2
+  2 log[<\sigma v> (10^{27} c   0.216820E+01   0.186728E+01   0.233743E+01   0.183021E+01   0.238840E+01   2
+  3 BR_{b \bar{b}}              0.119620E+00   0.907084E-02   0.251115E+00   0.105560E-02   0.302383E+00   2
+ 20 BR_{\tau^+\tau^-}           0.880380E+00   0.748885E+00   0.990929E+00   0.697617E+00   0.998944E+00   2

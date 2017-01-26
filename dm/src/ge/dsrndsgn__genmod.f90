@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:44 2016
+        MODULE DSRNDSGN__genmod
+          INTERFACE 
+            FUNCTION DSRNDSGN(IDUM)
+              INTEGER(KIND=4) :: IDUM
+              REAL(KIND=8) :: DSRNDSGN
+            END FUNCTION DSRNDSGN
+          END INTERFACE 
+        END MODULE DSRNDSGN__genmod

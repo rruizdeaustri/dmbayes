@@ -1,0 +1,14 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:55 2016
+        MODULE DMHAYIELDGET__genmod
+          INTERFACE 
+            FUNCTION DMHAYIELDGET(ZI,MXI,CH,FI,FTYPE,ISTAT)
+              INTEGER(KIND=4) :: ZI
+              INTEGER(KIND=4) :: MXI
+              INTEGER(KIND=4) :: CH
+              INTEGER(KIND=4) :: FI
+              INTEGER(KIND=4) :: FTYPE
+              INTEGER(KIND=4) :: ISTAT
+              REAL(KIND=8) :: DMHAYIELDGET
+            END FUNCTION DMHAYIELDGET
+          END INTERFACE 
+        END MODULE DMHAYIELDGET__genmod

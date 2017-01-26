@@ -1,0 +1,12 @@
+Marginalized 1D posterior pdf statistics 
+  
+Average -2 ln(Like)   =       1417.2112 (=  average chisq)
+-2 ln(mean like)      =       1415.9028
+Best fit -2 ln(like)  =       1413.8363 (= best fit chisq)
+Bayesian complexity   =          3.3749
+  
+ parameter                      mean           sddev          lower 68.00%   upper 68.00%   lower 95.00%   upper 95.00%   tails
+  1 m_\chi (GeV)                0.531424E+02   0.129185E+02   0.396104E+02   0.683934E+02   0.354796E+02   0.774710E+02   2
+  2 log[<\sigma v> (10^{27} c   0.210443E+01   0.114742E+00   0.198186E+01   0.223155E+01   0.190882E+01   0.230781E+01   2
+  3 BR_{b \bar{b}}              0.102931E+00   0.591853E-01   0.419092E-01   0.166519E+00   0.953167E-02   0.225957E+00   2
+ 20 BR_{\tau^+\tau^-}           0.897069E+00   0.591853E-01   0.833489E+00   0.958098E+00   0.774073E+00   0.990472E+00   2

@@ -1,0 +1,11 @@
+device postfile ../sim_rec_logBR_thr0/sim_rec_logBR_thr0.power.ps
+DEFINE TeX_strings 1
+DEFINE default_font rm
+expand 1.1
+define lw_st 3 lweight $lw_st
+define lt_ref 0 define ct_ref  "black"
+define lt_mean 1 define ct_mean  "green"
+define lt_bf 2 define ct_bf  "blue"
+define lt_prof 3 define ct_prof  "blue"
+
+###### data loading  ########

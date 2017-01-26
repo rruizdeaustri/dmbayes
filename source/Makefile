@@ -1,0 +1,217 @@
+########################################################
+### READ THROUGH AND CHANGE THE DEFAULT VALUES BELOW ###
+### BEFORE COMPILING.                                ###
+########################################################
+
+
+# Choose your OS here: linux or mac
+OS = linux
+
+# Choose your fortran compiler here
+# intel compiler by default
+
+# MPI version of the Intel fortran compiler
+FC = mpif90
+
+# Intel fortran compiler
+#FC = ifort
+
+# Choose your c compiler here
+# intel compiler by default
+
+ifeq ($(FC), mpif90)
+ ifeq ($(OS), linux)
+  #FFLAGS = -w90 -fpp -DMPI -DINTEL -i_dynamic -parallel -openmp  -g -check all -traceback -lpthread -warn all -check bounds -check format -check output_conversion -check pointers -check stack -check uninit 
+  #FFLAGS = -g -fpp -DMPI -DINTEL -i_dynamic -parallel -openmp -lpthread -warn all -check bounds -check format -traceback -check stack -check uninit 
+  FFLAGS = -g -fpp -DMPI -DINTEL -i_dynamic -lpthread -warn all -check bounds -check format -traceback -check stack -check uninit 
+  #FFLAGS = -O0 -g -DMPI -fcheck=all -lpthread -Wall -ffree-line-length-none -cpp
+ else
+ #for Mac
+  FFLAGS = -O3 -w90 -warn nogeneral  -vec-report0 -fpp -shared-intel -cxxlib -parallel -openmp -lpthread -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
+ endif
+else
+ ifeq ($(OS), linux)
+#  FFLAGS = -g  -O3 -w90 -fpp  -i_dynamic
+  FFLAGS = -O0 -g -w90 -fpp  -i_dynamic -parallel -openmp -lpthread -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
+ else
+  #for Mac (stack size increased to 2 GB)
+  FFLAGS = -O3 -w90 -warn nogeneral  -vec-report0 -fpp -shared-intel -cxxlib  -Wl,-stack_size,0x80000000
+ endif
+endif
+FCFLAGS = $(FFLAGS)
+
+#Optimisation level, eg: -O3 -xB, does not have any effect on my centrino
+#-opt_report -opt_report_phase all
+OPT= 
+#OR debug level: -g(n=1,2,3)
+DEBUG=
+
+export FC FCFLAGS FFLAGS CC CFLAGS CPPC CXXFLAGS 
+
+### Setups for the LIB root directory ###
+
+# Intel v8*
+#LIB_COMP= -lcxa -lcprts -lirc -lunwind
+
+LIB_DM=../dm/lib
+LIB_PC=../polychord/src
+#LIB_DE=../diver
+#INC_DE=$(LIB_DE)/build
+LIB_FLAT=../flatlib/lib
+BUILD_FLAT=../flatlib/build
+CONTRIB_FLAT=../flatlib/contrib
+LIB_TSPACK=../TSPACK
+#RT on courgette Mac Os
+LIB_CFITSIO=/software/cfitsio-3.330/lib
+LIB_WCS=/home/rruiz/Applications/wcslib/lib
+INC_WCS=../WCSLIB/wcslib-3.4
+LIB_FFTW=/software/fftw-3.3.3/intel/lib
+INC_FFTW=/software/fftw-3.3.3/intel/include
+
+export LIB_CFITSIO LIB_FFTW INC_FFTW
+
+# Glamdring: standard LAPACK/BLAS libraries
+#LIB_CG=/usr/lib/gcc-lib/i386-redhat-linux/3.3.3/
+#LAPACKL = -L$(LIB_CG) -llapack -lblas
+
+# MKL v7 on a 32-bit machine
+#LIB_CG= /home/ruiz/opt/intel_mkl/mkl721/lib/32
+#LAPACKL = -L$(LIB_CG) -lmkl_lapack -lmkl_ia32 -lpthread -lguide 
+
+# MKL v10 on a 32-bit machine
+#LAPACKL = -lmkl_ia32 -liomp5 -lpthread  -lguide
+
+# MKL v10 on a 64-bit machine
+#LAPACKL = -lmkl -lmkl_lapack -liomp5 -lpthread -lguide
+
+# Ciclope: standard LAPACK/BLAS libraries
+#LIB_CG=/home/alfonso/lib/
+#LAPACKL = -L$(LIB_CG) -llapack -lblas
+
+#MKL v10 for MAC
+#LIB_CG = /Library/Frameworks/Intel_MKL.framework/Versions/10.0.4.022/lib/32
+
+#RT on MacOSX This is for ifort v11.1
+#LIB_CG = /Library/Frameworks/Intel_MKL.framework/Versions/11.1.076_cprof/lib/32/
+#LAPACKL = -L$(LIB_CG) -lmkl_intel_thread -lmkl_intel_lp64 -lmkl_core -lpthread
+#LAPACKL = -L/home/rruiz/applications/lapack-3.6.0 -llapack -lrefblas
+LAPACKL = -L$(LIB_CG) -lmkl_solver_lp64_sequential -lmkl_intel_lp64  -lmkl_sequential -lmkl_core -lm /software/intel_2013.3.163/composer_xe_2013.3.163/compiler/lib/intel64/libmatmul.a
+
+OBJS =   fermi_utils.o numerical_routines.o inifile.o utils.o \
+         settings.o typedef.o \
+         paramdef.o fermi_ptsrc.o fermi_bg.o fermi_ini.o likedata.o \
+         propose.o calclike.o postprocess.o
+
+OBJFILES = $(OBJS) #driver.o 
+
+chord_OBJFILES = $(OBJS) nestwrap.o driver_chord.o 
+
+mnde_OBJFILES = $(OBJS) nestwrap.o diverwrap.o driver_mnde.o 
+
+TESTOBJ =  $(OBJS) tester.o 
+
+DDOBJ 	= typedef.o DDbound.o 
+
+PNAME1 = dmbayes 
+
+PNAME2 = dmbayes_chord
+
+PLOTFILES = inifile.o utils.o settings.o  typedef.o  paramdef.o \
+	    likedata.o mcsamples.o matlab.o smplots.o GetPlots.o
+
+
+LIBS =  $(LIB_COMP) \
+	-L$(LIB_DM) -ldm \
+	-L$(LIB_FLAT) -lflatlib \
+	-L$(LIB_CFITSIO) -lcfitsio \
+	-L$(LIB_FFTW) -lfftw3 -lm \
+	-L$(LIB_WCS) -lwcs \
+	-L$(LIB_TSPACK) -lTSPACK \
+	$(LAPACKL)
+
+TYPEDEF = typedef.f90 fermi_utils.f90
+
+default : $(PNAME2)
+
+fort: typedef $(PNAME1) $(PNAME2)
+
+
+#all:  flatlib typedef dmlib tspack nestlib diverlib $(PNAME1) $(PNAME2) tester
+all: flatlib typedef dmlib tspack chordlib $(PNAME2) tester
+
+
+# PS - added include paths for FLATlib, CMLIB and Diver module files
+%.o: %.f90 
+	$(FC) $(FFLAGS) -I$(LIB_PC) -I$(BUILD_FLAT) -I$(INC_WCS) -I$(CONTRIB_FLAT)/CUBPACK/build/Core -c $*.f90
+
+# PS - added include paths for FLATlib, CMLIB and Diver module files
+%.o: %.F90
+	$(FC) $(FFLAGS) -I$(LIB_PC) -I$(BUILD_FLAT) -I$(INC_WCS) -I$(CONTRIB_FLAT)/CUBPACK/build/Core -c $*.F90
+
+
+# library dm.a for dark matter and other observables computations
+dmlib: 
+	cd ../dm ; $(MAKE) all
+
+# library flatlib.a for fermi irpfs
+flatlib: 
+	cd ../flatlib ; $(MAKE) all
+
+flataverage:
+	cd ../flatlib ; $(MAKE) flataverage
+
+tspack:
+	cd ../TSPACK; $(MAKE)
+
+# library libnest3.a for the nested sampler
+#nestlib:
+#	cd ../multinest; $(MAKE) all
+
+#diverlib:
+#	cd ../diver; $(MAKE) libdiver.a
+
+# library libnest3.a for the nested sampler
+chordlib:
+	cd ../polychord; $(MAKE) all
+
+$(PNAME1): flatlib tspack typedef dmlib $(OBJFILES) 
+	$(FC) -o ../$(PNAME1)  $(OBJFILES) $(LIBS) $(FFLAGS)
+
+
+#$(PNAME2): flatlib tspack nestlib diverlib typedef dmlib $(mnde_OBJFILES) 
+#	$(FC) -o ../$(PNAME2)  $(mnde_OBJFILES)  -L$(LIB_NS) -lnest3 $(LIBS) $(FFLAGS) 
+
+$(PNAME2): $(chord_OBJFILES) 
+	$(FC) -o ../$(PNAME2)  $(chord_OBJFILES)  -L$(LIB_PC) -lchord $(LIBS) $(FFLAGS) 
+
+
+typedef	: $(TYPEDEF)
+	$(FC) -I$(BUILD_FLAT) -I$(CONTRIB_FLAT)/CUBPACK/build/Core -c $(TYPEDEF)
+
+tester: flatlib tspack typedef dmlib $(TESTOBJ)
+	$(FC) -o ../tester  $(TESTOBJ) $(LIBS) $(FFLAGS) 
+
+cleanall:
+	$(MAKE) clean clean_dm clean_polychord clean_flatlib clean_tspack
+
+
+clean: clean_sb 
+
+clean_sb:
+	rm -f *.o *.mod *.d *.pc *.obj ../core ../$(PNAME1)  ../$(PNAME2) ../tester ../getplots
+
+clean_dm:
+	cd ../dm; $(MAKE) clean ;
+
+clean_polychord:
+	cd ../polychord; $(MAKE) clean ;
+
+clean_flatlib:
+	cd ../flatlib; $(MAKE) clean ;
+
+clean_tspack:
+	cd ../TSPACK; $(MAKE) clean ;
+
+getplots: $(PLOTFILES)
+	$(FC) -o ../getplots $(PLOTFILES) $(LAPACKL) $(FFLAGS) 
+

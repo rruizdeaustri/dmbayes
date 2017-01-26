@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE XERROR__genmod
+          INTERFACE 
+            SUBROUTINE XERROR(MESSG,NMESSG,NERR,LEVEL)
+              CHARACTER(*) :: MESSG
+              INTEGER(KIND=4) :: NMESSG
+              INTEGER(KIND=4) :: NERR
+              INTEGER(KIND=4) :: LEVEL
+            END SUBROUTINE XERROR
+          END INTERFACE 
+        END MODULE XERROR__genmod

@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
+        MODULE XERABT__genmod
+          INTERFACE 
+            SUBROUTINE XERABT(MESSG,NMESSG)
+              CHARACTER(*) :: MESSG
+              INTEGER(KIND=4) :: NMESSG
+            END SUBROUTINE XERABT
+          END INTERFACE 
+        END MODULE XERABT__genmod

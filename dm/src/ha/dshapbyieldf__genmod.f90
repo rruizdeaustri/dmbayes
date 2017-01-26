@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:53 2016
+        MODULE DSHAPBYIELDF__genmod
+          INTERFACE 
+            FUNCTION DSHAPBYIELDF(MX,TP,CHI)
+              REAL(KIND=8) :: MX
+              REAL(KIND=8) :: TP
+              INTEGER(KIND=4) :: CHI
+              REAL(KIND=8) :: DSHAPBYIELDF
+            END FUNCTION DSHAPBYIELDF
+          END INTERFACE 
+        END MODULE DSHAPBYIELDF__genmod

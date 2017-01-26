@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:05 2016
+        MODULE DSHMUDFNUM__genmod
+          INTERFACE 
+            FUNCTION DSHMUDFNUM(U)
+              REAL(KIND=8) :: U
+              REAL(KIND=8) :: DSHMUDFNUM
+            END FUNCTION DSHMUDFNUM
+          END INTERFACE 
+        END MODULE DSHMUDFNUM__genmod
