@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:41 2016
-        MODULE DSIDTAG__genmod
-          INTERFACE 
-            FUNCTION DSIDTAG
-              CHARACTER(LEN=12) :: DSIDTAG
-            END FUNCTION DSIDTAG
-          END INTERFACE 
-        END MODULE DSIDTAG__genmod

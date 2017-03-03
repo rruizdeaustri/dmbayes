@@ -71,7 +71,7 @@ module settings
   real, parameter :: logZero = 1e30
 
   integer, parameter :: current_data = 1, synthetic_data = 2, synthetic_data_with_noise = 3
-  integer, parameter :: doMCMC = 0, doGRID = 4, doPP = 1, doPC = 5, doNS = 6
+  integer, parameter :: doMCMC = 0, doGRID = 4, doPP = 1, doNS = 5, doDE = 6, doPC = 7
 
   !MPI related variables
   integer :: MPIchains = 1, MPIrank = 0

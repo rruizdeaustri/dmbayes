@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:39 2016
-        MODULE DSBESSEK2__genmod
-          INTERFACE 
-            FUNCTION DSBESSEK2(X)
-              REAL(KIND=8) :: X
-              REAL(KIND=8) :: DSBESSEK2
-            END FUNCTION DSBESSEK2
-          END INTERFACE 
-        END MODULE DSBESSEK2__genmod

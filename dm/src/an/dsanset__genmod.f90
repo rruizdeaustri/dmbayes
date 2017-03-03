@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:36 2016
-        MODULE DSANSET__genmod
-          INTERFACE 
-            SUBROUTINE DSANSET(C)
-              CHARACTER(*) :: C
-            END SUBROUTINE DSANSET
-          END INTERFACE 
-        END MODULE DSANSET__genmod

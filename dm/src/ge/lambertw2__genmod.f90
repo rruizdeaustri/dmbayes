@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:48 2016
-        MODULE LAMBERTW2__genmod
-          INTERFACE 
-            FUNCTION LAMBERTW2(X)
-              REAL(KIND=8) :: X
-              REAL(KIND=8) :: LAMBERTW2
-            END FUNCTION LAMBERTW2
-          END INTERFACE 
-        END MODULE LAMBERTW2__genmod

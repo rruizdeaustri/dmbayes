@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:01 2016
-        MODULE DMHMJPAR1__genmod
-          INTERFACE 
-            FUNCTION DMHMJPAR1(RR)
-              REAL(KIND=8) :: RR
-              REAL(KIND=8) :: DMHMJPAR1
-            END FUNCTION DMHMJPAR1
-          END INTERFACE 
-        END MODULE DMHMJPAR1__genmod

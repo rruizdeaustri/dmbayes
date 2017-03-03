@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:16 2016
-        MODULE DMIBSET__genmod
-          INTERFACE 
-            SUBROUTINE DMIBSET(C)
-              CHARACTER(*) :: C
-            END SUBROUTINE DMIBSET
-          END INTERFACE 
-        END MODULE DMIBSET__genmod
