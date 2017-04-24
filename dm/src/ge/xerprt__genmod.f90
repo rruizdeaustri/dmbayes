@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:37 2016
-        MODULE XERPRT__genmod
-          INTERFACE 
-            SUBROUTINE XERPRT(MESSG,NMESSG)
-              CHARACTER(*) :: MESSG
-              INTEGER(KIND=4) :: NMESSG
-            END SUBROUTINE XERPRT
-          END INTERFACE 
-        END MODULE XERPRT__genmod

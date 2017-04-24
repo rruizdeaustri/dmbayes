@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:11:16 2016
-        MODULE DMIBINTSEL__genmod
-          INTERFACE 
-            FUNCTION DMIBINTSEL(YINT)
-              REAL(KIND=8) :: YINT
-              REAL(KIND=8) :: DMIBINTSEL
-            END FUNCTION DMIBINTSEL
-          END INTERFACE 
-        END MODULE DMIBINTSEL__genmod

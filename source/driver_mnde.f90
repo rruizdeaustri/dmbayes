@@ -41,7 +41,7 @@ program DMBayes_mnde
   write(*,*) trim(de_ver)
   write(*,*) 'See superbayes.org for latest info'
   write(*,*) '*****************************************************'
-  InputFile = trim(inifilesdir)//GetParam(1)
+  InputFile = GetParam(1)!trim(inifilesdir)//GetParam(1)
 
   if (InputFile == '') call DoStop('No parameter input file')
   write(*,*)  'Read InputFile: ', trim(InputFile)
@@ -229,7 +229,7 @@ program DMBayes_mnde
   !creates new .info file, regardless if you have restarted or not
   call CreateTxtFile(trim(infoname)//'.info', infofile_unit)
   !saves labels in .info file
-  call SetFormat
+  call SetFormat(Params)
   !saves flags in .info file
   call SaveFlags(infofile_unit)
 

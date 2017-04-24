@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Fri Sep 16 16:10:58 2016
-        MODULE DSHMDFISOTR__genmod
-          INTERFACE 
-            FUNCTION DSHMDFISOTR(V)
-              REAL(KIND=8) :: V
-              REAL(KIND=8) :: DSHMDFISOTR
-            END FUNCTION DSHMDFISOTR
-          END INTERFACE 
-        END MODULE DSHMDFISOTR__genmod
