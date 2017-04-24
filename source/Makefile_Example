@@ -136,7 +136,7 @@ flataverage:
 	cd ../flatlib ; $(MAKE) flataverage
 
 tspack:
-	cd ../TSPACK; $(MAKE)
+	cd ../TSPACK; $(MAKE) FF="$(FC)" FOPT="$(FOPT)"
 
 # library libnest3.a for the nested sampler
 nestlib:
