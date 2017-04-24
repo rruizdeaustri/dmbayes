@@ -24,7 +24,7 @@ LIB_WCS=.
 LIB_FFTW=.
 INC_FFTW=/usr/include
 LAPACKL=-llapack -lblas
-
+INC_WCS=../WCSLIB/wcslib-4.19
 
 ### Don't mess with anthing below this line ###
 
