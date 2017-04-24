@@ -7,43 +7,49 @@
 # Choose your OS here: linux or mac
 OS = linux
 
-# Choose your fortran compiler here
-# intel compiler by default
+# Choose your compilers here
+# GNU compiler
+FC = gfortran
+CC = gcc
+# Intel compiler
+# FC = ifort
+# CC = icc
+# MPI wrapper for intel compiler (the case where mpif90 wraps gfortran instead is not supported yet)
+# FC = mpif90
+# CC = mpicc
 
-# MPI version of the Intel fortran compiler
-FC = mpif90
-
-# Intel fortran compiler
-#FC = ifort
-
-# Choose your c compiler here
-# intel compiler by default
-
+MODULE = module
 ifeq ($(FC), mpif90)
  ifeq ($(OS), linux)
   FFLAGS = -O3 -w90 -fpp -DMPI -DINTEL -i_dynamic -parallel -openmp -lpthread -warn all -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
  else
- #for Mac
+  #for Mac
   FFLAGS = -O3 -w90 -warn nogeneral  -vec-report0 -fpp -shared-intel -cxxlib -parallel -openmp -lpthread -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
  endif
 else
- ifeq ($(OS), linux)
-#  FFLAGS = -g  -O3 -w90 -fpp  -i_dynamic
-  FFLAGS = -O3 -w90 -fpp  -i_dynamic -parallel -openmp -lpthread -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
+ ifeq ($(FC), ifort)
+	 ifeq ($(OS), linux)
+	  #FFLAGS = -g  -O3 -w90 -fpp  -i_dynamic
+	  FFLAGS = -O3 -w90 -fpp  -i_dynamic -parallel -openmp -lpthread -check bounds -check format -check output_conversion -check pointers -check stack -check uninit
+	 else
+	  #for Mac (stack size increased to 2 GB)
+	  FFLAGS = -O3 -w90 -warn nogeneral  -vec-report0 -fpp -shared-intel -cxxlib -Wl,-search_paths_first
+	 endif
  else
-  #for Mac (stack size increased to 2 GB)
-  FFLAGS = -O3 -w90 -warn nogeneral  -vec-report0 -fpp -shared-intel -cxxlib -Wl,-search_paths_first
+	FFLAGS = -O2 -Wall -ffixed-line-length-none -ffree-line-length-none -cpp
+  MODULE = J
  endif
 endif
 FCFLAGS = $(FFLAGS)
+FOPT = $(FFLAGS)
 
 #Optimisation level, eg: -O3 -xB, does not have any effect on my centrino
 #-opt_report -opt_report_phase all
-OPT= 
+OPT=
 #OR debug level: -g(n=1,2,3)
 DEBUG=
 
-export FC FCFLAGS FFLAGS CC CFLAGS CPPC CXXFLAGS 
+export FC FCFLAGS FFLAGS FOPT CC CFLAGS CPPC CXXFLAGS MODULE
 
 ### Setups for the LIB root directory ###
 
@@ -52,7 +58,7 @@ export FC FCFLAGS FFLAGS CC CFLAGS CPPC CXXFLAGS
 
 LIB_DM=../dm/lib
 LIB_NS=../multinest
-LIB_DE=../diver
+LIB_DE=../Diver
 INC_DE=$(LIB_DE)/build
 LIB_FLAT=../flatlib/lib
 BUILD_FLAT=../flatlib/build
@@ -72,7 +78,7 @@ export LIB_CFITSIO LIB_FFTW INC_FFTW
 
 # MKL v7 on a 32-bit machine
 #LIB_CG= /home/ruiz/opt/intel_mkl/mkl721/lib/32
-#LAPACKL = -L$(LIB_CG) -lmkl_lapack -lmkl_ia32 -lpthread -lguide 
+#LAPACKL = -L$(LIB_CG) -lmkl_lapack -lmkl_ia32 -lpthread -lguide
 
 # MKL v10 on a 32-bit machine
 #LAPACKL = -lmkl_ia32 -liomp5 -lpthread  -lguide
@@ -104,15 +110,15 @@ OBJS =   fermi_utils.o numerical_routines.o inifile.o utils.o \
          paramdef.o fermi_ptsrc.o fermi_bg.o fermi_ini.o likedata.o \
          propose.o calclike.o postprocess.o MC_DM.o
 
-OBJFILES = $(OBJS) driver.o 
+OBJFILES = $(OBJS) driver.o
 
-mnde_OBJFILES = $(OBJS) nestwrap.o diverwrap.o driver_mnde.o 
+mnde_OBJFILES = $(OBJS) nestwrap.o diverwrap.o driver_mnde.o
 
-TESTOBJ =  $(OBJS) tester.o 
+TESTOBJ =  $(OBJS) tester.o
 
-DDOBJ 	= typedef.o DDbound.o 
+DDOBJ 	= typedef.o DDbound.o
 
-PNAME1 = dmbayes 
+PNAME1 = dmbayes
 
 PNAME2 = dmbayes_mnde
 
@@ -137,11 +143,11 @@ default : $(PNAME2)
 fort: typedef $(PNAME1) $(PNAME2)
 
 
-all:  flatlib typedef dmlib tspack nestlib diverlib $(PNAME1) $(PNAME2) tester
+all:  flatlib typedef dmlib tspack nestlib diver $(PNAME1) $(PNAME2) tester
 
 
 # PS - added include paths for FLATlib, CMLIB and Diver module files
-%.o: %.f90 
+%.o: %.f90
 	$(FC) $(FFLAGS) -I$(LIB_NS) -I$(INC_DE) -I$(BUILD_FLAT) -I$(INC_WCS) -I$(CONTRIB_FLAT)/CUBPACK/build/Core -c $*.f90
 
 # PS - added include paths for FLATlib, CMLIB and Diver module files
@@ -150,16 +156,16 @@ all:  flatlib typedef dmlib tspack nestlib diverlib $(PNAME1) $(PNAME2) tester
 
 
 # library dm.a for dark matter and other observables computations
-dmlib: 
+dmlib:
 	cd ../dm ; $(MAKE) all
 
 # library flatlib.a for fermi irpfs
-flatlib: 
+flatlib:
 	cd ../flatlib ; $(MAKE) all
 
 flataverage:
 	cd ../flatlib ; $(MAKE) flataverage
-	
+
 tspack:
 	cd ../TSPACK; $(MAKE)
 
@@ -167,28 +173,28 @@ tspack:
 nestlib:
 	cd ../multinest; $(MAKE) all
 
-diverlib:
-	cd ../diver; $(MAKE) libdiver.a
+diver:
+	cd ../Diver; $(MAKE) FF=$(FC) libdiver.a
 
-$(PNAME1): flatlib tspack typedef dmlib $(OBJFILES) 
+$(PNAME1): flatlib tspack typedef dmlib $(OBJFILES)
 	$(FC) -o ../$(PNAME1)  $(OBJFILES) $(LIBS) $(FFLAGS)
 
 
-$(PNAME2): flatlib tspack nestlib diverlib typedef dmlib $(mnde_OBJFILES) 
-	$(FC) -o ../$(PNAME2)  $(mnde_OBJFILES)  -L$(LIB_NS) -lnest3 $(LIBS) $(FFLAGS) 
+$(PNAME2): flatlib tspack nestlib diver typedef dmlib $(mnde_OBJFILES)
+	$(FC) -o ../$(PNAME2)  $(mnde_OBJFILES)  -L$(LIB_NS) -lnest3 $(LIBS) $(FFLAGS)
 
 
 typedef	: $(TYPEDEF)
 	$(FC) -I$(BUILD_FLAT) -I$(CONTRIB_FLAT)/CUBPACK/build/Core -c $(TYPEDEF)
 
 tester: flatlib tspack typedef dmlib $(TESTOBJ)
-	$(FC) -o ../tester  $(TESTOBJ) $(LIBS) $(FFLAGS) 
+	$(FC) -o ../tester  $(TESTOBJ) $(LIBS) $(FFLAGS)
 
 cleanall:
 	$(MAKE) clean clean_dm clean_nested clean_de clean_flatlib clean_tspack
 
 
-clean: clean_sb 
+clean: clean_sb
 
 clean_sb:
 	rm -f *.o *.mod *.d *.pc *.obj ../core ../$(PNAME1)  ../$(PNAME2) ../tester ../getplots
@@ -200,8 +206,8 @@ clean_nested:
 	cd ../multinest; $(MAKE) clean ;
 
 clean_de:
-	cd ../diver; $(MAKE) clean ;
-	
+	cd ../Diver; $(MAKE) clean ;
+
 clean_flatlib:
 	cd ../flatlib; $(MAKE) clean ;
 
@@ -209,5 +215,5 @@ clean_tspack:
 	cd ../TSPACK; $(MAKE) clean ;
 
 getplots: $(PLOTFILES)
-	$(FC) -o ../getplots $(PLOTFILES) $(LAPACKL) $(FFLAGS) 
+	$(FC) -o ../getplots $(PLOTFILES) $(LAPACKL) $(FFLAGS)
 

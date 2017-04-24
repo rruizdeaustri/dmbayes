@@ -11,10 +11,10 @@ module IniFile
   character (LEN=500), dimension(:), allocatable :: Keys, Vals
   !GD: increased string lengths (was 150)
   integer :: NumKeys = 0, ArrSize = 0
-  logical :: Ini_fail_on_not_found = .false., SlashComments = .false. 
- 
+  logical :: Ini_fail_on_not_found = .false., SlashComments = .false.
+
 contains
-  
+
   subroutine realloc(NewSize)
      integer, intent(IN) :: NewSize
      character (LEN=500), dimension(:), allocatable :: TMP
@@ -47,7 +47,7 @@ contains
          allocate(Vals(1:NewSize))
          Vals=''
       end if
-      
+
      end if
 
      ArrSize=NewSize
@@ -62,9 +62,9 @@ contains
       InLine=trim(adjustl(AInLine))
       EqPos = scan(InLine,'=')
       if (EqPos/=0 .and. InLine(1:1)/='#' .and. InLine(1:7) /= 'COMMENT' ) then
-   
-         NumKeys=NumKeys+1      
-  
+
+         NumKeys=NumKeys+1
+
          if (NumKeys > ArrSize) then
             ArrSize=ArrSize+100
             call realloc(ArrSize)
@@ -73,7 +73,7 @@ contains
          Keys(NumKeys) = trim(InLine(1:EqPos-1))
          S = adjustl(InLine(EqPos+1:))
          !PS bug fix April 24 2011
-         if (len_trim(S) /= 0) then 
+         if (len_trim(S) /= 0) then
            if (SlashComments) then
              slashpos=scan(S,'/')
              if (slashpos /= 0) then
@@ -87,7 +87,7 @@ contains
          endif
 
          Vals(NumKeys)=trim(S)
-   
+
 
       end if
 
@@ -99,23 +99,23 @@ contains
      logical, intent(OUT) :: error
      logical, optional, intent(IN) :: slash_comments
      character (LEN=500) :: InLine
-    
+
     if ((slash_comments)) then
      SlashComments = slash_comments
     else
      SlashComments = .false.
     end if
      NumKeys=0
-    
+
     open(unit=unit_id,file=filename,form='formatted',status='old', err=500)
-   
+
     ArrSize=50
- 
+
     call realloc(ArrSize)
-    do 
+    do
       read (unit_id,'(a)',end=400) InLine
       if (InLine == 'END') exit;
-      if (InLine /= '') call Ini_AddLine(InLine) 
+      if (InLine /= '') call Ini_AddLine(InLine)
     end do
 
 400 close(unit_id)
@@ -138,19 +138,19 @@ contains
     do i=1,NumLines
        call Ini_AddLine(Lines(i))
     end do
-  
+
 
   end  subroutine Ini_Open_Fromlines
 
   subroutine Ini_Close
-    
+
     call realloc(0)
 
   end  subroutine Ini_Close
-  
+
   function Strip_As(Line,offset)
     character (LEN=500) :: Strip_As, NewLine, RestLine,Stripped
-    character (LEN=*), intent(IN) :: Line    
+    character (LEN=*), intent(IN) :: Line
     character (LEN=5) :: snumber
     integer :: Apos, dim, Blank, number
     integer, intent(IN) :: offset
@@ -161,7 +161,7 @@ contains
     Strip_As = ''
     Stripped = ''
 
-    do 
+    do
        Apos = scan(trim(RestLine), 'A')
        if (Apos > 0) then
           NewLine = RestLine(1:Apos-1)
@@ -186,7 +186,7 @@ contains
 
 
   function Ini_Read_String(Key, NotFoundFail)
-   character (LEN=500) Ini_Read_String 
+   character (LEN=500) Ini_Read_String
    character (LEN=*), intent(IN) :: Key
    logical, optional, intent(IN) :: NotFoundFail
    integer i
@@ -223,16 +223,16 @@ contains
          TmpLine = Ini_Read_String(Key)
       end if
    Ini_Read_String_A = Strip_As(TmpLine, num)
- 
+
   end function Ini_Read_String_A
 
   function Ini_Read_Int(Key, Default)
    integer Ini_Read_Int
    integer, optional, intent(IN) :: Default
    character  (LEN=*), intent(IN) :: Key
-  
+
    character(LEN=500) :: S
-   
+
    S = Ini_Read_String(Key,.not. present(Default))
    if (S == '') then
       if (.not. present(Default)) then
@@ -252,11 +252,11 @@ contains
   end function Ini_Read_Int
 
   function Ini_Read_Double(Key, Default)
-   double precision Ini_Read_Double 
+   double precision Ini_Read_Double
    double precision, optional, intent(IN) :: Default
    character (LEN=*), intent(IN) :: Key
    character(LEN=500) :: S
-   
+
    S = Ini_Read_String(Key,.not. present(Default))
    if (S == '') then
       if (.not. present(Default)) then
@@ -276,11 +276,11 @@ contains
   end function Ini_Read_Double
 
     function Ini_Read_Real(Key, Default)
-    real Ini_Read_Real 
+    real Ini_Read_Real
     real, optional, intent(IN) :: Default
     character (LEN=*), intent(IN) :: Key
     character(LEN=500) :: S
-   
+
    S = Ini_Read_String(Key,.not. present(Default))
    if (S == '') then
       if (.not. present(Default)) then
@@ -303,9 +303,9 @@ contains
    logical Ini_Read_Logical
    logical, optional, intent(IN) :: Default
    character  (LEN=*), intent(IN) :: Key
-  
+
    character(LEN=500) :: S
-   
+
    S = Ini_Read_String(Key,.not. present(Default))
    if (S == '') then
       if (.not. present(Default)) then

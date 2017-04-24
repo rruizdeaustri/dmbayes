@@ -1,6 +1,6 @@
 !module with global variables and constants
 !contains useful I/O routines and matrix manipulations
-!This version September 2008 
+!This version September 2008
 !SuperBayes Package - by Roberto Ruiz de Austri (rruiz@delta.ft.uam.es) and Roberto Trotta (rxt@astro.ox.ac.uk)
 
 module settings
@@ -18,25 +18,25 @@ module settings
   character(LEN = 200), parameter :: dm_ver =       'DarkMatter: version 1'
   character(LEN = 200), parameter :: ns_ver =       'Nested sampling: version 2.18'
   character(LEN = 200), parameter :: like_ver =     'Likelihood code: version 11/2014'
-  character(LEN = 200), parameter :: de_ver =       'Differential evolution: version 08/2014'
+  character(LEN = 200), parameter :: de_ver =       'Diver: version 1.0.0'
 
   !format output/input
   character(LEN = 200) :: fmt_params
   character(LEN = 200) :: fmt, fmt_gdif, fmt_PS_BF
 
-  integer, parameter :: num_hard = 16 
+  integer, parameter :: num_hard = 16
   !CS: Changed this to 16 - including both grid and template parameters
   !CS: Later: Changed this to
   integer, parameter :: num_soft = 15 !nuisance params
   !CS: Defined this new parameter: Nuisance parameters unrelated to the bg or PS
-  integer, parameter :: num_nuis_wobg = 5, num_ps_par = 7 
-  integer, parameter :: num_additional = 2 !extra params in the output 
-  !this is analogous to fast/slow split in cmb-case. 
-  !For the moment both sets of params treated equally. 
+  integer, parameter :: num_nuis_wobg = 5, num_ps_par = 7
+  integer, parameter :: num_additional = 2 !extra params in the output
+  !this is analogous to fast/slow split in cmb-case.
+  !For the moment both sets of params treated equally.
 
-  
+
   real, parameter :: propose_scale = 2.4
-  real :: Temperature  = 1 
+  real :: Temperature  = 1
   integer :: nprocs
 
   integer :: oversample_nuisance = 0
@@ -101,7 +101,7 @@ contains
    goto 120
 
 100 rewind(tmp_file_unit)  !Try other possible format
-   do j=1,m 
+   do j=1,m
     do k=1,n
       read (tmp_file_unit,*, end = 200) mat(j,k)
     end do
@@ -146,7 +146,7 @@ contains
    integer, intent(in) :: n
    real, intent(in) :: vec(n)
    integer j
-  
+
    call CreateTxtFile(aname, tmp_file_unit)
 
    do j=1,n
@@ -154,7 +154,7 @@ contains
    end do
 
    close(tmp_file_unit)
-  
+
  end subroutine WriteVector
 
  subroutine Matrix_Write(aname, mat, forcetable)
@@ -212,9 +212,9 @@ contains
    real m(n,n), diag(n)
    integer ierr, tmpsize
    real tmp(3*n**2)
-   
+
    tmpsize = 3*n**2
-   call SSYEV('V','U',n,m,n,diag,tmp,tmpsize,ierr) !evalues and vectors of symmetric matrix   
+   call SSYEV('V','U',n,m,n,diag,tmp,tmpsize,ierr) !evalues and vectors of symmetric matrix
  end subroutine Diagonalize
 
 
@@ -223,17 +223,17 @@ contains
    real, intent(inout):: M(:,:)
    real w(Size(M,DIM=1)),tmp(Size(M,DIM=1),Size(M,DIM=1))
    integer i, n
-   
+
    n=Size(M,DIM=1)
    if (n<=1) return
    if (Size(M,DIM=2)/=n) stop 'Matrix_Inverse: non-square matrix'
-   
-   call Diagonalize(M,w,n)      
+
+   call Diagonalize(M,w,n)
    do i=1, n
       tmp(i,:) = M(:,i)/w(i)
    end do
-   M = matmul(M,tmp)     
-   
+   M = matmul(M,tmp)
+
  end subroutine Matrix_Inverse
 
 end module settings

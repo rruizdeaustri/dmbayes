@@ -1,5 +1,5 @@
 ! SuperBayes Package - by Roberto Ruiz de Austri (rruiz@delta.ft.uam.es) and Roberto Trotta (rxt@astro.ox.ac.uk)
-! This version August 2008. Several improvements, minor bug fixes, new plotting options, 
+! This version August 2008. Several improvements, minor bug fixes, new plotting options,
 ! now includes Nested Sampling by Feroz & Hobson, see ../multinest/ver_a/readme.txt
 ! for latest info, visit superbayes.org
 ! Main file
@@ -23,7 +23,7 @@ program DMBayes_mnde
 
   character(LEN=150) :: InputFile, LogFile, rootname, out_rootname, &
          infoname, seedstr, cwd, inifilesdir
-  character(12)      :: MC_Elapsed_Time 
+  character(12)      :: MC_Elapsed_Time
   integer            :: num_points, seedsb, istat
   integer            :: MC_Hertz, MC_Begin_Clock, MC_End_Clock, MC_ms
   logical            :: bad
@@ -50,7 +50,6 @@ program DMBayes_mnde
   call Ini_Open(InputFile, 1, bad, .false.)
   if (bad)  call DoStop('Error opening parameter file: '//trim(InputFile))
 
-  Ini_fail_on_not_found = .true.
   rootname = Ini_Read_String('file_root')
 
   !-----------------------------------
@@ -72,15 +71,15 @@ program DMBayes_mnde
 
   ! ---- Action type ----
   action = Ini_Read_Int('action',doMCMC)
-  
+
   if (action /= doNS .and. action /= doDE) then
-  	write(*,*) "This executable can only be used with:" 
+  	write(*,*) "This executable can only be used with:"
         write(*,*) "  MultiNest (action=5)"
         write(*,*) "  Diver (action=6)"
 	stop
   endif
 
-  propose_grid = .false. 
+  propose_grid = .false.
 
   if (action .eq. doNS) then
     !set up nested sampling parameters
@@ -115,7 +114,7 @@ program DMBayes_mnde
   endif
 
   out_rootname = rootname
-  infoname = rootname 
+  infoname = rootname
   !set up the seed for the nested sampler
   if (seedsb .ne. 0) then
      nest_seed = seedsb
@@ -134,7 +133,7 @@ program DMBayes_mnde
 
 
   ! ---- what we need to compute ----
-  GFlags%ID_predict = Ini_Read_Logical('compute_Indirect_Detection') 
+  GFlags%ID_predict = Ini_Read_Logical('compute_Indirect_Detection')
 
   !---- adding ID parameters ---
   if(GFlags%ID_predict) then
@@ -143,11 +142,11 @@ program DMBayes_mnde
    GIDin%gammas%delta_gamma   = Ini_Read_Double('delta_gamma',1.d-5)
    GIDin%gammas%egath   = Ini_Read_Double('egath')
    GIDin%gammas%efluxes_i = Ini_Read_Double('ei')
-   GIDin%gammas%efluxes_f = Ini_Read_Double('ef')   
+   GIDin%gammas%efluxes_f = Ini_Read_Double('ef')
    GIDin%gammas%nbins   = Ini_Read_Int('nbins')
 
-   GFlags%ID_Flags_gamma%gadiff = Ini_Read_Logical('compute_ID_gadiff') 
-   GFlags%ID_Flags_gamma%GC_region = Ini_Read_Logical('compute_ID_GC_region') 
+   GFlags%ID_Flags_gamma%gadiff = Ini_Read_Logical('compute_ID_gadiff')
+   GFlags%ID_Flags_gamma%GC_region = Ini_Read_Logical('compute_ID_GC_region')
    GFlags%ID_Flags_gamma%gac = Ini_Read_Logical('compute_ID_gacont')
 
    if (GFlags%ID_Flags_gamma%GC_region) then
@@ -172,7 +171,7 @@ program DMBayes_mnde
   LogFile = trim(out_rootname)//'.log'
   logfile_unit = 49
 
-  ! --- Sampling method ---- 
+  ! --- Sampling method ----
      !use_nuisance_splitting = Ini_Read_Logical('Use_nuisance_splitting', .false.)
      use_nuisance_splitting = .false.
      oversample_nuisance = Ini_Read_Int('oversample_nuisance',1)
@@ -186,7 +185,7 @@ program DMBayes_mnde
         procedure = Ini_Read_Int('slicing_procedure')
         call doStop('Sorry - slice sampling untested for the moment')
      end if
-  ! --- Parameterization choice ---- 
+  ! --- Parameterization choice ----
   !whether to use log scale on masses
   use_log_mass = Ini_Read_Logical('use_log_mass')
   use_BRs = Ini_Read_Logical('use_BRs')
@@ -194,14 +193,14 @@ program DMBayes_mnde
 
   ! ---- Data to include ------
   Use_Nuisance = Ini_Read_Logical('Use_Nuisance',.true.)
-  Use_Gamma = Ini_Read_Logical('Use_Gamma',.false.)       	
-  GFlags%use_data = Ini_Read_Int('use_data') !1 for Fermi, 2 for generation of data, 3 for generation of data with Poisson noise.  
+  Use_Gamma = Ini_Read_Logical('Use_Gamma',.false.)
+  GFlags%use_data = Ini_Read_Int('use_data') !1 for Fermi, 2 for generation of data, 3 for generation of data with Poisson noise.
 
   !----- Some checks for consistency of requests ----
   if (Use_Gamma .and. (.not. (GFlags%ID_Flags_gamma%gadiff .or. GFlags%ID_Flags_gamma%GC_region))) then
      call DoStop('You cannot use gamma-ray data in the likelihood if you do not compute it!')
   end If
-  if (any(analysis_step .eq. (/1,2,4,5/)) .and. action .ne. doNS) then 
+  if (any(analysis_step .eq. (/1,2,4,5/)) .and. action .ne. doNS) then
      write(*,*) 'You must use nested sampling with analysis step ',analysis_step
      call DoStop('Inconsistent ini file.  Exiting...')
   else if (any(analysis_step .eq. (/3,7/))  .and. action .ne. doDE) then
@@ -212,7 +211,7 @@ program DMBayes_mnde
   endif
 
 
-  !---- Miscellaneous settings ----- 
+  !---- Miscellaneous settings -----
 
   Ini_fail_on_not_found = .true.
 
@@ -241,10 +240,10 @@ program DMBayes_mnde
   end if
 
   num_points = 0
-  call StartTiming(MC_Hertz,MC_Begin_Clock)  
+  call StartTiming(MC_Hertz,MC_Begin_Clock)
   !creates logfile to write total timing
   call CreateTxtFile(LogFile,logfile_unit)
-  
+
   if (action .eq. doNS) then
 
     !-----------------------------------
@@ -260,7 +259,7 @@ program DMBayes_mnde
     call dive_sample
 
   endif
- 
+
   !-----------------------------------
   ! Wrapping up loose ends
   !-----------------------------------
