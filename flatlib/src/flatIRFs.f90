@@ -22,7 +22,7 @@
       RECURSIVE FUNCTION flatIRFs_Aeff(l10E_true, IncidenceAngles_true, strip) RESULT (Aeff)
       ! Returns the effective area as a function of true photon energy and incidence angles, either
       ! in total or for the thick or thin detector strips individually.
-      !    
+      !
       ! Input:   l10E_true               double   log (True energy of incoming photon / GeV)
       !          IncidenceAngles_true    double   [ cos (True off-axis angle of incoming photon), 
       !                                             True azimuthal angle of incoming photon (radians) ]

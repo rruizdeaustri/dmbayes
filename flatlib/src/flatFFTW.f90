@@ -184,10 +184,6 @@
       !weightB = (TransformedPSFCube_energies(lowerindex(1)+1) - E_true)/gap
       !flatFFTW_TransformedPSF = weightB*TransformedPSFCube(:,:,lowerindex(1)) + weightA*TransformedPSFCube(:,:,lowerindex(1)+1)
 
-
-!      print*,source_FFTsize_RA(ROI),padding_RA(ROI),source_FFTsize_DEC(ROI),padding_DEC(ROI)
-!      stop
-
       !Algorithm 3 - Old-fashioned F77 search.  Still the fastest apparently...
       if (abs(E_true - TransformedPSFCube_energies(1)) .lt. 1.d-8) then
         lowerindex(1) = 1

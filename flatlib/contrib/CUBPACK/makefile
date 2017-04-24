@@ -39,13 +39,10 @@ cubpack_drivers: cubpack $(DRIVERS_OBJ)
 	$(foreach DRIVER,$(DRIVERS_BARE), $(FF) $(FCFLAGS) -o $(LOCAL_BUILD)/$(DRIVER) $(LOCAL_BUILD)/Drivers/$(DRIVER).o -L$(LIB) -lcubpack;)
 
 $(LOCAL_BUILD)/Core/%.o: $(LOCAL_SRC)/Core/%.f90
-	$(FC) -c $(FCFLAGS) -o $@ -module $(LOCAL_BUILD)/Core $<
-
-#$(LOCAL_BUILD)/Core/%.o: $(LOCAL_SRC)/Core/%.f90
-#	$(FC) -c $(FCFLAGS) -o $@ -J $(LOCAL_BUILD)/Core $<
+	$(FC) -c $(FCFLAGS) -o $@ -$(MODULE) $(LOCAL_BUILD)/Core $<
 
 $(LOCAL_BUILD)/Drivers/%.o: $(LOCAL_SRC)/Drivers/%.f90
-	$(FC) -c $(FCFLAGS) -o $@ -module $(LOCAL_BUILD)/Drivers -I$(LOCAL_BUILD)/Core $<
+	$(FC) -c $(FCFLAGS) -o $@ -$(MODULE) $(LOCAL_BUILD)/Drivers -I$(LOCAL_BUILD)/Core $<
 
 clean:
 	rm -f -r $(LOCAL_BUILD)/Core/*.o

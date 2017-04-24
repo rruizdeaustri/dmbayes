@@ -157,18 +157,9 @@
             if (i .eq. source_FFTsize_RA(ROI)) Direction_true(1) = Direction_true(1)*(1.d0 - 5.d0*sign(epsilon(Direction_true(1)),Direction_true(1)))
             if (j .eq. source_FFTsize_DEC(ROI)) Direction_true(2) = Direction_true(2)*(1.d0 - 5.d0*sign(epsilon(Direction_true(2)),Direction_true(2)))
             UntransformedSource(ROI)%ptr(i,j) = sourceFunction(logE_true, Direction_true)
-!rruiz
-!            if( UntransformedSource(ROI)%ptr(i,j) .lt. 1.d-20)  UntransformedSource(ROI)%ptr(i,j) = 1.d-20
-           !if( UntransformedSource(ROI)%ptr(i,j) /= 0d0) print*,k,i,j,logE_true, Direction_true, UntransformedSource(ROI)%ptr(i,j)
-           !print*,k,i,j,logE_true, Direction_true, UntransformedSource(ROI)%ptr(i,j)
           enddo
         enddo
 
-
-! When there is an extrapolation this is not consistent since we get 
-! 0 flux and we have to avoid this as it was done previously to avoid 
-! numerical issues
-!Here below as well        
         if (padding_RA(ROI) .ne. 0 .or. padding_DEC(ROI) .ne. 0) then
           UntransformedSource(ROI)%ptr(source_FFTsize_RA(ROI)+1:,:) = 0.d0
           UntransformedSource(ROI)%ptr(:,source_FFTsize_DEC(ROI)+1:) = 0.d0    
@@ -176,35 +167,14 @@
 
         call dfftw_execute_dft_r2c(plan_source(ROI), UntransformedSource(ROI)%ptr, TransformedSource(ROI)%ptr)
 
-   !rruiz
-       UntransformedInverse(ROI)%ptr = TransformedSource(ROI)%ptr * cmplx(flatFFTW_TransformedPSF(ROI,logE_true)) 
+        UntransformedInverse(ROI)%ptr = TransformedSource(ROI)%ptr * cmplx(flatFFTW_TransformedPSF(ROI,logE_true)) 
 
-
-!        do i = 1,60
-!         do j=1,60
-         ! if( UntransformedSource(ROI)%ptr(i,j) == 0d0) print*,k,i,j, Direction_true, UntransformedSource(ROI)%ptr(i,j)
-!         print*,k,i,j, Direction_true, UntransformedSource(ROI)%ptr(i,j)
-!         enddo
-!        enddo
-
-        
         call dfftw_execute_dft_c2r(plan_inverse(ROI), UntransformedInverse(ROI)%ptr, TransformedInverse(ROI)%ptr)
 
-!        do i = 1,60
-!         do j=1,60
-          !if( TransformedInverse(ROI)%ptr(i,j) == 0d0) print*,k,i,j, TransformedInverse(ROI)%ptr(i,j)
-!            print*,'transf hav',k,i,j, TransformedInverse(ROI)%ptr(i,j)
-!        enddo
-!        enddo
-
-
         if (PointingType_share .eqv. livetime) TransformedInverse(ROI)%ptr = TransformedInverse(ROI)%ptr * flatIRFs_Aeff_mean(logE_true, both)
-
         temp_Integrand(k,:,:) = TransformedInverse(ROI)%ptr(:source_FFTsize_RA(ROI),:source_FFTsize_DEC(ROI)) * Edisps_scaled(k) / &
                                 (dble(source_FFTsize_RA(ROI) + padding_RA(ROI)) * dble(source_FFTsize_DEC(ROI) + padding_DEC(ROI)))
-         
-     enddo
-    
+      enddo
     
       getIntegral = 0.d0
       do i=1,nFastSamples-1
