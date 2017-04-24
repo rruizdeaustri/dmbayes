@@ -18,6 +18,16 @@ CC = gcc
 # FC = mpif90
 # CC = mpicc
 
+### Local library paths (change to suit your system if any of the libs are not in standard paths) ###
+LIB_CFITSIO=.
+LIB_WCS=.
+LIB_FFTW=.
+INC_FFTW=/usr/include
+LAPACKL=-llapack -lblas
+
+
+### Don't mess with anthing below this line ###
+
 MODULE = module
 ifeq ($(FC), mpif90)
  ifeq ($(OS), linux)
@@ -51,59 +61,18 @@ DEBUG=
 
 export FC FCFLAGS FFLAGS FOPT CC CFLAGS CPPC CXXFLAGS MODULE
 
-### Setups for the LIB root directory ###
-
-# Intel v8*
-#LIB_COMP= -lcxa -lcprts -lirc -lunwind
+### Library paths that you should not change ###
 
 LIB_DM=../dm/lib
 LIB_NS=../multinest
-LIB_DE=../Diver
+LIB_DE=../Diver/lib
 INC_DE=$(LIB_DE)/build
 LIB_FLAT=../flatlib/lib
 BUILD_FLAT=../flatlib/build
 CONTRIB_FLAT=../flatlib/contrib
 LIB_TSPACK=../TSPACK
-LIB_CFITSIO= /usr/local/lib
-LIB_WCS=.
-INC_WCS=../WCSLIB/wcslib-3.4
-LIB_FFTW=.
-INC_FFTW=.
 
 export LIB_CFITSIO LIB_FFTW INC_FFTW
-
-# Glamdring: standard LAPACK/BLAS libraries
-#LIB_CG=/usr/lib/gcc-lib/i386-redhat-linux/3.3.3/
-#LAPACKL = -L$(LIB_CG) -llapack -lblas
-
-# MKL v7 on a 32-bit machine
-#LIB_CG= /home/ruiz/opt/intel_mkl/mkl721/lib/32
-#LAPACKL = -L$(LIB_CG) -lmkl_lapack -lmkl_ia32 -lpthread -lguide
-
-# MKL v10 on a 32-bit machine
-#LAPACKL = -lmkl_ia32 -liomp5 -lpthread  -lguide
-
-# MKL v10 on a 64-bit machine
-#LAPACKL = -lmkl -lmkl_lapack -liomp5 -lpthread -lguide
-
-# Ciclope: standard LAPACK/BLAS libraries
-#LIB_CG=/home/alfonso/lib/
-#LAPACKL = -L$(LIB_CG) -llapack -lblas
-
-#MKL v10 for MAC
-#LIB_CG = /Library/Frameworks/Intel_MKL.framework/Versions/10.0.4.022/lib/32
-
-#RT on MacOSX This is for ifort v11.1
-#LIB_CG = /Library/Frameworks/Intel_MKL.framework/Versions/11.1.076_cprof/lib/32/
-#LAPACKL = -L$(LIB_CG) -lmkl_intel_thread -lmkl_intel -lmkl_sequential -lmkl_core -lpthread  -lmkl_lapack -lguide
-
-# LAPACK on Summergate (and GLAST boxes, via Summergate)
-LAPACKL = -llapack -lblas
-
-# MKL/LAPACK on copsosx03
-#LAPACKL = -lmkl_core -lmkl_intel -lmkl_lapack -liomp5 -lpthread \
-#          -lguide -lmkl_intel_thread
-
 
 OBJS =   fermi_utils.o numerical_routines.o inifile.o utils.o \
          settings.o typedef.o \
@@ -143,7 +112,7 @@ default : $(PNAME2)
 fort: typedef $(PNAME1) $(PNAME2)
 
 
-all:  flatlib typedef dmlib tspack nestlib diver $(PNAME1) $(PNAME2) tester
+all:  flatlib typedef dmlib tspack nestlib diver $(PNAME2) tester
 
 
 # PS - added include paths for FLATlib, CMLIB and Diver module files
@@ -174,11 +143,11 @@ nestlib:
 	cd ../multinest; $(MAKE) all
 
 diver:
-	cd ../Diver; $(MAKE) FF=$(FC) libdiver.a
+	cd ../Diver; $(MAKE) FF="$(FC)" CC="$(CC)" MODULE="$(MODULE)" FOPT="$(FOPT)" libdiver.a
+
 
 $(PNAME1): flatlib tspack typedef dmlib $(OBJFILES)
 	$(FC) -o ../$(PNAME1)  $(OBJFILES) $(LIBS) $(FFLAGS)
-
 
 $(PNAME2): flatlib tspack nestlib diver typedef dmlib $(mnde_OBJFILES)
 	$(FC) -o ../$(PNAME2)  $(mnde_OBJFILES)  -L$(LIB_NS) -lnest3 $(LIBS) $(FFLAGS)
