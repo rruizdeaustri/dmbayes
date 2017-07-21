@@ -9,17 +9,17 @@ module dewrapper
 
  implicit none
 
- private 
+ private
  public dive_sample, de_NP, de_maxgen, de_maxciv, de_bndry, de_convsteps, de_convthresh
  public de_discrete, de_removeDuplicates, de_jDE, de_lambdajDE, de_current, de_expon, de_doBayesian, de_restart
  public de_Cr, de_lambda, de_maxNodePop, de_Ztol, de_root
 
  integer :: sdim, nDerived
- integer :: de_NP, de_maxgen, de_maxciv, de_bndry, de_convsteps 
+ integer :: de_NP, de_maxgen, de_maxciv, de_bndry, de_convsteps
  double precision :: de_convthresh
  integer, dimension(1) :: de_discrete
  logical :: de_removeDuplicates, de_jDE, de_lambdajDE, de_current, de_expon, de_doBayesian, de_restart
- double precision :: de_Cr, de_lambda, de_maxNodePop, de_Ztol 
+ double precision :: de_Cr, de_lambda, de_maxNodePop, de_Ztol
  character*100 de_root !root for saving output files
  double precision, allocatable :: BF_like_all(:)
  double precision, allocatable :: BF_PS_all(:,:)
@@ -43,13 +43,13 @@ module dewrapper
           !don't count the parameters with delta priors
           if (Scales%PMin(i) .eq. Scales%PMax(i)) cycle
           sdim=sdim+1
-          if (j==2) then 
+          if (j==2) then
              de_upperbounds(sdim) = Scales%PMax(i)
              de_lowerbounds(sdim) = Scales%PMin(i)
           endif
        end do
        if (j == 1) allocate(de_upperbounds(sdim),de_lowerbounds(sdim))
-    enddo   
+    enddo
 
     !PS: FIXME the discrete point source parameter needs to have integral upper/lower boundaries -- need to add a check for this!!
 
@@ -93,7 +93,7 @@ module dewrapper
 
     !Discrete params are given as discrete=(/x,y/) where x and y are the parameter numbers that should be integral.
     !The discrete parameter is always the last one in the .ini file.
-    de_discrete = sdim 
+    de_discrete = sdim
 
     call diver(getLogLikeDE, de_lowerbounds, de_upperbounds, de_root, nDerived=nDerived, resume=de_restart,      &
                jDE=de_jDE, NP=de_NP, maxgen=de_maxgen, maxciv=de_maxciv, removeDuplicates=de_removeDuplicates,   &
@@ -131,10 +131,12 @@ module dewrapper
     if (.not. validvector) then
        getLogLikeDE = logZero
        return
-    endif        
+    endif
+
+    j=0
+    allocate(Params%P(num_params))
 
     !Work out which are free parameters and which have delta priors
-    j=0
     do i = 1,num_params
        if (Scales%PMin(i) == Scales%PMax(i)) then
           Params%P(i) = Scales%PMin(i)
@@ -155,7 +157,7 @@ module dewrapper
     if ( (Params%P(i+1) < PS_prior_box_centres(1,Params%P(num_params)) - 0.75) .or. &
          (Params%P(i+1) > PS_prior_box_centres(1,Params%P(num_params)) + 0.75) .or. &
          (Params%P(i+2) < PS_prior_box_centres(2,Params%P(num_params)) - 0.75) .or. &
-         (Params%P(i+2) > PS_prior_box_centres(2,Params%P(num_params)) + 0.75) ) then 
+         (Params%P(i+2) > PS_prior_box_centres(2,Params%P(num_params)) + 0.75) ) then
 
        !The point is outside the allowed l,b range.  Here we make the likelihood an artificial 'funnel' to
        !help falling into the allowed l,b range faster, i.e. GetLogLikeDE = logZero*(1+ (linear) distance from allowed zone)
@@ -170,10 +172,10 @@ module dewrapper
        dble( Params%P(i+2) - (PS_prior_box_centres(2,Params%P(num_params)) + 0.75) ))
 
     else
- 
+
        !The point is inside the allowed l,b range, so get the log likelihood
        getLogLikeDE = GetLogLike(Params)
-       if (getLogLikeDE .ge. 1.d10) getLogLikeDE = logZero 
+       if (getLogLikeDE .ge. 1.d10) getLogLikeDE = logZero
 
     end if
 
@@ -182,7 +184,7 @@ module dewrapper
        BF_Like = getLogLikeDE
        forall(i=1:7) BF_PS(i,Params%P(num_params)) = Params%P(num_hard + num_nuis_wobg + Dim_Gparams + Dim_Tparams + i)
     end if
-       
+
 #ifdef MPI
     !Gather the best-fit values from all the different MPI processes.
     call MPI_Allgather(BF_like, 1, MPI_DOUBLE_PRECISION, BF_like_all, 1, MPI_DOUBLE_PRECISION, MPI_COMM_WORLD, ierror)
@@ -213,7 +215,7 @@ module dewrapper
 
     !Get the derived parameters
     call OutParams_NS(Params,Cube)
-    
+
     !Cube now contains Params and the derived parameters
     inparams = Cube
 
@@ -241,9 +243,9 @@ module dewrapper
     !Work out which PS are in the top third by brightness.  First sort the top third of BFvals_copy into descending order according to brightness.
     do i = 1, 1+nPS/3
       temp1 = -huge(1.d0)
-      temp1(i:nPS) = BFvals_copy(3,i:)	 
+      temp1(i:nPS) = BFvals_copy(3,i:)
       location = maxloc(temp1)
-      temp2 = BFvals_copy(:,i)              
+      temp2 = BFvals_copy(:,i)
       BFvals_copy(:,i) = BFvals_copy(:,location(1))
       BFvals_copy(:,location(1)) = temp2
     end do
