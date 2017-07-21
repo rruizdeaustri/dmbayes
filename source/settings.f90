@@ -14,11 +14,11 @@ module settings
 
 
   !which version this is and info about packages
-  character(LEN = 200), parameter :: version =      'DMBayeS, v1.0, Nov 2014'
+  character(LEN = 200), parameter :: version =      'DMBayeS, v1.0, Jul 2017'
   character(LEN = 200), parameter :: dm_ver =       'DarkMatter: version 1'
-  character(LEN = 200), parameter :: ns_ver =       'Nested sampling: version 2.18'
+  character(LEN = 200), parameter :: ns_ver =       'Nested sampling: version 3.10'
   character(LEN = 200), parameter :: like_ver =     'Likelihood code: version 11/2014'
-  character(LEN = 200), parameter :: de_ver =       'Diver: version 1.0.0'
+  character(LEN = 200), parameter :: de_ver =       'Diver: version 1.0.2'
 
   !format output/input
   character(LEN = 200) :: fmt_params
@@ -27,9 +27,9 @@ module settings
   integer, parameter :: num_hard = 16
   !CS: Changed this to 16 - including both grid and template parameters
   !CS: Later: Changed this to
-  integer, parameter :: num_soft = 15 !nuisance params
+  integer, parameter :: num_soft = 23 !nuisance params
   !CS: Defined this new parameter: Nuisance parameters unrelated to the bg or PS
-  integer, parameter :: num_nuis_wobg = 5, num_ps_par = 7
+  integer, parameter :: num_nuis_wobg = 5
   integer, parameter :: num_additional = 2 !extra params in the output
   !this is analogous to fast/slow split in cmb-case.
   !For the moment both sets of params treated equally.
@@ -45,8 +45,7 @@ module settings
   integer :: action
 
   !The rest are set up automatically
-  !integer, parameter :: num_params = num_hard + num_soft !max number allowe
-  integer :: num_params
+  integer, parameter :: num_params = num_hard + num_soft !max number allowe
   integer, dimension(:), allocatable :: params_used, nuis_params_used
   integer num_params_used, num_slow, num_nuis
   !num_params_used corresponds to the total number of used params

@@ -6,7 +6,7 @@ module nestwrapper
    use priors
    use Calclike
    implicit none
-   
+
    !nested sampling parameters
    logical nest_mmodal !multiple modes expected?
    integer nest_nlive !no. of live points
@@ -22,7 +22,7 @@ module nestwrapper
    logical nest_outfile !Produce output files?
    logical nest_initMPI !Set to F in order for the main program to handle MPI initialization
    integer nest_maxIter !maximum number of iterations, a non-positive value means infinity
-   integer sdim !dimensionality   
+   integer sdim !dimensionality
    real*8 nest_logZero
 
 
@@ -44,7 +44,7 @@ subroutine nest_Sample
    end do
 
    !set total no. of parameters to be saved
-   nest_nPar=CountParams()   
+   nest_nPar=CountParams()
 
    !no wraparound
    allocate(nest_pWrap(sdim))
@@ -63,7 +63,7 @@ subroutine nest_Sample
 
    call nestRun(nest_mmodal,.false.,nest_nlive,nest_tol,nest_efr,sdim,nest_nPar,nest_nCdims,nest_maxModes,100,-1.d90, &
    nest_root,nest_seed,nest_pWrap,nest_fb,restart_multinest,nest_outfile,nest_initMPI,nest_logZero,nest_maxIter,getLogLikeNS,dumper,context)
-    
+
 end subroutine nest_Sample
 
 !-----*-----------------------------------------------------------------
@@ -80,8 +80,9 @@ subroutine getLogLikeNS(Cube,n_dim,nPar,lnew,context)
    Type(ParamSet) Params
    real*8 logZero
    parameter(logZero=-huge(1.d0)*epsilon(1.d0))
-   
+
    j=0
+   allocate(Params%P(num_params))
 
    do i=1,num_params
 
@@ -91,13 +92,13 @@ subroutine getLogLikeNS(Cube,n_dim,nPar,lnew,context)
          j=j+1
          if(any((/1,4/) .eq. analysis_step)) then
             !In order for mode separation to happen on the PS parameters and not the BG parameters the order in which
-            !parameters are saved in the cube has to be changed. 
+            !parameters are saved in the cube has to be changed.
             if((i > 21).and.(i < 32)) Cube(j+3) = Scales%PMin(i)+(Scales%PMax(i)-Scales%PMin(i))*Cube(j+3)
             if((i > 31).and.(i < 35)) Cube(j-3) = Scales%PMin(i)+(Scales%PMax(i)-Scales%PMin(i))*Cube(j-3)
             if((i > 21).and.(i < 32)) Params%P(i) = real(Cube(j+3))
             if((i > 31).and.(i < 35)) Params%P(i) = real(Cube(j-3))
          else
-            Cube(j)=Scales%PMin(i)+(Scales%PMax(i)-Scales%PMin(i))*Cube(j) 
+            Cube(j)=Scales%PMin(i)+(Scales%PMax(i)-Scales%PMin(i))*Cube(j)
             Params%P(i)=real(Cube(j))
          end if
       end if
@@ -108,7 +109,7 @@ subroutine getLogLikeNS(Cube,n_dim,nPar,lnew,context)
    lnew=dble(-GetLogLike(Params))
 
    if(lnew<=-1.d10) lnew=logZero
-   
+
    !get the additional parameters
    call OutParams_NS(Params,Cube)
 
@@ -130,7 +131,7 @@ subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLo
 	double precision logZ				! log evidence
 	double precision logZerr			! error on log evidence
 	integer context					! not required by MultiNest, any additional information user wants to pass
-	
+
 end subroutine dumper
 
 !-----*-----------------------------------------------------------------

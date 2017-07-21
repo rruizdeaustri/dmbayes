@@ -1,10 +1,10 @@
-!This module contains 
+!This module contains
 !        - type definitions for MCMC variables (type definitions for MSSM variables in typedef.f90)
-!        - parameter read-in/initialization routines 
+!        - parameter read-in/initialization routines
 !        - mapping routines linking MCMC parameters (params) and the physical parameters
 !        - parameters I/O routines
 !DMBayes Package
-!This version Oct 2012 
+!This version Oct 2012
 !Monte Carlo routines based on COSMOMC package by Antony Lewis (http://cosmologist.info)
 
 module ParamDef
@@ -14,7 +14,7 @@ module ParamDef
   use settings
 
  implicit none
- 
+
  Type ParamSet
    real, dimension(:), allocatable :: P
  end Type ParamSet
@@ -39,7 +39,7 @@ module ParamDef
  logical :: propose_grid = .false., postproc = .false.
  logical :: estimate_propose_matrix = .false., use_BRs = .false.
  logical :: use_log_mass = .false., use_log_channels = .false.
- logical :: use_nuisance_splitting = .false. 
+ logical :: use_nuisance_splitting = .false.
 
  logical :: Use_Gamma = .false.
  logical :: Use_Nuisance = .false.
@@ -64,7 +64,7 @@ module ParamDef
  character(LEN=35) :: phigam_units, dphigam_units, ratenu_units, &
             dratenu_units
 
- !global variables 
+ !global variables
  Type(DM), save :: CurrentOutputP, PreviousOutputP
  Type(Input_Params) :: Fiducial
  Type(Nuisance_Params) :: FidNuisance
@@ -76,12 +76,12 @@ module ParamDef
  !global variable containing the flags
  Type(Flags) :: GFlags, GFlags_old
  !global variable containing ID params
- Type(ID_in) :: GIDin, GIDin_old 
- Type(ID_out), save :: GIDout 
+ Type(ID_in) :: GIDin, GIDin_old
+ Type(ID_out), save :: GIDout
  !timing variables
  logical, parameter :: timing= .true.
  integer :: Hertz,  Begin_Clock, End_Clock, ms
- character(12) :: Elapsed_Time 
+ character(12) :: Elapsed_Time
  real :: dm_av = 0d0, dm_ssq = 0d0
  !standard dev squared
  real :: like_av, like_ssq
@@ -98,17 +98,14 @@ module ParamDef
  !MultiNest needs this
  logical :: add_noise
 
- !parameter indicies 
+ !parameter indicies
  integer, parameter :: mx = 1, alpha = 13, beta = 14, gam = 15, rho0 = 16, m_top=21
  !Cross-section/BR parameters; must have sigmav and one other in place 2, and be contiguous up to br_max_index
  integer, parameter :: BR_max_index = 12
  integer, parameter :: sigmav = 2, tautau = 2, ccbar = 3, bbar = 4, ttbar = 5, ww = 6, zz = 7, zgam = 8, gamgam = 9, gg = 10, ee = 11, mumu = 12
 
- !rruiz
- integer :: PS_number
-
 contains
-           
+
   subroutine Initialize(Params)
     use IniFile
     implicit none
@@ -117,10 +114,7 @@ contains
     character(LEN=5000) InLine
     character(LEN=120) prop_mat
     real wid, mult, like
-
-    real, dimension(:,:), allocatable :: pmat
-
-    num_params = num_hard + num_soft + PS_number * num_ps_par
+    real pmat(num_params,num_params)
 
     DMNames(mx)     =  'm_\chi (GeV)'
     DMUsed(mx)      =  .true.
@@ -147,7 +141,7 @@ contains
     DMUsed(ee)     =  .true.
     DMNames(mumu)  =  'BR_{\mu^+ \mu^-}'
     DMUsed(mumu)   =  .true.
-    
+
     DMNames(alpha)    =  '\alpha'
     DMUsed(alpha)     =  .true.
     DMNames(beta)     =  '\beta'
@@ -156,23 +150,22 @@ contains
     DMUsed(gam)       =  .true.
     DMNames(rho0)     =  '\rho_0 (GeV\,cm$^{-3}$)'
     DMUsed(rho0)      =  .true.
-    
+
     Ini_fail_on_not_found = .false.
     prop_mat = Ini_Read_String('propose_matrix')
     has_propose_matrix = prop_mat /= ''
 
     allocate(Params%P(num_params),Scales%PMin(num_params),Scales%PMax(num_params), Scales%PWidth(num_params), Scales%center(num_params), GridDim(num_params))
 
-
-!    if (restart) then
+    if (restart) then
        !RestartLine has been saved before, see driver.f90
-!       read(RestartLine, *) mult, like, Params%P(1:num_params)
-!       StartLike = Like
-!       if (Feedback > 1) then
-!          write(*,*) ' Restarting from like: ', like
-!          write(*,*) ' At params ', Params%P(1:num_params)
-!       end if
-!    end if
+       read(RestartLine, *) mult, like, Params%P(1:num_params)
+       StartLike = Like
+       if (Feedback > 1) then
+          write(*,*) ' Restarting from like: ', like
+          write(*,*) ' At params ', Params%P(1:num_params)
+       end if
+    end if
 
     num_params_used = 0
     num_slow = 0
@@ -189,21 +182,21 @@ contains
        if (abs(Scales%PMin(i) - Scales%PMax(i)) .gt. epsilon(Scales%PMax(i))) then
           !those are used params
           num_params_used = num_params_used + 1
-          if (i > num_hard) then 
+          if (i > num_hard) then
              num_nuis = num_nuis + 1
           else
-             num_slow = num_slow + 1          
+             num_slow = num_slow + 1
           end if
           if (propose_grid) then
-             GridDim(i) = nint((Scales%PMax(i) - Scales%PMin(i))/Scales%PWidth(i))+1 
-             If (Feedback > 0) then 
-                write(*,*) 'Grid Points in Param' ,i, ' = ', GridDim(i), Scales%Pmin(i), Scales%Pmax(i), Scales%Pwidth(i)                
+             GridDim(i) = nint((Scales%PMax(i) - Scales%PMin(i))/Scales%PWidth(i))+1
+             If (Feedback > 0) then
+                write(*,*) 'Grid Points in Param' ,i, ' = ', GridDim(i), Scales%Pmin(i), Scales%Pmax(i), Scales%Pwidth(i)
              end If
              TotGridPoints = TotGridPoints*GridDim(i)
           end if
        end if
 
-       !if (.not. restart) then
+       if (.not. restart) then
           if (.not. propose_grid) then
              do
                 if (wid < 0) then
@@ -212,9 +205,6 @@ contains
                    Params%P(i) = Scales%center(i) - abs(Gaussian1())*wid
                 else
                    Params%P(i) = Scales%center(i) + Gaussian1()*wid
-!                    Params%P(i) = Scales%center(i) + random_gaussian(1)*wid
-                   !write(*,*) 'Yo2', Scales%center(i), i,  Scales%PMin(i),  Scales%PMax(i),  Params%P(i)
-                   
                 end if
                 !Repeat until get acceptable values in range
                 if (Params%P(i)>=  Scales%PMin(i) .and. Params%P(i) <= Scales%PMax(i)) exit
@@ -222,10 +212,10 @@ contains
           else !if grid
              Params%P(i) = Scales%PMin(i)
           end if !propose grid
-      ! end if !not restart
+       end if !not restart
     end do
 
-  
+
     if (abs(Scales%PMin(alpha) - Scales%PMax(alpha)) .lt. epsilon(Scales%PMax(alpha)) .and. &
         abs(Scales%PMin(beta) - Scales%PMax(beta)) .lt. epsilon(Scales%PMax(beta)) .and. &
         abs(Scales%PMin(gam) - Scales%PMax(gam)) .lt. epsilon(Scales%PMax(gam)))  GFlags%ID_Flags_gamma%halo_fix = .true.
@@ -264,12 +254,12 @@ contains
     end if
 
     !Check how many parameters are scanned over and make sure it matches analysis_step
-    required_dimensionalities = (/6,3,16,6,3,0,25/) !FIXME 18->19, 25->26 once bubble template is included 
-!    if (num_params_used /= required_dimensionalities(analysis_step)) then
-!       write(*,*) "You are trying to scan over ",num_params_used, " parameters."
-!       write(*,*) "If you use analysis_step = ",analysis_step," you must scan over ", required_dimensionalities(analysis_step), " parameters in total!!!" 
-!       stop
-!    end if
+    required_dimensionalities = (/6,3,18,6,3,0,25/) !FIXME 18->19, 25->26 once bubble template is included
+    if (num_params_used /= required_dimensionalities(analysis_step)) then
+       write(*,*) "You are trying to scan over ",num_params_used, " parameters."
+       write(*,*) "If you use analysis_step = ",analysis_step," you must scan over ", required_dimensionalities(analysis_step), " parameters in total!!!"
+       stop
+    end if
 
     if (Feedback > 0 ) then
        write(*, *) 'Varying a total of ', num_params_used, ' parameters'
@@ -298,8 +288,8 @@ contains
 
        propose_matrix = pmat(params_used, params_used)
        call SetProposeMatrix
-       if (Feedback > 0) then 
-          write(*,*) 'which are the params_used', params_used 
+       if (Feedback > 0) then
+          write(*,*) 'which are the params_used', params_used
           write(*,*) 'which are the nuis_params_used', nuis_params_used
        end if
        !look for it in this file below
@@ -317,7 +307,6 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
      use settings
 
      implicit none
-     integer :: i
      real Params(num_Params)
      Type(Input_Params) DM
      Type(Nuisance_Params) NuisP
@@ -335,7 +324,7 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
      DM%gamma = Params(gam)
      DM%rho = Params(rho0)
 
-     !Start off by assuming all annihilation channels into massive final states are closed   
+     !Start off by assuming all annihilation channels into massive final states are closed
      DM%sigmav = 0.d0
      DM%BR_ccbar = 0.d0
      DM%BR_bbar = 0.d0
@@ -346,7 +335,7 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
      DM%BR_ww = 0.d0
      DM%BR_zz = 0.d0
      DM%BR_zgam = 0.d0
-     
+
      !Now reopen those annihilation channels that are allowed
      call OpenChannel(DM%mx,MassData%e,DM%BR_ee,Params(ee),use_log_channels)
      call OpenChannel(DM%mx,MassData%mu,DM%BR_mumu,Params(mumu),use_log_channels)
@@ -365,8 +354,8 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
            DM%sigmav = 10**(Params(sigmav))
         else
            DM%sigmav = Params(sigmav)
-        endif   
-        DM%BR_tautau = 1.d0 - DM%BR_ee - DM%BR_mumu - DM%BR_ccbar - DM%BR_bbar - DM%BR_ttbar - DM%BR_ww - DM%BR_zz - DM%BR_gg - DM%BR_zgam - DM%BR_gamgam    
+        endif
+        DM%BR_tautau = 1.d0 - DM%BR_ee - DM%BR_mumu - DM%BR_ccbar - DM%BR_bbar - DM%BR_ttbar - DM%BR_ww - DM%BR_zz - DM%BR_gg - DM%BR_zgam - DM%BR_gamgam
      else
         !BR_tautau is a parameter in this case
         call OpenChannel(DM%mx,MassData%tau,DM%BR_tautau,Params(tautau),use_log_channels)
@@ -377,7 +366,7 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
      NuisP%a0 = Params(17)
      NuisP%e0 = Params(18)
      NuisP%delta1 = Params(19)
-     NuisP%delta2  = Params(20) 
+     NuisP%delta2  = Params(20)
      NuisP%mtop = Params(m_top)
 !Change
      !BgP%bg_A = Params(20)
@@ -398,19 +387,17 @@ subroutine ParamsToDMParams(Params, DM, NuisP, BgGP, BgTP, PSP)
      BgTP%beta_CR = Params(31)
 
 !Point source parameters
-     do i = 1, PS_number
-      !print*,i, Params(32+7*(i-1)),Params(33+7*(i-1))
-      PSP%PS_l(i) = Params(32+ num_ps_par *(i-1))
-      PSP%PS_b(i) = Params(33+num_ps_par*(i-1))
-      PSP%N_0(i) = Params(34+num_ps_par*(i-1))
-      PSP%E_0(i) = Params(35+num_ps_par*(i-1))
-      PSP%PS_alpha(i) = Params(36+num_ps_par*(i-1))
-      PSP%PS_beta(i) = Params(37+num_ps_par*(i-1))
-      PSP%Inv_E_c(i) = Params(38+num_ps_par*(i-1))
-     enddo
+     PSP%PS_l = Params(32)
+     PSP%PS_b = Params(33)
+     PSP%N_0 = Params(34)
+     PSP%E_0 = Params(35)
+     PSP%PS_alpha = Params(36)
+     PSP%PS_beta = Params(37)
+     PSP%Inv_E_c = Params(38)
+     PSP%PSnumber = Params(39)
 
      if (Feedback > 3)  call PrintOutModelParams(DM, NuisP, BgGP, BgTP, PSP)
- 
+
 end subroutine ParamsToDMParams
 
 
@@ -420,7 +407,7 @@ subroutine convertXSectionsToBRs(DM)
    Type(Input_Params), intent (INOUT) :: DM
 
    !Add all the sigmavs to get sigmav_total
-   DM%sigmav = DM%BR_tautau + DM%BR_bbar + DM%BR_ttbar + DM%BR_ww + DM%BR_zz + DM%BR_ee + DM%BR_mumu + DM%BR_ccbar + DM%BR_gg + DM%BR_zgam + DM%BR_gamgam        
+   DM%sigmav = DM%BR_tautau + DM%BR_bbar + DM%BR_ttbar + DM%BR_ww + DM%BR_zz + DM%BR_ee + DM%BR_mumu + DM%BR_ccbar + DM%BR_gg + DM%BR_zgam + DM%BR_gamgam
    DM%BR_ccbar = DM%BR_ccbar/DM%sigmav
    DM%BR_bbar = DM%BR_bbar/DM%sigmav
    DM%BR_ttbar = DM%BR_ttbar/DM%sigmav
@@ -461,7 +448,6 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
      use settings
 
      implicit none
-     integer :: i
      real Params(num_Params)
      Type(Input_Params) DM
      Type(Nuisance_Params) NuisP
@@ -477,9 +463,9 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
 
      Params(alpha) = DM%alpha
      Params(beta) = DM%beta
-     Params(gam) = DM%gamma 
-     Params(rho0) = DM%rho 
- 
+     Params(gam) = DM%gamma
+     Params(rho0) = DM%rho
+
      if (use_log_channels) then
 
         if (use_BRs) then
@@ -507,13 +493,13 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
            Params(ee) = safe_log10(DM%BR_ee*DM%sigmav)
            Params(mumu) = safe_log10(DM%BR_mumu*DM%sigmav)
            Params(tautau) = safe_log10((1.d0 - DM%BR_bbar - DM%BR_ttbar - DM%BR_ww - DM%BR_zz - DM%BR_ee - &
-                              DM%BR_mumu - DM%BR_ccbar - DM%BR_gg - DM%BR_zgam - DM%BR_gamgam)*DM%sigmav)       
+                              DM%BR_mumu - DM%BR_ccbar - DM%BR_gg - DM%BR_zgam - DM%BR_gamgam)*DM%sigmav)
         endif
 
      else
 
         if (use_BRs) then
-           Params(sigmav) = DM%sigmav       
+           Params(sigmav) = DM%sigmav
            Params(ccbar) = DM%BR_ccbar
            Params(bbar) = DM%BR_bbar
            Params(ttbar) = DM%BR_ttbar
@@ -536,7 +522,7 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
            Params(gg) = DM%BR_gg*DM%sigmav
            Params(ee) = DM%BR_ee*DM%sigmav
            Params(mumu) = DM%BR_mumu*DM%sigmav
-           Params(tautau) = DM%sigmav - sum(params(3:BR_max_index))       
+           Params(tautau) = DM%sigmav - sum(params(3:BR_max_index))
         endif
 
      end if
@@ -550,8 +536,9 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
      !Change: bg params
      !Params(20) = BgP%bg_A
      !Params(21) = BgP%bg_Al
-     !Params(22) = BgP%bg_Ah 
+     !Params(22) = BgP%bg_Ah
 !To do: Generalize this
+
 !Background parameters
      Params(22) = BgGP%bg_xs
      Params(23) = BgTP%X_CO_1
@@ -563,23 +550,20 @@ subroutine DMParamsToParams(DM, Params, NuisP, BgGP, BgTP, PSP)
      Params(29) = BgTP%n_p
      Params(30) = BgTP%alpha_CR
      Params(31) = BgTP%beta_CR
-!Point source parameters                                  
-     do i = 1, PS_number
-      Params(32+7*(i-1)) = PSP%PS_l(i)
-      Params(33+7*(i-1)) = PSP%PS_b(i)
-      Params(34+7*(i-1)) = PSP%N_0(i)
-      Params(35+7*(i-1)) = PSP%E_0(i)
-      Params(36+7*(i-1)) = PSP%PS_alpha(i)
-      Params(37+7*(i-1)) = PSP%PS_beta(i)
-      Params(38+7*(i-1)) = PSP%Inv_E_c(i)
-     enddo
-                
+
+!Point source parameters
+     Params(32) = PSP%PS_l
+     Params(33) = PSP%PS_b
+     Params(34) = PSP%N_0
+     Params(35) = PSP%E_0
+     Params(36) = PSP%PS_alpha
+     Params(37) = PSP%PS_beta
+     Params(38) = PSP%Inv_E_c
+    Params(39) = PSP%PSnumber
 
 end subroutine DMParamsToParams
 
 subroutine PrintOutModelParams(InP, InN, InG, InT, InPS)
-
-     integer :: i
      Type(Input_Params) InP
      Type(Nuisance_Params) InN
      Type(Grid_Params) InG
@@ -609,7 +593,7 @@ subroutine PrintOutModelParams(InP, InN, InG, InT, InPS)
         write(*,*) 'A_0          : ', InN%a0
         write(*,*) 'E_0          : ', InN%e0
         write(*,*) 'delta_1      : ', InN%delta1
-        write(*,*) 'delta_2      : ', InN%delta2      
+        write(*,*) 'delta_2      : ', InN%delta2
         write(*,*) 'm top        : ', InN%mtop, ' (GeV)'
         write(*,*) '>>>> Background Grid Params'
         write(*,*) 'x_s        : ', InG%bg_xs
@@ -624,15 +608,14 @@ subroutine PrintOutModelParams(InP, InN, InG, InT, InPS)
         write(*,*) 'CR_alpha   : ', InT%alpha_CR
         write(*,*) 'CR_beta    : ', InT%beta_CR
         write(*,*) '>>>> Point Source Params'
-        do i = 1 ,size(InPS%PS_l)
-         write(*,*) 'l(i)         : ', InPS%PS_l(i)
-         write(*,*) 'b(i)         : ', InPS%PS_b(i)
-         write(*,*) 'log10(N_0)   : ', InPS%N_0(i)
-         write(*,*) 'E_0          : ', InPS%E_0(i)
-         write(*,*) 'PS_alpha     : ', InPS%PS_alpha(i)
-         write(*,*) 'PS_beta      : ', InPS%PS_beta(i)
-         write(*,*) 'Inv_E_c      : ', InPS%Inv_E_c(i)
-        enddo
+        write(*,*) 'l            : ', InPS%PS_l
+        write(*,*) 'b            : ', InPS%PS_b
+        write(*,*) 'log10(N_0)   : ', InPS%N_0
+        write(*,*) 'E_0          : ', InPS%E_0
+        write(*,*) 'PS_alpha     : ', InPS%PS_alpha
+        write(*,*) 'PS_beta      : ', InPS%PS_beta
+        write(*,*) 'Inv_E_c      : ', InPS%Inv_E_c
+        write(*,*) 'Varied PS    : ', InPS%PSnumber
 
 end subroutine PrintOutModelParams
 
@@ -657,65 +640,29 @@ subroutine WriteParams(P, mult, like)
     write (outfile_unit, trim(fmt_params), ADVANCE='NO') mult,like, P%P
 
     write (outfile_unit, fmt, ADVANCE='NO') PreviousOutputP%AddOut%br_tautau !to be consistent with the rest
-    write (outfile_unit, fmt, ADVANCE='NO') PreviousOutputP%AddOut%J       
+    write (outfile_unit, fmt, ADVANCE='NO') PreviousOutputP%AddOut%J
 
     if (postproc .and. GFlags%ID_Flags_gamma%gadiff) then
         write (outfile_unit, fmt_gdif, ADVANCE='NO') PreviousOutputP%id%gammas%Ekin(1:nbins)
-        write (outfile_unit, fmt_gdif, ADVANCE='NO') PreviousOutputP%id%gammas%fluxgadiff(1:nbins) 
+        write (outfile_unit, fmt_gdif, ADVANCE='NO') PreviousOutputP%id%gammas%fluxgadiff(1:nbins)
     endif
 
     if (GFlags%ID_Flags_gamma%gac) write (outfile_unit, fmt, ADVANCE='NO') PreviousOutputP%id%gammas%fluxgac
-    
+
     write (outfile_unit, '(A)') ' ' !to start a new line
-    
+
     if (flush_write) call FlushFile(outfile_unit)
 
 end  subroutine WriteParams
 
 
-!subroutine OutParams_NS(P,paramOut)
-!    implicit none
-!    Type(ParamSet) P
-!    real*8 paramOut(:)
-!    integer i
-    
-
-!    i=0
-
-    !Which variables to save
-    !Customize it to suits your need
-    !Remember to adjust the formats in SetFormat
-!    paramOut(1:num_params)=P%P(1:num_params)
-!    call convertParamsToBRs(paramOut)
-!    i=i+num_params
-
-!    paramOut(i+1)= CurrentOutputP%AddOut%br_tautau
-!    i = i+1
-!    paramOut(i+1)=CurrentOutputP%AddOut%J 
-!    i = i+1
-!    if (GFlags%ID_predict)  then
-!      if (GFlags%ID_Flags_gamma%gadiff) then
-!    	 paramOut(i+1:i+num_hm)=CurrentOutputP%id%gammas%fluxgadiff
-!       i=i+num_hm
-!	end if
-      
-!      if (GFlags%ID_Flags_gamma%gac) then
-!       paramOut(i+1)=CurrentOutputP%id%gammas%fluxgac
-!       i=i+1
-!      end if
-      
-!    endif
-
-!end subroutine OutParams_NS
-
 subroutine OutParams_NS(P,paramOut)
-
     implicit none
 
     Type(ParamSet) :: P
     real*8 :: paramOut(:), ParamTemp(1000)
     integer :: i
-    
+
     i=0
 
     !Which variables to save
@@ -724,10 +671,10 @@ subroutine OutParams_NS(P,paramOut)
     paramTemp(1:num_params)=P%P(1:num_params)
     call convertParamsToBRs(ParamTemp)
 !    i=i+num_params
-       
+
     paramOut(i+1)=CurrentOutputP%AddOut%br_tautau
     i = i+1
-    paramOut(i+1)=CurrentOutputP%AddOut%J 
+    paramOut(i+1)=CurrentOutputP%AddOut%J
     i = i+1
 
     if(size(paramOut) > i) then
@@ -737,17 +684,17 @@ subroutine OutParams_NS(P,paramOut)
 !    	 paramOut(i+1:i+num_hm)=CurrentOutputP%id%gammas%fluxgadiff
 !       i=i+num_hm
 !	end if
-      
+
       if (GFlags%ID_Flags_gamma%gac) then
        paramOut(i+1)=CurrentOutputP%id%gammas%fluxgac
        i=i+1
       end if
-           
+
     endif
 
 
   endif
-  
+
 
 end subroutine OutParams_NS
 
@@ -757,16 +704,16 @@ integer function CountParams()
     !derived parameters
     implicit none
     integer n
-    
-    n=num_params    
+
+    n=num_params
     !this counts the number of additional params (in the output)
     n = n+num_additional
 
     if (GFlags%ID_predict)  then
  !     if (GFlags%ID_Flags_gamma%gadiff) n=n+num_hm
-      
+
       if (GFlags%ID_Flags_gamma%gac) n=n+1
-                  
+
     endif
     CountParams=n
 
@@ -786,12 +733,12 @@ subroutine SetFormat(Params)
   fmt_gdif = '('//trim(numcat(' ',nbins))//'E20.12)'
   fmt = '(E20.12)'
 
-  if(GIDin%gammas%delta_gamma == 0.d0) then 
+  if(GIDin%gammas%delta_gamma == 0.d0) then
     phigam_units = ' (cm^-2 s^-1 sr^-1)'
-    dphigam_units = ' (cm^-2 s^-1 MeV^-1 sr^-1)' 
+    dphigam_units = ' (cm^-2 s^-1 MeV^-1 sr^-1)'
   else
     phigam_units = ' (cm^-2 s^-1)'
-    dphigam_units = ' (cm^-2 s^-1 MeV^-1)'   
+    dphigam_units = ' (cm^-2 s^-1 MeV^-1)'
   endif
 
 
@@ -805,29 +752,25 @@ subroutine SetFormat(Params)
   !   AdditionalOutNames(1) = 'log '//trim(AdditionalOutNames(1))
   !end if
 
-  allocate(ParamsNames(num_params))
-
   ParamsNames(1:16) = pack(DMNames,DMUsed)
   ParamsNames(17:21) = pack(NuisanceNames,NuisanceUsed)
   !ParamsNames(20:22) = pack(BgNames,BgUsed)
   !To do: Generalize
   ParamsNames(22:22) = pack(GridNames,GridUsed)
   ParamsNames(23:31) = pack(TemplateNames,TemplateUsed)
-  do i = 1, PS_number
-   ParamsNames(32+7*(i-1):38+7*(i-1)) = pack(PSNames,PSUsed)
-  enddo
-  write(infofile_unit, '(A)') '# Chain generated with '//trim(version)  
+  ParamsNames(32:39) = pack(PSNames,PSUsed)
+  write(infofile_unit, '(A)') '# Chain generated with '//trim(version)
   write(infofile_unit, '(A)') '# '//trim(dm_ver)
   write(infofile_unit, '(A)') '# '//trim(ns_ver)
   write(infofile_unit, '(A)') '# '//trim(like_ver)
   write(infofile_unit, '(A)') '# '//trim(de_ver)
   write(infofile_unit, '(A)') '### Chain generated by: '
   write(infofile_unit, '(A, I4)') 'action = ', action
-  write(infofile_unit, '(A)') '### header info '    
+  write(infofile_unit, '(A)') '### header info '
   write(infofile_unit, '(A)') '# First col contains the multiplicity'
   write(infofile_unit, '(A)') '# Second col contains -2ln(like)=chisq'
   write(infofile_unit, '(A)') '# Subsequent columns: col i+2 contain parameter with name lab i'
-  write(infofile_unit, '(A)') '### Input and nuisance params'    
+  write(infofile_unit, '(A)') '### Input and nuisance params'
   do i=1,num_params
      if(Scales%PMin(i)==Scales%PMax(i)) then
          Params%P(i)=Scales%PMin(i)
@@ -879,8 +822,8 @@ subroutine SaveFlags(in_unit)
   write(in_unit, '(A,L)') 'Use_Gamma = ', Use_Gamma
 
   write(in_unit, '(A)') '### Current or future data '
-  write(in_unit, '(A,I3)') 'use_data = ', GFlags%use_data 
-  
+  write(in_unit, '(A,I3)') 'use_data = ', GFlags%use_data
+
   write(in_unit, '(A)') '### Whether log priors are used '
   write(in_unit, '(A,L)') 'use_log_mass = ', use_log_mass
   write(in_unit, '(A,L)') 'use_log_channels = ', use_log_channels
@@ -891,7 +834,7 @@ subroutine SaveFlags(in_unit)
   write(in_unit, '(A)') '### Quantities computed '
   write(in_unit, '(A,L)') 'compute_Indirect_Detection = ', GFlags%ID_predict
 
-  
+
   if (GFlags%ID_predict)  then
      write(in_unit, '(A)') '### Indirect detection quantities '
      write(in_unit, '(A,L)') 'compute_ID_gadiff =', GFlags%ID_Flags_gamma%gadiff
@@ -910,11 +853,11 @@ subroutine  LoadOldFlags(InputFile)
   if (bad) call DoStop ('Problem loading up file: '//trim(InputFile))
 
 
-  GFlags_old%ID_predict = Ini_Read_Logical('compute_Indirect_Detection') 
+  GFlags_old%ID_predict = Ini_Read_Logical('compute_Indirect_Detection')
 
 
   if(GFlags_old%ID_predict) then
-    GFlags_old%ID_Flags_gamma%gadiff = Ini_Read_Logical('compute_ID_gadiff') 
+    GFlags_old%ID_Flags_gamma%gadiff = Ini_Read_Logical('compute_ID_gadiff')
     GFlags_old%ID_Flags_gamma%gac = Ini_Read_Logical('compute_ID_gacont')
   endif
 
@@ -924,36 +867,36 @@ subroutine  LoadOldFlags(InputFile)
 end subroutine  LoadOldFlags
 
 subroutine WriteDebug(Flag, InN, DMO)
- 
+
     Type(FLAGS), INTENT(IN) :: Flag
     Type(Nuisance_params), INTENT(IN) :: InN
     Type(DM), INTENT(IN) :: DMO
 
     integer, parameter ::  nout=99
     character(LEN = 200) :: fmt_idhmd
- 
-    if(GIDin%gammas%delta_gamma == 0.d0) then 
+
+    if(GIDin%gammas%delta_gamma == 0.d0) then
      phigam_units = ' (cm^-2 s^-1 sr^-1)'
-     dphigam_units = ' (cm^-2 s^-1 GeV^-1 sr^-1)' 
+     dphigam_units = ' (cm^-2 s^-1 GeV^-1 sr^-1)'
     else
      phigam_units = ' (cm^-2 s^-1)'
-     dphigam_units = ' (cm^-2 s^-1 GeV^-1)'   
+     dphigam_units = ' (cm^-2 s^-1 GeV^-1)'
     endif
- 
+
     open(nout,file='tester.out',status='replace')
 
-    write(nout,'(a)')'                  OUTPUT:'    
+    write(nout,'(a)')'                  OUTPUT:'
     write(nout,'(a)')'                  -------------------'
     write(nout,'(a)')
 
     write(nout,'(a)')'Input values:'
     write(nout,'(a)')'-------------'
 
-    write(nout,'(a)') 
+    write(nout,'(a)')
 
     write(nout,581)'M_top'
     write(nout,102) InN%mtop
-    write(nout,'(a)') 
+    write(nout,'(a)')
 
 
     if (Flag%ID_predict) then
@@ -975,16 +918,16 @@ subroutine WriteDebug(Flag, InN, DMO)
 
 !      if (Flag%ID%gam) then
 !       write(nout,'(2a)') ' Monocromatic gamma ray fluxes gg'//trim(phigam_units)
-!       write (nout, fmt_idhm ) GIDin%hmodel(1:n_hm) 
+!       write (nout, fmt_idhm ) GIDin%hmodel(1:n_hm)
 !       write (nout, fmt_idhmd) DSO%ID%fluxgaga(1:n_hm)
 !       write(nout,'(a)')
 
 !       write(nout,'(2a)') ' Monocromatic gamma ray fluxes gZ'//trim(phigam_units)
-!       write (nout, fmt_idhm ) DSO%ID_in%hmodel(1:n_hm) 
+!       write (nout, fmt_idhm ) DSO%ID_in%hmodel(1:n_hm)
 !       write (nout, fmt_idhmd) DSO%ID%fluxgaz(1:n_hm)
 !       write(nout,'(a)')!
 !      endif
-     
+
     endif
 
  100  format(3(g11.4),1x,g11.4,7x,i3)
@@ -1029,7 +972,7 @@ subroutine WriteDebug(Flag, InN, DMO)
  692  format(2(g15.4),3x,3(g15.4))
 
 
- 694  format('//trim(numcat(' ',n_hm))//'G10.4) 
+ 694  format('//trim(numcat(' ',n_hm))//'G10.4)
 
 !fmt_idgadiff = '('//trim(numcat(' ',num_hm))//'E15.5)'
 
@@ -1057,7 +1000,7 @@ subroutine SetProposeMatrix
 
    if (num_nuis /= 0) then
       !Get the conditional covariance by projecting the inverse covariances of nuis parameters
-            if (.not. allocated(propose_matrix_nuis)) then  
+            if (.not. allocated(propose_matrix_nuis)) then
               allocate(propose_matrix_nuis(num_nuis, num_nuis))
               allocate(propose_diag_nuis(num_nuis))
             end if
@@ -1075,7 +1018,7 @@ subroutine SetProposeMatrix
    end if
 
    if (num_slow /= 0) then
-  
+
    if (.not. allocated(propose_diag)) allocate(propose_diag(num_params_used))
    call Diagonalize(propose_matrix, propose_diag, num_params_used)
        !propose_matrix = U D U^T, returning U in propose_matrix
@@ -1084,14 +1027,14 @@ subroutine SetProposeMatrix
         call DoStop('Proposal matrix has negative or zero eigenvalues')
    propose_diag = sqrt(max(1e-12,propose_diag))
 
-   !Get projected lengths 
+   !Get projected lengths
    do i = 1, num_params_used
           vecs(:,i) = propose_diag(i)*propose_matrix(1:num_slow,i)
-          proj_len(i) = sum(vecs(:,i)**2)  
+          proj_len(i) = sum(vecs(:,i)**2)
    end do
 
        if (.not. allocated(slow_evecs)) allocate(slow_evecs(num_slow))
-       !keep evectors with longest projected lengths in slow dimensions, orthogonal to previous longest       
+       !keep evectors with longest projected lengths in slow dimensions, orthogonal to previous longest
        do i = 1, num_slow
          j = MaxIndex(proj_len, num_params_used)
          slow_evecs(i) = j
@@ -1122,15 +1065,15 @@ subroutine SetProposeMatrixOLD
      propose_matrix(i,:) = propose_matrix(i,:) / sigmas(i)
      propose_matrix(:,i) = propose_matrix(:,i) / sigmas(i)
    end do
-   
-  
+
+
    if (.not. allocated(propose_diag)) allocate(propose_diag(num_params_used))
    call Diagonalize(propose_matrix, propose_diag, num_params_used)
    !propose_matrix = U D U^T, returning U in propose_matrix
    if (any(propose_diag <= 0)) &
         stop 'Proposal matrix has negative or zero eigenvalues'
    propose_diag = sqrt(max(1e-12,propose_diag))
-         
+
 end subroutine SetProposeMatrixOLD
 
 
@@ -1152,7 +1095,7 @@ subroutine OpenChannel(mx, mchan, BR, param, using_log)
  double precision, intent(IN) :: mx, mchan
  double precision, intent(INOUT) :: BR
  real, intent(INOUT) :: param
- logical, intent(IN) :: using_log 
+ logical, intent(IN) :: using_log
 
  if (using_log) then
     if (mx .gt. mchan) then
@@ -1169,14 +1112,14 @@ subroutine OpenChannel(mx, mchan, BR, param, using_log)
  endif
 
 end subroutine OpenChannel
-   
+
 
 subroutine DoStop(S)
  character(LEN=*), intent(in), optional :: S
  integer ierror
         if (present(S)) write (*,*) trim(S)
 #ifdef MPI
-        MPI_StartTime = MPI_WTime() - MPI_StartTime 
+        MPI_StartTime = MPI_WTime() - MPI_StartTime
         if (Feedback > 0 .and. MPIRank==0) then
            write (*,*) 'Total time:', nint(MPI_StartTime), &
                                    '(',MPI_StartTime/(60*60),' hours)'
@@ -1187,5 +1130,5 @@ subroutine DoStop(S)
         stop
 
 end subroutine DoStop
-   
+
 end module ParamDef

@@ -8,10 +8,10 @@ module CalcLike
   use Random
   use settings
   use ParamDef
-  use likedata 
+  use likedata
   use Fermi_Ini
-  use Fermi_Ptsrc  
-  use Fermi_BG  
+  use Fermi_Ptsrc
+  use Fermi_BG
 
   implicit none
 
@@ -27,7 +27,7 @@ module CalcLike
   double precision, private :: LogModelSanityLimit
   integer, private :: obsC_shared
   double precision, private :: C_shared, invSsq_shared
-  double precision :: debugCountOffset = 0.d0                      !Counts to artificially add to model and obs; should be 0 for producion 
+  double precision :: debugCountOffset = 0.d0                      !Counts to artificially add to model and obs; should be 0 for producion
   logical, parameter :: singleLikeDebug = .false.                  !Turn on single-likelihood test debug mode
   logical, parameter :: sysErrDist_logNorm = .true.                !Chooses a log-normal or Gaussian distribition for the systematic error
 
@@ -42,14 +42,14 @@ contains
     DMO%ID_in%gammas%GC_angSep => GC_angSep
     DMO%ID_in%gammas%GC_Ebins => GC_Ebins
     DMO%ID_in%gammas%GC_pixArea => GC_pixData(3)
-   
+
   end subroutine Fermi_set
 
 
-  function GetLogLike(Params) 
+  function GetLogLike(Params)
     !Returns -Ln(Likelihood) = chi^2/2
     !this is the function wrapper
-    Type(ParamSet)::  Params 
+    Type(ParamSet)::  Params
     Type(Input_Params):: HardP
     Type(Nuisance_Params):: NuisP
     Type(Grid_params) :: BgGP
@@ -68,9 +68,6 @@ contains
     logical, parameter :: DebugSampler = .false.
 
     900 format(E15.5)
-    
-
-    allocate(PSP%PS_l(PS_number),PSP%PS_b(PS_number),PSP%N_0(PS_number),PSP%E_0(PS_number),PSP%PS_alpha(PS_number),PSP%PS_beta(PS_number),PSP%Inv_E_c(PS_number))
 
     numav = num
     !This compensates for the large num at restart
@@ -91,7 +88,7 @@ contains
       !proposal outside prior range
       GetLogLike = logZero
       if (Feedback > 2) then
-        write(*,*) 'Error: point is out of bounds or unphysical' 
+        write(*,*) 'Error: point is out of bounds or unphysical'
         write(*,*) ' unphysical: ', unphys
         do p = 1, num_params
           write(*,'(A, 3E15.5, A, 2L2)') ' Min, Max, P, P<Min, P>Max =', Scales%PMin(p), Scales%PMax(p), &
@@ -100,24 +97,24 @@ contains
       endif
     end if
 
-
     if (.not. DebugSampler) then
 
       call ParamsToDMParams(Params%P, HardP, NuisP, BgGP, BgTP, PSP)
       DMO%ID_in = GIDin !Set ID settings (parameters such as cos(Psi), etc are read into GIDin from the inifile)
 
-      if(Fermi_include_BG) then 
+      if(Fermi_include_BG) then
+
        !Determine background model: convert scanned parameters to grid and template parameters, and do the interpolation of BG models.
        forall(i = 1:Dim_Gparams) bg_Gparams(i) = Params%P(num_hard + num_nuis_wobg + i) !Num_hard and num_nuis_wobg defined in settings.f90
        forall(i = 1:Dim_Tparams) bg_Tparams(i) = Params%P(num_hard + num_nuis_wobg + Dim_Gparams + i)
        GC_BG = Generate_GC_BG_map(bg_Gparams,bg_Tparams,GC_Ebins,GCDims)
+
       else
+
        GC_BG = 0d0
+
       endif
 
-
-!       print*,GCDims(1),GCDims(2),GCDims(3)
- !     stop
 
       !Add contributions from point sources
       !--------------------------------------
@@ -125,18 +122,12 @@ contains
       if (any(analysis_step .eq. (/1,3,4/))) then
 
         !Sift out the parameters of the current point source
-        indx = num_hard + num_nuis_wobg + Dim_Gparams + Dim_Tparams
-
-        if(.not. Fermi_include_BG) indx = num_hard + num_nuis_wobg + 10
-
-
-!rruiz: need to modify this 
-!        print*,'indx ', indx 
-        do i = 1, PS_number
-        
-         PS_param = Params%P(indx + 1 : indx + NPtSrcParam)
-
-!         print*,i,PS_param 
+        if (Fermi_include_BG) then
+          indx = num_hard + num_nuis_wobg + Dim_Gparams + Dim_Tparams
+        else
+          indx = num_hard + num_nuis_wobg + 10
+        endif
+        PS_param = Params%P(indx + 1 : indx + NPtSrcParam)
 
 !       !In case you want to study the likelihood result for a specific point source or set of
 !       !point sources, you can fix the parameters here:
@@ -181,7 +172,7 @@ contains
 !         BF_PS(5,5) = 2.19189286!2.2
 !         BF_PS(6,5) = 0.0106788315!0.0
 !         BF_PS(7,5) = 2.77776246E-09!0.0
-!        
+!
 !         !Set the current point source's parameters to the correct one of those set above
 !         PS_param = BF_PS(:, Params%P(indx + NPtSrcParam + 1))
 !       end if
@@ -192,22 +183,12 @@ contains
         lon_index = min(int((PS_param(1) - RA(1,1))/lonspan*dble(GCDims(1)))+1,GCDims(1))
         lat_index = min(int((PS_param(2) - DEC(1,1))/latspan*dble(GCDims(2)))+1,GCDims(2))
 
-!        print*,PS_param(1) ,RA(1,1)
-
         !Loop over the energy bins, adding the current point source to the model.
         do j = 1,GCDims(3)
           binsize = (GC_Ebins(j,2) - GC_Ebins(j,1)) * GC_pixData(3)
-         !print*,lon_index,lat_index,j,GC_BG(lon_index,lat_index,j)
-          GC_BG(lon_index,lat_index,j) = GC_BG(lon_index,lat_index,j) + PtSrc_Param_IntFlux(PS_param,GC_Ebins(j,1),GC_Ebins(j,2))/binsize 
-! rruiz
-!          print*, j,lon_index,lat_index,GC_Ebins(j,1),GC_Ebins(j,2),GC_BG(lon_index,lat_index,j)     
+          GC_BG(lon_index,lat_index,j) = GC_BG(lon_index,lat_index,j) + PtSrc_Param_IntFlux(PS_param,GC_Ebins(j,1),GC_Ebins(j,2))/binsize
         end do
 
-
-        indx = indx + NPtSrcParam
-
-       enddo
-     
       endif
 
 !     !AR : ********* Second MultiNest run -- with point sources included in the model. Here I add them by hand ***********
@@ -421,7 +402,7 @@ contains
 !		BF_PS(5,26) = 1.88658082
 !		BF_PS(6,26) = 0.09014678
 !		BF_PS(7,26) = 1.77239581e-05
-!      
+!
 !     do j = 1,26
 !           !Work out where on the sky the point source j is, in terms of grid indices.
 !            lon_index = min(int((BF_PS(1,j) - RA(1,1))/lonspan*dble(GCDims(1)))+1,GCDims(1))
@@ -434,13 +415,11 @@ contains
 !              GC_BG(lon_index,lat_index,i) = GC_BG(lon_index,lat_index,i) + PtSrc_Param_IntFlux(PS_param_BF,GC_Ebins(i,1),GC_Ebins(i,2))/binsize
 !            end do
 !     end do
-!      	
+!
 !     !AR : ********* End section for second MultiNest run, with point sources included in the model by hand. ***********
-      
-      
-      !Add point sources to the model, fixed to their current best-fit values.  
 
 
+      !Add point sources to the model, fixed to their current best-fit values.
       if (any((/1,3,4,7/) .eq. analysis_step)) then
 
         !Add the fixed point sources
@@ -454,19 +433,17 @@ contains
           if (Number_PS > 0) call Add_PtSrcs_to_Map(Number_PS,BF_PS,current,GC_BG,RA,DEC,GCDims,GC_pixData,GC_Ebins)
         endif
 
-      end if     
-
+      end if
 
       !Setup Fermi data
-
       call Fermi_set(DMO)
 
       if (timing) call StartTiming(Hertz,Begin_Clock)
-     
+
       !Calls darkmatter to get the spectrum
       call GetPredictions(HardP, NuisP, DMO)
-      
-      !if (feedback > 2) call PrintOutModelParams(HardP, NuisP, BgGP, BgTP, PSP)
+
+      if (feedback > 2) call PrintOutModelParams(HardP, NuisP, BgGP, BgTP, PSP)
 
       if (timing) then
         call StopTiming(Begin_Clock, End_Clock, Hertz, Elapsed_Time, ms)
@@ -482,8 +459,8 @@ contains
         !global variable, saves the results from the current Trial point
         !if the Current is accepted, than the Previous is written
         !in WriteParams
-        !the variables are defined in paramdef.f90 
-        CurrentOutputP = DMO 
+        !the variables are defined in paramdef.f90
+        CurrentOutputP = DMO
 
         if (Feedback > 2) write(*,*) '... Computing likelihood ... '
         if (timing) call StartTiming(Hertz,Begin_Clock)
@@ -505,8 +482,6 @@ contains
       GetLogLike = FakeGetLogLike(Params)
 
     endif !DebugSampler
-
-    deallocate(PSP%PS_l,PSP%PS_b,PSP%N_0,PSP%E_0,PSP%PS_alpha,PSP%PS_beta,PSP%Inv_E_c)
 
     if (singleLikeDebug) then
       write(*,*) "-Ln(likelihood) at requested point: ", GetLogLike
@@ -533,6 +508,8 @@ contains
        call calc_gcr_like(DMO, HardP, NuisP, NewLogLike)
        GetLogLikePost = GetLogLikePost + NewLogLike
        if (Feedback > 2) write(*,'(A,E15.7)') '-lnlike gamma    = ', NewLogLike
+       call StopTiming(Begin_Clock, End_Clock, Hertz, Elapsed_Time, ms)
+       write(*,*) 'Elapsed time = ', Elapsed_Time
     endif
 
     if (Use_Nuisance) then
@@ -556,7 +533,7 @@ contains
        CheckPhysicality = 0d0
     else
        CheckPhysicality = LogZero
-       write(*,*) 'Warning: rogue point found! Problem with: ', trim(flag)     
+       write(*,*) 'Warning: rogue point found! Problem with: ', trim(flag)
     end if
     return
 
@@ -640,11 +617,11 @@ contains
   ! Likelihood calculation routines -------------------------------
   !----------------------------------------------------------------
 
-  subroutine calc_gcr_like(DMO, InP, NuisP, lnlike)  
+  subroutine calc_gcr_like(DMO, InP, NuisP, lnlike)
 
     implicit none
 
-    Type(DM) :: DMO 
+    Type(DM) :: DMO
     Type(Input_Params) :: InP
     Type(Nuisance_params):: NuisP
     Type(Grid_params) :: BgGP
@@ -661,19 +638,12 @@ contains
     integer :: coreIndex_start, coreIndex_end
     integer :: intcounts(DMO%ID_in%gammas%GC_corePix,DMO%ID_in%gammas%GC_corePix,DMO%ID_in%gammas%GCDims(3)-2)
 
-    real(8), allocatable, save :: GC_model_fake(:,:,:)
-
-
-    !rruiz
-    GFlags%Debug = .false.
-
     allocate(working(product(DMO%ID_in%gammas%GCDims) + 2*max(GC_splineOrder_lon*(DMO%ID_in%gammas%GCDims(1)+1),&
          GC_splineOrder_lat*(DMO%ID_in%gammas%GCDims(2)+1),&
          GC_splineOrder_lat*(DMO%ID_in%gammas%GCDims(3)+1))))
     forall(i=1:DMO%ID_in%gammas%GCDims(3)) logE(i) = GC_coords(3,fermifits_worldindex(1,1,i,DMO%ID_in%gammas%GCDims))
-
     where(DMO%ID_in%gammas%GC_model .lt. 1.d-20) DMO%ID_in%gammas%GC_model = 1.d-20
-    
+
     LogModelSanityLimit = log10(5.d0*maxval(DMO%ID_in%gammas%GC_model))
     errorFlag = 0
 
@@ -692,32 +662,25 @@ contains
     deallocate(working)
 
     allocate(working(GC_splineOrder_lat*GC_splineOrder_logE+&
-      3*max(GC_splineOrder_lon,GC_splineOrder_lat,GC_splineOrder_logE)+GC_splineOrder_logE))  
-  
+      3*max(GC_splineOrder_lon,GC_splineOrder_lat,GC_splineOrder_logE)+GC_splineOrder_logE))
+
     !Debugging
     if (Gflags%debug)  then
       print*,'max model val before convolution',maxval(DMO%ID_in%gammas%GC_model)
       print*,'min model val before convolution',minval(DMO%ID_in%gammas%GC_model)
     endif
-         
+
     if(Any(DMO%ID_in%gammas%GC_model(:,:,:) < 0.)) then
       write(*,*) "THE MODEL CONTAINS NEGATIVE FLUX ENTRIES BEFORE CONVOLUTION WITH THE PSF!!!"
       print*,'maxval ',maxval(model),'minval ',minval(model)
       STOP
     end if
-    
+
     !Convolve the model map with the instrumental response (PSF, energy dispersion and effective area)
-    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime)  
-
-!      do i=1,60
-!       do j = 1,60
-!        print*, i,j,DMO%ID_in%gammas%GC_model(i,j,:)
-!       enddo
-!     enddo
-
+    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime)
     do i=1,DMO%ID_in%gammas%GCDims(3)
-      !Divide through by the average effective area.  This factor is actually contained in the exposure, so 
-      !doing it this way actually means that we are assuming only that the effective livetime (=exposure/mean_Aeff) 
+      !Divide through by the average effective area.  This factor is actually contained in the exposure, so
+      !doing it this way actually means that we are assuming only that the effective livetime (=exposure/mean_Aeff)
       !is constant in each bin, not the whole exposure.  This is why we use pointingType=livetime above.
       DMO%ID_in%gammas%GC_model(:,:,i) = DMO%ID_in%gammas%GC_model(:,:,i) / flatIRFs_Aeff_mean(logE(i), both)
     enddo
@@ -739,17 +702,17 @@ contains
       write(*,*) 'Obs'
       write(*,'(10E15.5)') GC_obs(25:30, 25, 5)
     end if
-   
+
     if (any(DMO%ID_in%gammas%GC_model .lt. 0.)) call flatUtils_crash('Error, negative fluxes!')
 
     deallocate(working)
- 
+
+
     !Get the likelihood
     coreIndex_start = (DMO%ID_in%gammas%GC_outerPix - DMO%ID_in%gammas%GC_corePix) / 2 + 1
     coreIndex_end = (DMO%ID_in%gammas%GC_outerPix + DMO%ID_in%gammas%GC_corePix) / 2
     !Model prediction in photons cm^-2 s^-1 GeV^-1 sr^-1
     model = DMO%ID_in%gammas%GC_model(coreIndex_start:coreIndex_end, coreIndex_start:coreIndex_end,2:DMO%ID_in%gammas%GCDims(3)-1)
-
     !Observations in photons/bin if GIDin%gammas%GCPoissonian, else flux in photons cm^-2 s^-1 GeV^-1 sr^-1
     obs = GC_obs(coreIndex_start:coreIndex_end, coreIndex_start:coreIndex_end,2:DMO%ID_in%gammas%GCDims(3)-1)
     !Exposures in cm^2 s GeV sr
@@ -758,22 +721,11 @@ contains
 
     if (GIDin%gammas%GCPoissonian) then
 
+      !Poisson statistics
+
       if (any(expos .le. 0.d0)) call DoStop('Zero or negative exposure in one or more bins - check exposure cube!')
       model = model * expos + debugCountOffset !Model --> photons cm^-2 s^-1 GeV^-1 sr^-1 * cm^2 s GeV sr = photons per bin
       intcounts = nint(obs+debugCountOffset)
-
-!rruiz
-!      open(lun,file='cubmap5.txt',status='unknown')
-!      do i=1,60
-!       do j = 1,60
-       !if(any(model(i,j,:) /= 0d0)) print*, i,j,model(i,j,:)
-!        write(lun,'(19E15.5)') dble(i),dble(j),model(i,j,:) 
-!       enddo
-!     enddo
-
-!     close(lun)
-
-!     stop
 
       if (Gflags%debug)  then
          write(*,*) 'maximum number of counts from the model', maxval(model)
@@ -783,22 +735,22 @@ contains
       !Spits out text files for this specific model, for debugging or visualisation of a final fit.
       if (singleLikeDebug) call contour_plots(DMO%ID_in%gammas%GC_corePix,DMO%ID_in%gammas%GCDims(3)-2,model,intcounts)
 
-       !Choose the energy range to include in the analysis, depending on which analysis step this is.
+      !Choose the energy range to include in the analysis, depending on which analysis step this is.
       if (analysis_step .le. 2) then
          E_start = 10  !High-E bins only
       else
          E_start = 3   !Low-E and high-E bins
       end if
 
-      !Do the actual Poisson likelihood calculation. 
+      !Do the actual Poisson likelihood calculation.
       do k = E_start, DMO%ID_in%gammas%GCDims(3)-2
         error = tauGC*tauGC + GC_Aeff_PE_sq(k)
         do i = 1, DMO%ID_in%gammas%GC_corePix
           do j = 1, DMO%ID_in%gammas%GC_corePix
 
-             if (model(i,j,k) .lt. 0.d0 .or. intcounts(i,j,k) .lt. 0) then 
+             if (model(i,j,k) .lt. 0.d0 .or. intcounts(i,j,k) .lt. 0) then
                 write(*,*) 'k,i,j,model,intcounts = ', k, i, j, model(i,j,k), intcounts(i,j,k)
-                write(*,*) 'For input parameters = '            
+                write(*,*) 'For input parameters = '
                 call  PrintOutModelParams(InP, NuisP, BgGP, BgTP, PSP)
                 call flatutils_crash('Error: something has gone negative in the likelihood!')
              endif
@@ -806,7 +758,6 @@ contains
              !Shouldn't let the model predict zero exactly, as then anything other than zero observed events sends lnlike to -Infinity
              if(model(i,j,k) .eq. 0.) model(i,j,k) = 10.d0*tiny(1.d0)
              lnlike = lnlike + dslnpoisint(model(i,j,k),model(i,j,k),intcounts(i,j,k),error,sysErrDist_logNorm)
-             !print*,i,j,k,model(i,j,k),intcounts(i,j,k),lnlike
 
           enddo
         enddo
@@ -816,18 +767,18 @@ contains
       lnlike = -lnlike
 
 
-    else 
+    else
 
       !Chi-squared statistics
       !In this case the observations have been divided by the exposure in a poor-man's unfolding proceedure.
       !This means that obs has units of flux in photons cm^-2 s^-1 GeV^-1 sr^-1.
 
-      LikeTerms = model - obs 
+      LikeTerms = model - obs
       LikeTerms = LikeTerms * LikeTerms
       if (any(expos .eq. 0.d0)) call DoStop('Divide by zero due to zero exposure - check exposure cube!')
       Poisson_errors_sq = model / expos
       !Here we approximate the sigma^2 of the Gaussian by the Poisson average (ie sigma=sqrt(N) approximation)
-      forall(i=1:DMO%ID_in%gammas%GCDims(3)-2) & 
+      forall(i=1:DMO%ID_in%gammas%GCDims(3)-2) &
        partial_likelihood(i) = &
           sum(LikeTerms(:,:,i) / (Poisson_errors_sq(:,:,i) + &
           model(:,:,i) * model(:,:,i) * tauGC * tauGC + &
@@ -866,11 +817,9 @@ contains
       if (GC_IntModel .gt. LogModelSanityLimit) then
         if (feedback .gt. 4) then
           write(*,*) 'Warning: apparent ringing at log_10(E/GeV) of',logE_GeV
-          write(*,*) 'Returning interpolated flux of 1.d-20 for this energy.' 
+          write(*,*) 'Returning interpolated flux of 1.d-20 for this energy.'
         endif
-       ! rruiz
         GC_IntModel = 1.d-20
-       !  GC_IntModel = 1.d-100
         return
       endif
 
@@ -878,7 +827,7 @@ contains
       if(GC_IntModel < 0.) print*,'GC_IntModel smaller than 0',GC_IntModel
 
     endif
-    
+
   END FUNCTION GC_IntModel
 
 
@@ -918,12 +867,12 @@ contains
        write(*,*) '        >> Indirect signatures'
 
        if (GFlags%ID_Flags_gamma%gadiff) then
-          write (* ,'(A,G10.4,A)') '       >>> Max Gamma ray fluxes ', maxval(Out%ID%gammas%fluxgadiff(1:nbins+1)) , dphigam_units 
+          write (* ,'(A,G10.4,A)') '       >>> Max Gamma ray fluxes ', maxval(Out%ID%gammas%fluxgadiff(1:nbins+1)) , dphigam_units
        endif
 
        if (GFlags%ID_Flags_gamma%gac) then
           write (* ,'(A,F8.4,A,G10.4,A)') '        >>> Gamma ray fluxes with threshold energy', &
-           GIDin%gammas%egath*1.d3, ' MeV: ', Out%ID%gammas%fluxgac, phigam_units 
+           GIDin%gammas%egath*1.d3, ' MeV: ', Out%ID%gammas%fluxgac, phigam_units
        endif
     end if
   end subroutine DebugDMOutput
@@ -1009,10 +958,10 @@ contains
       do j = 1,Ebins       ! Loop over the energy slices
         lun = (i-1)*15 + j
         error = tauGC*tauGC + GC_Aeff_PE_sq(j) ! Find the total systematic
-        write (formatstring, "(A2, I2, A7)") "(A", len(prefixes(i))+1, ",I2,A4)" 
+        write (formatstring, "(A2, I2, A7)") "(A", len(prefixes(i))+1, ",I2,A4)"
         write (filename, trim(formatstring)) trim(prefixes(i))//"_", j,".dat" ! Make the filename
         open(lun,file=trim(filename))                                         ! Open the file
-!        print*, trim(filename)
+        print*, trim(filename)
         do k = 1, bins     ! Loop over pixel rows
           formatstring = 'no'
           do l = 1, bins   ! Loop over pixel columns
@@ -1040,13 +989,13 @@ contains
 
 
   !---------------------------------------------
-  ! Old stuff, mostly unused 
+  ! Old stuff, mostly unused
   !--------------------------------------------
 
   function SmearedBound(y, x0, sigma, tau, lower)result(lnprob)
     !Returns the -ln(like) for a bound smeared with
     !theoretical and (if available) experimental error
-    !According to Eq. (3.5) in 
+    !According to Eq. (3.5) in
     !R. Ruiz de Austri, R. Trotta and L. Roszkowski (2006)
     !JHEP 05 (2006) 002, hep-ph/0602028
     !******** NOTICE *****************
@@ -1069,7 +1018,7 @@ contains
     !            = .false. means x0 is an upper bound
     !------------- output  --------------
     !   lnprob : -ln(like)
-    !            normalized in such a way that -ln(like) = 0 well above/below the bound 
+    !            normalized in such a way that -ln(like) = 0 well above/below the bound
     !            (ie, where no constraints are present)
     double precision :: y, sgn, lnprob, x0, sigma, tau, tstar, exparg, Zfunc2
     logical :: lower
@@ -1098,7 +1047,7 @@ contains
     !write(*,*) 'Zfunc 2', Zfunc2
     !write(*,*) 'Exp arg', exparg
 
-    if ( EXP(exparg) > 0d0) then 
+    if ( EXP(exparg) > 0d0) then
        !retain the exp term
        !multiplied by sqrt(2Pi)sigma to ensure that it is normalized in such a way
        !that lnprob = 0 for no constraint
@@ -1112,7 +1061,7 @@ contains
           lnprob = LogZero
        else if (Zfunc2 .eq. 1.0d0) then
           !no constraints in this region here
-          lnprob = 0d0 
+          lnprob = 0d0
        else
           write(*,*) 'Something wrong in SmearedBound, Zfunc2 = ', Zfunc2
        end if
@@ -1130,9 +1079,9 @@ contains
   end function Z_func
 
   function errfc(x)
-    !from Press et al p 164 
-    !returns the complementary error fct with fractional precision of E-7 
-    real(8) :: errfc, x,z,t 
+    !from Press et al p 164
+    !returns the complementary error fct with fractional precision of E-7
+    real(8) :: errfc, x,z,t
     z = abs(x)
     t = 1.0/(1.0 + z/2.0)
     errfc = t*EXP(-z*z - 1.26551223 + t*(1.00002368 + t*(0.37409196+ &
@@ -1143,9 +1092,9 @@ contains
   end function errfc
 
 
-  function FakeGetLogLike(Params) 
+  function FakeGetLogLike(Params)
     !Only for debug purposes
-    Type(ParamSet)::  Params  
+    Type(ParamSet)::  Params
     double precision :: FakeGetLogLike
     double precision :: s1, s2, rho, mu1, mu2
     double precision :: Pd
@@ -1182,6 +1131,6 @@ contains
     !Params%P(2) = Pd
 
   end function FakeGetLogLike
-  
+
 
 end module CalcLike

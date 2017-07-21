@@ -54,7 +54,7 @@ module parameters
                                                         'm_t (GeV)'/)
  logical, dimension(5), parameter :: NuisanceUsed = (/ .true., .true., .true., .true., .true./)
 
-! character(LEN=lmax),dimension(39) :: ParamsNames
+ character(LEN=lmax),dimension(39) :: ParamsNames
 
 !Background parameters are split into two groups: 
 !- Nonlinear grid parameters
@@ -87,37 +87,20 @@ logical, dimension(9), parameter :: TemplateUsed = (/ .true., .true., .true., .t
 ! character(LEN=lmax), dimension(3) :: BgNames = (/ 'bg_Z', 'bg_S', 'bg_T' /)
 ! logical, dimension(3), parameter :: BgUsed = (/ .true., .true., .true. /)
 
-!Type PS_params
-!     real*8 :: PS_l,PS_b,N_0,E_0,PS_alpha,PS_beta,Inv_E_c,PSnumber
-!end Type PS_params
-
-!character(LEN=lmax),dimension(8) :: PSNames = (/ 'l        ', &
-!                                                 'b        ', &
-!                                                 'log_N0   ', &
-!                                                 'E0       ', &
-!                                                 'alpha_PS ', &
-!                                                 'beta_PS  ', &
-!                                                 'Inv_Ec   ', &
-!                                                 'PS_number' /)
-!logical, dimension(8), parameter :: PSUsed = (/ .true., .true., .true., .true., .true., .true., .true., .true. /)
-
-
 Type PS_params
-  real*8, dimension(:), allocatable :: PS_l,PS_b,N_0,E_0,PS_alpha,PS_beta,Inv_E_c
+     real*8 :: PS_l,PS_b,N_0,E_0,PS_alpha,PS_beta,Inv_E_c,PSnumber
 end Type PS_params
 
-character(LEN=lmax),dimension(7) :: PSNames = (/ 'l        ', &
+character(LEN=lmax),dimension(8) :: PSNames = (/ 'l        ', &
                                                  'b        ', &
                                                  'log_N0   ', &
                                                  'E0       ', &
                                                  'alpha_PS ', &
                                                  'beta_PS  ', &
-                                                 'Inv_Ec   ' /)
+                                                 'Inv_Ec   ', &
+                                                 'PS_number' /)
+logical, dimension(8), parameter :: PSUsed = (/ .true., .true., .true., .true., .true., .true., .true., .true. /)
 
-logical, dimension(7), parameter :: PSUsed = (/ .true., .true., .true., .true., .true., .true., .true. /)
-
-
-character(LEN=lmax),dimension(:), allocatable :: ParamsNames
 
 !--------- DM parameters ---------------
 
