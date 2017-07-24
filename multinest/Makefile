@@ -1,14 +1,8 @@
-PROGS = libnest3.a
-
-#FC = mpif90 -i_dynamic -g -traceback -DMPI -fp-stack-check
 AR = ar r
 LINKLIB = ld -shared
 LIBDIR = ./
 
-#CS new
-#LAPACKLIB = -llapack
-
-NSOBJECTS = utils.o utils1.o priors.o kmeans_clstr.o xmeans_clstr.o posterior.o nested.o
+NSOBJECTS = utils.o utils1.o priors.o kmeans_clstr.o xmeans_clstr.o posterior.o nested.o cwrapper.o
 
 %.o: %.f90
 	$(FC) $(FFLAGS) -c -o $@ $^
@@ -16,13 +10,11 @@ NSOBJECTS = utils.o utils1.o priors.o kmeans_clstr.o xmeans_clstr.o posterior.o 
 %.o: %.F90
 	$(FC) $(FFLAGS) -c -o $@ $^
 
+default: libnest3.a
 
-all: $(PROGS)
-#	-rm nested.o
+all: libnest3.a
 
 libnest3.so: $(NSOBJECTS)
-	$(LINKLIB) -o $@ $^
-#CS new, instead of line above
 	$(LINKLIB) -o $(LIBS) $@ $^
 
 libnest3.a: $(NSOBJECTS)

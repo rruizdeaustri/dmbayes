@@ -61,7 +61,7 @@ subroutine nest_Sample
    nest_maxIter = 0
    nest_logZero = -huge(1.d0)*epsilon(1.d0)
 
-   call nestRun(nest_mmodal,.false.,nest_nlive,nest_tol,nest_efr,sdim,nest_nPar,nest_nCdims,nest_maxModes,100,-1.d90, &
+   call nestRun(.true., nest_mmodal,.false.,nest_nlive,nest_tol,nest_efr,sdim,nest_nPar,nest_nCdims,nest_maxModes,100,-1.d90, &
    nest_root,nest_seed,nest_pWrap,nest_fb,restart_multinest,nest_outfile,nest_initMPI,nest_logZero,nest_maxIter,getLogLikeNS,dumper,context)
 
 end subroutine nest_Sample
@@ -117,7 +117,7 @@ end subroutine getLogLikeNS
 
 !-----*-----------------------------------------------------------------
 
-subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, logZerr, context)
+subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, INSlogZ, logZerr, context)
 
 	implicit none
 
@@ -129,6 +129,7 @@ subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLo
 	double precision, pointer :: paramConstr(:)	! array with mean, sigmas, maxlike & MAP parameters
 	double precision maxLogLike			! max loglikelihood value
 	double precision logZ				! log evidence
+	double precision INSlogZ				! log evidence from importance nested sampling
 	double precision logZerr			! error on log evidence
 	integer context					! not required by MultiNest, any additional information user wants to pass
 

@@ -2,6 +2,7 @@
 
 module posterior
   use utils1
+  use xmeans_clstr
   
   implicit none
       
@@ -18,10 +19,8 @@ contains
 !------------------------------------------------------------------------
       
  subroutine pos_samp(Ztol,nIter,root,nLpt,ndim,nCdim,nPar,multimodal,outfile,globZ,globinfo,ic_n,ic_Z,ic_info,ic_reme, &
- ic_vnow,ic_npt,ic_nBrnch,ic_brnch,phyP,l,evDataAll,dumper,context)
+ ic_vnow,ic_npt,ic_nBrnch,ic_brnch,phyP,l,evDataAll,IS,IS_Z,dumper,context)
  !subroutine pos_samp
-        use xmeans_clstr, only: GaussMixExpMaxLike
-
   	implicit none
   	
 	double precision Ztol !null evidence
@@ -36,6 +35,8 @@ contains
 	integer i,j,k,i1,ios,ic_n,m,indx
 	integer ic_npt(ic_n),ic_nptloc(ic_n),ic_nBrnch(ic_n)
 	double precision ic_Z(ic_n),ic_info(ic_n),ic_vnow(ic_n),ic_brnch(ic_n,ic_n),phyP(nPar,nLpt),l(nLpt),evDataAll(:)
+	logical IS !importance sampling?
+	double precision IS_Z(2) !importance sampling log(Z) estimate & its standard deviation
 	logical ic_reme(ic_n)
   	character(len=100) evfile,livefile,postfile,resumefile
       	character(len=100) sepFile,statsFile,postfile4,strictSepFile,summaryFile
@@ -54,15 +55,15 @@ contains
 	
 	! parameters for dumper
 	double precision, pointer :: physLive(:,:), posterior(:,:), paramConstr(:)
-	double precision maxLogLike, logZ, logZerr
+	double precision maxLogLike, logZ, INSlogZ, logZerr
 	integer nSamples
 	
 	INTERFACE
 		!the user dumper function
-    		subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, logZerr, context_pass)
+    		subroutine dumper(nSamples, nlive, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, INSlogZ, logZerr, context_pass)
 			integer nSamples, nlive, nPar, context_pass
 			double precision, pointer :: physLive(:,:), posterior(:,:), paramConstr(:)
-			double precision maxLogLike, logZ, logZerr
+			double precision maxLogLike, logZ, INSlogZ, logZerr
 		end subroutine dumper
 	end INTERFACE
 	
@@ -257,7 +258,8 @@ contains
       			
 		open(unit=57,file=statsFile,form='formatted',status='replace')
       		!stats file
-		write(57,'(a,E28.18,a,E28.18)')"Global Evidence:",gzloc,"  +/-",sqrt(ginfoloc/dble(nLpt))
+		write(57,'(a,E28.18,a,E28.18)')		"Nested Sampling Global Log-Evidence           :",gzloc,"  +/-",sqrt(ginfoloc/dble(nLpt))
+		if( IS ) write(57,'(a,E28.18,a,E28.18)')"Nested Importance Sampling Global Log-Evidence:",IS_Z(1),"  +/-",IS_Z(2)
 	      		
 		!now the separated posterior samples
 	      
@@ -340,6 +342,15 @@ contains
 		endif
 		
 		open(unit=58,file=summaryFile,status='unknown')
+		if( IS ) then
+			write(fmt,'(a,i4,a)')  '(',nPar*4+4,'E28.18)'
+			write(58,fmt)paramConstr(1:nPar),paramConstr(nPar+1:2*nPar),paramConstr(nPar*2+1:nPar*3), &
+			paramConstr(nPar*3+1:nPar*4),globZ,maxLogLike,IS_Z
+		else
+			write(fmt,'(a,i4,a)')  '(',nPar*4+2,'E28.18)'
+			write(58,fmt)paramConstr(1:nPar),paramConstr(nPar+1:2*nPar),paramConstr(nPar*2+1:nPar*3), &
+			paramConstr(nPar*3+1:nPar*4),globZ,maxLogLike
+		endif
 		call genSepFiles(k,nPar,nClst,Ztol,pts,pNwt(1:k,1:nClst),nCon(1:nClst),ic_zloc(1:nClst), &
 		ic_infoloc(1:nClst), ic_nptloc(1:nClst),55,56,57,58,multimodal)
 		close(58)
@@ -352,7 +363,9 @@ contains
 	logZerr=sqrt(ginfoloc/dble(nLpt))
 	
 	! call the dumper
-	call dumper(nSamples, nLpt, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, logZerr, context)
+	INSlogZ = logZ
+	if( IS ) INSlogZ = IS_Z(1)
+	call dumper(nSamples, nLpt, nPar, physLive, posterior, paramConstr, maxLogLike, logZ, INSlogZ, logZerr, context)
 
       	deallocate(branchp,evdatp,wt)
       	deallocate(nbranchp,nPtPerNode)
@@ -528,8 +541,8 @@ contains
 			write(funit3,*)
 			write(funit3,'(a,i4)')'Mode',i
 			d3=(nliveP-locNpt(i))*sinfo/locInfo(i)+locNpt(i)
-			write(funit3,'(a,E28.18,a,E28.18)')"Strictly Local Evidence",slocZ," +/-",sqrt(sinfo/locNpt(i))
-			write(funit3,'(a,E28.18,a,E28.18)')"Local Evidence",locZ(i)," +/-",sqrt(locInfo(i)/d3)
+			write(funit3,'(a,E28.18,a,E28.18)')"Strictly Local Log-Evidence",slocZ," +/-",sqrt(sinfo/locNpt(i))
+			write(funit3,'(a,E28.18,a,E28.18)')"Local Log-Evidence",locZ(i)," +/-",sqrt(locInfo(i)/d3)
      		endif
 		write(funit3,'(a)')""
 		write(funit3,'(a)')"Dim No.       Mean        Sigma"

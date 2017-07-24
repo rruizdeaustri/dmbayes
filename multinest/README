@@ -1,14 +1,16 @@
-MultiNest v 2.18
+MultiNest v 3.10
 Farhan Feroz, Mike Hobson
 f.feroz@mrao.cam.ac.uk
-arXiv:0704.3704 & arXiv:0809.3437
-Released Aug 2012
+arXiv:0704.3704, arXiv:0809.3437 & arXiv:1306.2144
+Released Jul 2015
 
 ---------------------------------------------------------------------------
 
 MultiNest Licence
 
 Users are required to accept to the licence agreement given in LICENCE file.
+
+Users are also required to cite the MultiNest papers (arXiv:0704.3704, arXiv:0809.3437 & arXiv:1306.2144) in their publications.
 
 ---------------------------------------------------------------------------
 
@@ -35,35 +37,37 @@ restriction imposed by gfortran on line length.
 
 The subtoutine to begin MultiNest are as follows:
 
-subroutine nestRun(mmodal, ceff, nlive, tol, efr, ndims, nPar, nCdims, maxModes, updInt, Ztol, root, seed,
+subroutine nestRun(IS, mmodal, ceff, nlive, tol, efr, ndims, nPar, nCdims, maxModes, updInt, Ztol, root, seed,
 pWrap, feedback, resume, outfile, initMPI, logZero, maxiter, loglike, dumper, context)
 
-logical mmodal 	 								!do mode separation?
-integer nlive 	 								!number of live points
-logical ceff									!run in constant efficiency mode
-double precision tol 		 						!evidence tolerance factor
-double precision efr 		 						!sampling efficiency
-integer ndims	 								!number of dimensions
-integer nPar	 								!total no. of parameters
-integer nCdims									!no. of parameters on which clustering should be performed (read below)
-integer maxModes								!maximum no. of modes (for memory allocation)
-integer updInt									!iterations after which the output files should be written
-double precision Ztol								!null log-evidence (read below)
-character(LEN=100) root  							!root for MultiNest output files
-integer seed 		 							!random no. generator seed, -ve value for seed from the sys clock
-integer pWrap[ndims]								!wraparound parameters?
-logical feedback								!need update on sampling progress?
-logical resume									!resume from a previous run?
-logical outfile									!write output files?
-logical initMPI									!initialize MPI routines?, relevant only if compiling with MPI
-										!set it to F if you want your main program to handle MPI initialization
-double precision logZero							!points with loglike < logZero will be ignored by MultiNest
-integer maxiter									!max no. of iterations, a non-positive value means infinity. MultiNest will terminate if either it 
-										!has done max no. of iterations or convergence criterion (defined through tol) has been satisfied
-loglike(Cube,ndims,nPar,lnew) 							!subroutine which gives lnew=loglike(Cube(ndims))
-dumper(nSamples,nlive,nPar,physLive,posterior,paramConstr,maxloglike,logZ,c)	!subroutine called after every updInt*10 iterations with the posterior 
-										!distribution, parameter constraints, max loglike & log evidence values
-integer context									!not required by MultiNest, any additional information user wants to pass
+logical IS 	 						!do Importance Nested Sampling (INS)?
+logical mmodal 	 						!do mode separation?
+integer nlive 	 						!number of live points
+logical ceff							!run in constant efficiency mode
+double precision tol 		 				!evidence tolerance factor
+double precision efr 		 				!sampling efficiency
+integer ndims	 						!number of dimensions
+integer nPar	 						!total no. of parameters
+integer nCdims							!no. of parameters on which clustering should be performed (read below)
+integer maxModes						!maximum no. of modes (for memory allocation)
+integer updInt							!iterations after which the output files should be written
+double precision Ztol						!null log-evidence (read below)
+character(LEN=100) root  					!root for MultiNest output files
+integer seed 		 					!random no. generator seed, -ve value for seed from the sys clock
+integer pWrap[ndims]						!wraparound parameters?
+logical feedback						!need update on sampling progress?
+logical resume							!resume from a previous run?
+logical outfile							!write output files?
+logical initMPI							!initialize MPI routines?, relevant only if compiling with MPI
+								!set it to F if you want your main program to handle MPI initialization
+double precision logZero					!points with loglike < logZero will be ignored by MultiNest
+integer maxiter							!max no. of iterations, a non-positive value means infinity. MultiNest will terminate if either it 
+								!has done max no. of iterations or convergence criterion (defined through tol) has been satisfied
+loglike(Cube,ndims,nPar,lnew) 					!subroutine which gives lnew=loglike(Cube(ndims))
+dumper(nSamples,nlive,nPar,physLive,posterior,
+	paramConstr,maxloglike,logZ,INSlogZ,logZerr,c)		!subroutine called after every updInt*10 iterations with the posterior 
+								!distribution, parameter constraints, max loglike & log evidence values
+integer context							!not required by MultiNest, any additional information user wants to pass
       
 --------------------------------------------------------------------------- 
 
@@ -78,7 +82,7 @@ Return the log-likelihood in lnew.
 
 ---------------------------------------------------------------------------
 
-dumper routine: dumper(nSamples,nlive,nPar,physLive,posterior,paramConstr,maxloglike,logZ,logZerr,context)
+dumper routine: dumper(nSamples,nlive,nPar,physLive,posterior,paramConstr,maxloglike,logZ,INSlogZ,logZerr,context)
 
 This routine is called after every updInt*10 iterations & at the end of the sampling allowing the posterior 
 distribution & parameter constraints to be passed on to the user in the memory. The argument are as follows:
@@ -95,7 +99,8 @@ paramConstr(1, 4*nPar):
      paramConstr(1, nPar*2+1) to paramConstr(1, 3*nPar) = best-fit (maxlike) parameters
      paramConstr(1, nPar*4+1) to paramConstr(1, 4*nPar) = MAP (maximum-a-posteriori) parameters
 maxLogLike					    	= maximum loglikelihood value
-logZ						     	= log evidence value
+logZ						     	= log evidence value from the default (non-INS) mode
+INSlogZ						     	= log evidence value from the INS mode
 logZerr						     	= error on log evidence value
 context							not required by MultiNest, any additional information user wants to pass
 
@@ -219,9 +224,20 @@ Contains the equally weighted posterior samples. Columns have parameter values f
 
 
 [root]summary.txt
-There is one line per mode with nPar*4+2 values in each line in this file. Each line has the following values 
-in its column mean parameter values, standard deviations of the parameters, bestfit (maxlike) parameter values, 
-MAP (maximum-a-posteriori) parameter values, local log evidence, maximum loglike value
+There are nmode+1 (nmode = number of modes) rows in this file. First row has the statistics for the global 
+posterior. After the first line there is one row per mode with nPar*4+2 values in each line in this file. 
+Each row has the following values in its column mean parameter values, standard deviations of the parameters, 
+bestfit (maxlike) parameter values, MAP (maximum-a-posteriori) parameter values, local log-evidence, maximum 
+loglike value. If IS = T (i.e. INS being used), first row has an additional value right at the end, INS 
+log-evidence estimate.
+
+---------------------------------------------------------------------------
+
+INS Output Files:
+
+In INS mode (when IS = T), MultiNest will produce 3 additional binary files: [root]IS.iterinfo, IS.points, IS.ptprob
+These files are used for resuming job with IS (Importance Nested sampling) mode set to T. They can be quite
+large and can be deleted once the job has finished.
 
 ---------------------------------------------------------------------------
 
@@ -346,6 +362,46 @@ If the sampling efficiency with the standard MultiNest (when ceff = F) is very l
 high (roughly greater than 30) then constant efficiency mode can be used to get higher sampling efficiency. Users should use
 ask for around 5% or lower targer efficiency (efr <= 0.05) in constant efficiency mode & ensure that posteriors are stable 
 when a slightly lower value is used for target efficiency. Evidence values obtained with constant efficiency mode will not be
-accurate.
+accurate in the default mode (IS = F). With INS (IS = T) accurate evidences can be calculated (read arXiv:1306.2144) for more
+details.
+
+---------------------------------------------------------------------------
+
+Importance Nested Sampling:
+
+
+Sampling Parameters:
+
+INS can calculate an order of magnitude more accurate evidence values than the vanilla nested sampling, for the same number
+of live points & target efficiency (efr). INS can also calculate reasonably accurate evidence values in constant efficiency
+mode (when ceff = T). However, users should always check that the posterior distributions & evidence values are stable for
+reasonable change in these sampling parameters. Potentially users can use fewer live points &/or higher target efficiency
+(efr) with INS to get the same level of accuracy on evidence & therefore analysis can be sped-up.
+
+
+Quoted Error on Log-Evidence:
+
+The quoted error on log-evidence in INS mode is generally an overestimate. Users should use the quoted error on log-evidence
+from vanilla nested sampling as an upper bound on the error on INS log-evidence.
+
+
+Output Files:
+
+In INS mode, MultiNest will produce 3 additional binary output files (see output files section) in which it will record 
+information about all the points it has collected. These files can be quite large. It is recommended that the user sets 
+updint parameter (which sets the number of iterations after which posterior files are updated) to 1000 or more otherwise 
+a lot of time might be wasted in writing these large files. These binary files are only used while resuming jobs & can be
+deleted once the job has finished.
+
+
+Memory Requirements:
+
+INS requires a lot more memory than the defult mode (when IS = F). With nlive <= 1000, memory requirements are feasible on
+modern computers but with nlive >= 4000, segfaults may results due to not enough memory available.
+
+
+Multi-Modal Mode:
+
+Multi-modal mode is not supported yet when IS = T. If mmodal = T along with IS = T, MultiNest will set mmodal = F.
 
 ---------------------------------------------------------------------------

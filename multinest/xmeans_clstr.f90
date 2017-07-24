@@ -2089,7 +2089,7 @@ module xmeans_clstr
 		if(logLloc(1)>npt-ptInClstr(numClstr)) then
 			d2=0d0
 		else
-			d2=0.005d0
+			d2=0.001d0
 		endif
 		
 		if(flag) then
