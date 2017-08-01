@@ -730,7 +730,7 @@ SUBROUTINE Fermi_Initialize
 
     !Start reading in the index file
     call Ini_Open(Fermi_indexfile, 1, bad, .false.)
-    if (bad) stop("Error opening index file for Fermi GC BG Grid!")
+    if (bad) stop ("Error opening index file for Fermi GC BG Grid!")
 
     Fermi_rootname = Ini_Read_String('rootname')
     Dim_Gparams = Ini_Read_Int('Ndim_grid',10)
