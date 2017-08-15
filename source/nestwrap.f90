@@ -61,7 +61,9 @@ subroutine nest_Sample
    nest_maxIter = 0
    nest_logZero = -huge(1.d0)*epsilon(1.d0)
 
-   call nestRun(.true., nest_mmodal,.false.,nest_nlive,nest_tol,nest_efr,sdim,nest_nPar,nest_nCdims,nest_maxModes,100,-1.d90, &
+   updInt = 10 ! how many iterations before saving output files
+
+   call nestRun(.true., nest_mmodal,.false.,nest_nlive,nest_tol,nest_efr,sdim,nest_nPar,nest_nCdims,nest_maxModes,updInt,-1.d90, &
    nest_root,nest_seed,nest_pWrap,nest_fb,restart_multinest,nest_outfile,nest_initMPI,nest_logZero,nest_maxIter,getLogLikeNS,dumper,context)
 
 end subroutine nest_Sample
@@ -101,6 +103,15 @@ subroutine getLogLikeNS(Cube,n_dim,nPar,lnew,context)
             Cube(j)=Scales%PMin(i)+(Scales%PMax(i)-Scales%PMin(i))*Cube(j)
             Params%P(i)=real(Cube(j))
          end if
+
+         IF ((i > 21).and.(i < 32)) THEN
+            write(*,*) "Param i=",i," stored in Cube(j) j=",j+3
+         ELSE IF ((i > 31).and.(i < 35)) THEN
+            write(*,*) "Param i=",i," stored in Cube(j) j=",j-3
+         ELSE
+            write(*,*) "Param i=",i," stored in Cube(j) j=",j
+         END IF
+         
       end if
 
    end do
