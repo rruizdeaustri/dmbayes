@@ -13,6 +13,8 @@ module CalcLike
   use Fermi_Ptsrc
   use Fermi_BG
 
+  use write_array_to_file, only: saveas_netcdf
+
   implicit none
 
   logical :: Init_data
@@ -68,6 +70,9 @@ contains
     logical, parameter :: DebugSampler = .false.
 
     900 format(E15.5)
+
+    !print *, "*!*!*!*!*!*!*HEEEYYY Now I'm in calclike.f90:GetLogLike: Fermi_include_BG=", Fermi_include_BG
+
 
     numav = num
     !This compensates for the large num at restart
@@ -677,7 +682,17 @@ contains
     end if
 
     !Convolve the model map with the instrumental response (PSF, energy dispersion and effective area)
-    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime)
+
+    !DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution_orig(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime)
+    !call saveas_netcdf('convoutput_orig.nc', DMO%ID_in%gammas%GC_model)
+
+    !DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=.true.)
+    !call saveas_netcdf('convoutput_Econv.nc', DMO%ID_in%gammas%GC_model)
+
+    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=.false.)
+    !call saveas_netcdf('convoutput_noEconv.nc', DMO%ID_in%gammas%GC_model)
+
+
     do i=1,DMO%ID_in%gammas%GCDims(3)
       !Divide through by the average effective area.  This factor is actually contained in the exposure, so
       !doing it this way actually means that we are assuming only that the effective livetime (=exposure/mean_Aeff)
@@ -726,6 +741,9 @@ contains
       if (any(expos .le. 0.d0)) call DoStop('Zero or negative exposure in one or more bins - check exposure cube!')
       model = model * expos + debugCountOffset !Model --> photons cm^-2 s^-1 GeV^-1 sr^-1 * cm^2 s GeV sr = photons per bin
       intcounts = nint(obs+debugCountOffset)
+
+      call saveas_netcdf('model_noEconv.nc', model)
+      stop "blah"
 
       if (Gflags%debug)  then
          write(*,*) 'maximum number of counts from the model', maxval(model)

@@ -5,6 +5,7 @@ module nestwrapper
    use Nested
    use priors
    use Calclike
+!   use write_array_to_file, only: saveas_netcdf
    implicit none
 
    !nested sampling parameters

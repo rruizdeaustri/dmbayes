@@ -71,13 +71,15 @@ LIB_FLAT=../flatlib/lib
 BUILD_FLAT=../flatlib/build
 CONTRIB_FLAT=../flatlib/contrib
 LIB_TSPACK=../TSPACK
+LIB_NETCDF=../netcdf
 
 export LIB_CFITSIO LIB_FFTW INC_FFTW
 
 OBJS =   fermi_utils.o numerical_routines.o inifile.o utils.o \
          settings.o typedef.o \
          paramdef.o fermi_ptsrc.o fermi_bg.o fermi_ini.o likedata.o \
-         propose.o calclike.o postprocess.o MC_DM.o
+         propose.o calclike.o postprocess.o MC_DM.o \
+         write_array_to_file.o
 
 OBJFILES = $(OBJS) driver.o
 
@@ -103,6 +105,7 @@ LIBS =  $(LIB_COMP) \
 	-L$(LIB_FFTW) -lfftw3 -lm \
 	-L$(LIB_WCS) -lwcs \
 	-L$(LIB_TSPACK) -lTSPACK \
+    -L$(LIB_NETCDF) -lnetcdff.6.1.1 \
 	$(LAPACKL)
 
 TYPEDEF = typedef.f90 fermi_utils.f90

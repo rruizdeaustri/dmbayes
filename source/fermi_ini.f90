@@ -47,6 +47,10 @@ SUBROUTINE Fermi_Initialize
     integer :: RApix(N_ROIs), DECpix(N_ROIs) !Contain the number of bins in RA and DEC for the ROI;
     ! here N_ROIs is the number of ROIs that have either a different angular size or a different binning.
 
+    !print *, "*!*!*!*!*!*!*HEEEYYY I'm in fermi_ini.f90:Fermi_Initialize: Fermi_include_BG=", Fermi_include_BG
+    !print *, "*!*!*!*!*!*!*HEEEYYY I'm in fermi_ini.f90:Fermi_Initialize: Use_Fermi_Simulated=", Use_Fermi_Simulated
+
+
     if (Feedback .gt. 2) write(*,*) 'Initialising Fermi calculations...'
     if (Feedback .gt. 2) write(*,*) '  Initialising Fermi observations and models...'
     call Fermi_InitObsAndModels
