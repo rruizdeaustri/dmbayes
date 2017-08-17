@@ -155,6 +155,7 @@ program DMBayes_mnde
      GIDin%gammas%GCPoissonian = Ini_Read_Logical('GCPoissonian',.true.)
      GIDin%gammas%GC_outerPix = Ini_Read_Int('GC_outerPix',30)
      GIDin%gammas%GC_corePix = Ini_Read_Int('GC_corePix',10)
+     GIDin%gammas%doEconv = Ini_Read_Logical('doEconvolution', .true.)
    endif
 
   endif

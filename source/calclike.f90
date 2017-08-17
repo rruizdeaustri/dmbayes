@@ -673,6 +673,7 @@ contains
     if (Gflags%debug)  then
       print*,'max model val before convolution',maxval(DMO%ID_in%gammas%GC_model)
       print*,'min model val before convolution',minval(DMO%ID_in%gammas%GC_model)
+      print*, 'Do energy dispersion convolution?', DMO%ID_in%gammas%doEconv
     endif
 
     if(Any(DMO%ID_in%gammas%GC_model(:,:,:) < 0.)) then
@@ -682,6 +683,7 @@ contains
     end if
 
     !Convolve the model map with the instrumental response (PSF, energy dispersion and effective area)
+    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=DMO%ID_in%gammas%doEconv)
 
     !DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution_orig(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime)
     !call saveas_netcdf('convoutput_orig.nc', DMO%ID_in%gammas%GC_model)
@@ -689,7 +691,7 @@ contains
     !DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=.true.)
     !call saveas_netcdf('convoutput_Econv.nc', DMO%ID_in%gammas%GC_model)
 
-    DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=.false.)
+    !DMO%ID_in%gammas%GC_model = flatConvolve_fast_Convolution(GC,DMO%ID_in%gammas%GC_Ebins(:,3), GC_IntModel, pointingType=livetime, doEconv=.false.)
     !call saveas_netcdf('convoutput_noEconv.nc', DMO%ID_in%gammas%GC_model)
 
 
@@ -742,8 +744,8 @@ contains
       model = model * expos + debugCountOffset !Model --> photons cm^-2 s^-1 GeV^-1 sr^-1 * cm^2 s GeV sr = photons per bin
       intcounts = nint(obs+debugCountOffset)
 
-      call saveas_netcdf('model_noEconv.nc', model)
-      stop "blah"
+!      call saveas_netcdf('model_noEconv.nc', model)
+!      stop "blah"
 
       if (Gflags%debug)  then
          write(*,*) 'maximum number of counts from the model', maxval(model)

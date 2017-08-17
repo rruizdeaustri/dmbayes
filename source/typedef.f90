@@ -123,6 +123,7 @@ logical, dimension(8), parameter :: PSUsed = (/ .true., .true., .true., .true., 
    integer, pointer :: GCDims(:)
    real (8), pointer :: GC_model(:,:,:), GC_angSep(:,:), GC_Ebins(:,:), GC_pixArea  ! PS - added for passing into dminterface.  A similar thing will need to be done
                                        !      with other things read from FITS files, like pixel size / anglular coordinates, etc.
+   logical :: doEconv ! whether to do energy convolution when computing model
  End Type Gammas_In 
 
 
