@@ -13,8 +13,8 @@
 \newcommand{\ps}[1]{\textcolor{blue}{{\bf PS: #1}}}
 \newcommand{\ar}[1]{\textcolor{cyan}{{\bf AR: #1}}}
 
-\author{Tesla Jeltema, Gu{\dh}laugur J\'ohannesson, Grace Dupuis, \\Elinore Roebber, Antoine Recanati, Pat Scott, \\Charlotte Strege, Andrea Chiappo \& Roberto Trotta\\ (+some initial involvement from Johann Cohen-Tanugi, \\Jan Conrad, Joakim Edsj\"o, Eric Nuss, \\Troy Porter, Stefano Profumo \& Roberto Ruiz de Austri)}
-\date{Oct 2014}
+\author{Andrea Chiappo, Grace Dupuis, Tesla Jeltema, Gu{\dh}laugur J\'ohannesson, \\Troy Porter, Antoine Recanati, Elinore Roebber, Pat Scott, \\Charlotte Strege \& Roberto Trotta\\ (+some initial involvement from Johann Cohen-Tanugi, \\Jan Conrad, Joakim Edsj\"o, Eric Nuss, \\Stefano Profumo \& Roberto Ruiz de Austri)}
+\date{Oct 2014 + partial revisions}
 \title{\textbf{Working notes:}\\Detailed statistical analysis of dark matter annihilation at the Galactic Centre with Fermi-LAT}
 
 \begin{document}
@@ -23,7 +23,7 @@
 
 \section{Goals}
 
-The goal of our analysis is to provide a statistically-convergent scan over the parameter space of generic annihilating WIMP models, testing their viability in light of Fermi observations of the Galactic Centre region and deriving robust constraints on the WIMP parameters.  In particular, one of the main goals is to account properly for uncertainties in diffuse and point source modelling.  Our model parameter space consists of the WIMP mass, annihilation cross-section and annihilation branching fractions into 10 different SM final states, an 11-parameter diffuse background model, 7 parameters per point source, and 4 parameters for the dark matter profile.  Our final analysis aims to achieve statistically sound confidence regions from a profile likelihood analysis, for all parameters of interest.  This will provide a far more general and statistically complete analysis than standard upper limit calculations based on assumed final states, and other analyses based on a small number of diffuse models.
+The goal of our analysis is to provide a statistically-convergent scan over the parameter space of generic annihilating WIMP models, testing their viability in light of Fermi observations of the Galactic Centre region and deriving robust constraints on the WIMP parameters.  In particular, one of the main goals is to account properly for uncertainties in diffuse and point source modelling.  Our model parameter space consists of the WIMP mass, annihilation cross-section and annihilation branching fractions into 10 different SM final states, a 20-parameter diffuse background model, 7 parameters per point source, and 4 parameters for the dark matter profile.  Our final analysis aims to achieve statistically sound confidence regions from a profile likelihood analysis, for all parameters of interest.  This will provide a far more general and statistically complete analysis than standard upper limit calculations based on assumed final states, and other analyses based on a small number of diffuse models.
 
 In particular, the distinctive feature of this analysis is to include a raft of uncertainties as nuisance parameters in scans, allowing their effects to be profiled over. This translates into constraints on the WIMP properties that fully account for relevant astrophysical uncertainties.  These uncertainties include background modelling, point source contributions, the dark matter density profile, the systematic error associated with the LAT effective area, and a full treatment of the LAT energy dispersion (absent from \texttt{gtlike}).
 
@@ -50,7 +50,7 @@ The analysis proceeds via a series of nested sampling and differential evolution
 So far we have:
 \begin{enumerate}
 \item Developed \textsc{DMBayes}, a modified version of the \textsc{SuperBayeS} package, to perform the nested sampling+differential evolution scan over the WIMP parameter space.  \textsc{DMBayes} works with generic WIMP DM via an interface to \textsc{DMFIT}.
-\item Coupled \textsc{DMBayes} to \textsc{flatlib} 
+\item Coupled \textsc{DMBayes} to \textsc{flatlib}
 \item Written relevant likelihood and source modelling routines for the Galactic Centre
 \item Implemented some rudimentary halo-marginalisation capabilities
 \item Simulated a series of pure DM GC signals using \texttt{gtobssim}
@@ -93,7 +93,7 @@ The shape of this effective prior depends strongly on the prior range chosen for
 \end{figure}
 
 To investigate the influence of this choice of prior on the posterior distribution a scan of the parameter space was carried out assuming nine open annihilation channels, and imposing a log prior on the cross-sections with range $[-2.0,3.5]$. A range of 5.5 was chosen, because for this range intermediate and high values of the BRs are equally well sampled by the prior. The true point is given by $m_{\chi} = 167$\ GeV, $\textnormal{log}(<\sigma v> \cdot 10^{+27} \textnormal{cm}^3 \textnormal{s}^{-1}) = 2.34$, $BR_{b \bar{b}} = 0.844$, $BR_{\tau^+ \tau^-} = 0.156$, $BR(\textnormal{others}) \approx 0$. The simulated data include background noise, based on public Galactic and isotropic background models. A scan with Bayesian set-up (Nested Sampling parameters nlive = 2000, tol = 0.5, eff = 0.3) was carried out to reconstruct the DM parameters.
-The resulting plots of the profile likelihood and the marginalised posterior distribution are shown in Fig. \ref{Bayesianscan}. 
+The resulting plots of the profile likelihood and the marginalised posterior distribution are shown in Fig. \ref{Bayesianscan}.
 \begin{figure}
 \centering
 \includegraphics[trim = 140 120 140 120, clip = true, width=0.46\textwidth]{figs/2D_Posterior}
@@ -119,7 +119,7 @@ From the 1D posterior PDFs of the BRs (see Fig. \ref{1DpostBR}) one can see that
 \includegraphics[trim = 140 120 140 120, clip = true, width=0.46\textwidth]{figs/2D_PL_PLscan}
 \caption{Parameter inference results from a scan with PL set-up. The left (right) plots give marginalised posterior PDFs (profile likelihoods).  Crosses indicate the best fit, bullets the posterior mean, and red/yellow diamonds the true parameter values. (Ignore annotations referring to CMSSM and \textsc{SuperBayeS})}
 \label{PLscan}
-\end{figure} 
+\end{figure}
 
 As can be seen, for a PL scan the parameter space around the true point is reasonably well sampled. The best fit point is still far away from the true point. This is most likely due to realisation noise in the simulated data. The posterior PDF is also still centred far away from the true point. To determine if the BRs are all reasonably well sampled within their allowed range [0,1] one can consider the 1D profile likelihood distributions, shown in Fig. \ref{1DPLBR}. \\
 \begin{figure}
@@ -176,13 +176,13 @@ As a representative example, the data points in seven dimensions are given in ta
 2.5 & 1 & 97 & 0.01\\
 \hline
 \end{tabular}
-\caption{\fontsize{9}{9}\selectfont FWHM of the effective prior on the BRs in 7D for different ranges of the log prior on the cross-section. Additionally, the position of the largest bin and the number of non-zero bins is given for each range.} 
+\caption{\fontsize{9}{9}\selectfont FWHM of the effective prior on the BRs in 7D for different ranges of the log prior on the cross-section. Additionally, the position of the largest bin and the number of non-zero bins is given for each range.}
 \label{FWHM_7D}
 \end{table*}
 
 Each of the curves in Fig. \ref{FWHM_plot} have a similar shape, including a distinct peak. The higher the dimensionality of the parameter space, the the less pronounced is this peak. Additionally, the peak is shifted to slightly higher ranges as the dimensionality decreases. Given the shape of these distributions an obvious choice of effective prior for the BRs would be the distribution resulting from the log cross-section range at which the peak FWHM value is found. This is equivalent to maximising the number of bins containing a large number of points. However, it is important to keep in mind that both smaller and larger ranges for the log prior on the cross-sections have certain advantages. As can be seen in Table \ref{FWHM_7D}, the smaller the range, the more central is the position of the largest bin. Therefore, while the distribution does become narrower for smaller ranges, more central values of the BRs may be better sampled. On the other hand, the larger the range, the larger the number of bins that contain a non-zero number of points. Therefore, the overall number of BR values sampled increases, even though they might not be sampled as well as for smaller cross-section ranges.
 
-The second effective prior on the BRs that is of interest resembles the shape of the distribution shown in the central plot of Fig. \ref{BRPriorShape}. This prior distribution would lead to intermediate and large BR values being equally well sampled. To investigate which range for the log prior on the cross-section to choose to obtain this effective prior one can consider the ratio of the size of the last bin (BR = [0.99,1.0]) to the size of the smallest bin. This ratio is shown in Fig. \ref{Bin100_Binsmallest} as a function of the range of the log prior on the cross-sections for different dimensionalities of the parameter space.  
+The second effective prior on the BRs that is of interest resembles the shape of the distribution shown in the central plot of Fig. \ref{BRPriorShape}. This prior distribution would lead to intermediate and large BR values being equally well sampled. To investigate which range for the log prior on the cross-section to choose to obtain this effective prior one can consider the ratio of the size of the last bin (BR = [0.99,1.0]) to the size of the smallest bin. This ratio is shown in Fig. \ref{Bin100_Binsmallest} as a function of the range of the log prior on the cross-sections for different dimensionalities of the parameter space.
 \begin{figure}
 \centering
 \includegraphics[trim = 70 240 90 240, clip = true, width=0.9\textwidth]{figs/Ratio_Bin100_Binsmallest}
@@ -246,8 +246,8 @@ We have decided on a spatial pixel size of 0.25 $\times$ 0.25 degrees, 15 log-sp
    of the product of target density and CR density.  Unfortunately, neither is
    known with great accuracy.
 
-\subsubsection*{Target distributions} 
-   
+\subsubsection*{Target distributions}
+
    The two big contributors in the ISM are hydrogen and helium gas.  Cold helium
    cannot be observed so it is usually assumed to have the same distribution
    as hydrogen.  Hydrogen in the ISM has three forms: atomic, molecular, and
@@ -265,7 +265,7 @@ We have decided on a spatial pixel size of 0.25 $\times$ 0.25 degrees, 15 log-sp
    background temperature, usually assumed to be the CMB background.  For $T_S
    \rightarrow \infty$ we have $N(HI) \propto T$ while when $T_S \rightarrow
    T+T_{bg}$ we have $N(HI) \rightarrow \infty$.  To have a more linear
-   parameter in the grid, we actually scan over 
+   parameter in the grid, we actually scan over
    \begin{equation}
     x_S \equiv \left(\frac{T_S}{K}\right)\log_{10}\left[1-\left(\frac{80K}{T_S}\right)\right],
    \end{equation}
@@ -284,25 +284,31 @@ We have decided on a spatial pixel size of 0.25 $\times$ 0.25 degrees, 15 log-sp
    uncertain in the ROI.
 
 \subsubsection*{CR distribution}
-   
+
    The distribution of CRs depends on the distribution of sources and their
    propagation throughout the Galaxy.  To simplify things, we assume we know
    the propagation and only adjust the source distribution.  This is of course a
    simplification, but should suffice to parameterise the uncertainty of the
-   background model.  We go a step further and adjust the propagated CR flux
-   with a functional form
-   \begin{equation}
-      CR(R) \propto \left(\frac{R}{R_\odot}\right)^\alpha
-      e^{-\beta\frac{R-R_\odot}{R_\odot}}
-      \label{eq:CRsourceDistribution}
-   \end{equation}
-   We'll start by changing only $\alpha$ with a fixed $\beta$, basically controlling
-   the peakiness of the CR source distribution.  The lower the value of
-   $\alpha$, the peakier the distribution gets.  We use the same distribution
-   for the CR sources as in GALPROP.  The distribution of CRs is
-   supposed to include uncertainty in the distribution of targets as well.
-   Due to our limited source distribution function, this might not be
-   accurate.
+   background model.  We use 6 templates each for CR protons
+   and electrons, corresponding to sources located in 6 galactocentric rings of
+   different radius.  The outermost will not make much difference to the predicted
+   flux, so we will just vary the normalisations of the templates for the
+   inner $5\times2$ rings.
+
+   %We go a step further and adjust the propagated CR flux
+   %with a functional form
+   %\begin{equation}
+   %   CR(R) \propto \left(\frac{R}{R_\odot}\right)^\alpha
+   %   e^{-\beta\frac{R-R_\odot}{R_\odot}}
+   %   \label{eq:CRsourceDistribution}
+   %\end{equation}
+   %We'll start by changing only $\alpha$ with a fixed $\beta$, basically controlling
+   %the peakiness of the CR source distribution.  The lower the value of
+   %$\alpha$, the peakier the distribution gets.  We use the same distribution
+   %for the CR sources as in GALPROP.  The distribution of CRs is
+   %supposed to include uncertainty in the distribution of targets as well.
+   %Due to our limited source distribution function, this might not be
+   %accurate.
 
 \subsubsection*{Some approximations we apply}
 
@@ -325,8 +331,23 @@ We have decided on a spatial pixel size of 0.25 $\times$ 0.25 degrees, 15 log-sp
 
 \subsubsection{Specifics of particular grid setups}
 
+   \ps{This is now out of date after the introduction of the new CR proton and electron ring templates and running spectral indices.  When Gulli has computed the new templates this should be rewritten, such that the model parameters are:\vspace{3mm}\\{\em Grid parameters:}
+   \begin{itemize}
+      \item Spin temperature, $T_S$
+   \end{itemize}
+   {\em Template parameters:}
+   \begin{itemize}
+      \item CR proton source distribution (5 template normalisations)
+      \item CR proton spectral index, running and normalisation \begin{displaymath}F = p_1 \left(\frac{E}{E_0}\right)^{-p_2 - p_3 R}\end{displaymath} (3 parameters $p_i$; $E_0$ fixed.)
+      \item CR electron source distribution (5 template normalisations)
+      \item CR electron spectral index, running and normalisation (3 parameters)
+      \item $X_{CO}$ parameters, one for each of 0--1.5\,kpc, 1.5--3\,kpc, 3--50\,kpc (3 parameters)
+   \end{itemize}
+   This is 20 parameters in total for the diffuse model.  There will also be one additional parameter for the scaling factor to be applied to the bubble template.
+   }
+
    {\bf Test Grid I }
-   
+
    The directory bg$\_$data contains a subfolder TestGridI. This folder contains the test grid. This folder contains one subfolder for each grid point corresponding to different values of the grid parameter(s), which contains the template .fits files for the grid point. TestGridI also contains an index file; the location of the index file for a scan will be given in the .ini file. The index file contains information about the number of grid and template parameters, the number of templates and the parameter names. It also contains the values of the grid parameters associated with each grid point, the type of template parameter (linear or special), and the templates rescaled by each template parameter. In order to implement the BG parameters in the code two new parameter types (Grid$\_$params, Template$\_$params) were defined. \\
 
 The following model currently stored in TestGridI:
@@ -335,7 +356,7 @@ The following model currently stored in TestGridI:
    \begin{itemize}
       \item Spin temperature, $T_S$
    \end{itemize}
-   
+
    {\em Template parameters:}
    \begin{itemize}
       \item CR proton source distribution ($\alpha$, and/or $\beta$)
@@ -347,24 +368,24 @@ The following model currently stored in TestGridI:
    There are 6 values of $T_S$ for this model so only 6 grid points.  The
    templates for each grid point is stored in a separate directory, called
    TestGridI\_<i>, where i is a grid index going from 1 to 6. Each of the template map cubes has 0.25 degree pixel resolution and spans [-15,15] degrees. The mapping to  $T_S$ (and $x_{S}$) values is as follows: \\
-  
+
    \begin{tabular}[h]{c|c|c}
       Grid index & $T_S$ [K] & $x_{S}$\\
       \hline
-      1 & 100 & -69.9 \\
-      2 & 125 & -55.5 \\
-      3 & 150 & -49.6 \\
-      4 & 200 & -44.4 \\
-      5 & 400 & -38.8 \\
-      6 & 100000 & -34.8 \\
+      1 & 100 & $-$69.9 \\
+      2 & 125 & $-$55.5 \\
+      3 & 150 & $-$49.6 \\
+      4 & 200 & $-$44.4 \\
+      5 & 400 & $-$38.8 \\
+      6 & 100000 & $-$34.8 \\
    \end{tabular}\\
-   
-  Each grid point has 13 template maps associated with it, created by summing up various GALPROP
-   output components.  There is also one additional template map, identical at each grid point, associated with the Fermi bubbles. \ps{This 14th template still needs to be added.}  
+
+   Each grid point has 13 template maps associated with it, created by summing up various GALPROP
+   output components.  There is also one additional template map, identical at each grid point, associated with the Fermi bubbles. \ps{This 14th template still needs to be added.}
    The template filenames are TestGridI\_<i>\_<j>, where j
    is a template index going from 1 to 13.  The mapping between templates and
    the index is:\\
-   
+
    \begin{tabular}[h]{c|c}
       Template index & Description \\
       \hline
@@ -383,7 +404,7 @@ The following model currently stored in TestGridI:
      13 & $\pi^0$-decay for H$_2$ from 10--30\,kpc \\
      14 & Fermi bubbles \\
    \end{tabular}\\
-   
+
    Templates 1--4 should be multiplied with the CR electron spectral index
    (correction) and normalization.  Templates 2--4 should be multiplied with
    $X_{CO}$ factors, one factor for each template.  The same $X_{CO}$ factors
@@ -499,7 +520,7 @@ The BG parameters, their parameter type and their prior ranges are given in tabl
 \hline
 Parameter & Parameter Type & Prior Range \\
 \hline
-\hline 
+\hline
 $T_S$($x_S$) & Grid & [100,100000]([-69.9,-34.8]) \\
 \hline
 $X_{CO}(1)$ & Template (Linear) & [0.1,5.0] \\
@@ -544,7 +565,7 @@ In order to identify the point sources we use Bayesian object detection, followi
 \item $H_1$: the detected object is real (amplitude > 0, or alternatively amplitude > $A_{lim}$).
 \end{itemize}
 
-This method was shown to work for signal-to-noise ratios of 0.5 - 1.0.  
+This method was shown to work for signal-to-noise ratios of 0.5 - 1.0.
 
 Note that this approach is known to not work well for separating out two objects that lie very close together and have very different amplitudes.  The other problems when applying this approach to the Fermi GC analysis is that by assuming that only one point source is present in the ROI one will automatically overestimate the background (which then receives contributions from all other point sources), and at the same time underestimate the point source amplitude. Scanning of complicated models in this way also takes forever, so there is no way this technique can be used to do detailed background or spectral fits.  We therefore apply it only for determining the existence and approximate location of point sources.  We then turn to differential evolution for carrying out detailed fits and profile likelihoods of the spectral parameters of sources identified with Bayesian object detection, and for determining background and DM parameters.
 
@@ -560,12 +581,12 @@ Our overall iterative fitting method is thus as follows:
 \begin{enumerate}
 \item Background (simple 3D parameterisation: $T_S$, $X_{\rm CO, global}$, globalnorm(p)) and point source fit (3 parameters ($l$,$b$,$N_0$) high energy bins only).  Posterior scan (MultiNest), 6D.
 \item Background (simple 3D parameterisation) fit for null evidence.  Posterior scan (MultiNest), 3D.
-\item Background (full 11D parameterisation) and point source fit (5 parameters, high and low E bins, with positions fixed to best-fit values from step 1), with Known Point Source Index discrete parameter, iteratively setting parameters of point sources *not* corresponding to the value of the index parameter to their current best-fit values as the scan progresses and those best-fit values improve.  Gradually improves the fits of the known point sources.  Likelihood-only scan (Diver), 17D.
+\item Background (full 21D parameterisation) and point source fit (5 parameters, high and low E bins, with positions fixed to best-fit values from step 1), with Known Point Source Index discrete parameter, iteratively setting parameters of point sources *not* corresponding to the value of the index parameter to their current best-fit values as the scan progresses and those best-fit values improve.  Gradually improves the fits of the known point sources.  Likelihood-only scan (Diver), 27D.
 \item Repeat Steps 1--3, with found PS and 8 non-simple BG values fixed to their best fit values from Step 3 when repeating Step 1.  Repeat until all point sources seem to have been found, i.e.\ no more pass the null evidence cut.
 \item Repeat steps 1 and 2 also including low energy bins, to make sure we didn't miss any PS that don't show up in the high E bins.  If we did miss any, run them through steps 3 and 4 to get their parameters.
 \item Repeat step 3 one last time, including all PS found to this point, and also allowing their positions to vary.  The point sources should start the fit with their current best-fit values.
 \item Calculate the local evidence for each PS (i.e.\ find the difference in the evidence found when including all PS, and when excluding a certain PS from the model). Discard the ones that don't pass the evidence threshold (\ps{this threshold still to be defined}).
-\item Fix the point source parameters to the best fit values.  Background (full 11D parameterisation) and DM fit (full 15D parameterisation).  Likelihood-only scan (Diver), 26D.
+\item Fix the point source parameters to the best fit values.  Background (full 21D parameterisation) and DM fit (full 15D parameterisation).  Likelihood-only scan (Diver), 36D.
 
 \end{enumerate}
 
@@ -601,7 +622,7 @@ To test the ability of our unified fit strategy (\ref{UFS}) to accurately recove
 
 \textbf{Test 1} (Grace): details not shown -- good fits obtained with up to 10 point sources, bugs encountered thereafter.  Bugs fixed.  Plotting scripts and ini files passed on to Antoine.
 
-\textbf{Test 2} (Antoine): We tested the efficiency of Step 3 with a fake data set generated from the 46 PS from the catalogue, in a set background (3rd grid point, all templates not rescaled, i.e.\ $x_S = -49.6$, $X_{CO, global} = 1$, $norm_e = norm_p = 1$, $index_e = index_p = 0$, $\alpha = 2$, $\beta = 5$). The ini files referred to here can be found in \verb=antoine_for_the_record/46PS/ini_files/= on the svn main directory. 
+\textbf{Test 2} (Antoine): We tested the efficiency of Step 3 with a fake data set generated from the 46 PS from the catalogue, in a set background (3rd grid point, all templates not rescaled, i.e.\ $x_S = -49.6$, $X_{CO, global} = 1$, $norm_e = norm_p = 1$, $index_e = index_p = 0$, $\alpha = 2$, $\beta = 5$). The ini files referred to here can be found in \verb=antoine_for_the_record/46PS/ini_files/= on the svn main directory.
 
 These tests were Diver 11D runs (3D for the BG, 7D per PS and 1D: PS index). \begin{itemize}
 \item ini file: \verb=46PS_11DDiverRunI.ini=
@@ -666,13 +687,13 @@ PS & $l$ & $b$ & $N_0$ & $E_0$ & $\alpha$ & $\beta$ & $1.e5/E_C$ \\
 \item Null evidence: \verb=MNNullRunII.ini=
 \item nCdims = 2, nlive = 3000, tol = 0.01, eff = 0.3
 \end{itemize}
-The 26 point sources fitted by \textsc{Diver} in the previous step are now added to the model\footnote{This is currently 
-hardcoded in calclike.f90 - search '!AR' comments to find where exactly. \ps{I will implement new code that allows this 
-to be automated from step to step.}}, to find the left point sources on top. So far (the run is not finished yet), MultiNest 
-has found 14 modes, but unfortunately it does not seem to be any of the ones missed in the first run, but either points 
-that lie close to one previously found, or just ``another finding of one same point source'' (if, for example, its amplitude 
-has been underestimated in steps 1 to 3) : see figure \ref{fig:scatterplot46PSMNII}. We can hope to find the rest of the 
-point sources in further iterations of steps 1-3 (with more live points/lower tolerance?), or perhaps when adding the low 
+The 26 point sources fitted by \textsc{Diver} in the previous step are now added to the model\footnote{This is currently
+hardcoded in calclike.f90 - search '!AR' comments to find where exactly. \ps{I will implement new code that allows this
+to be automated from step to step.}}, to find the left point sources on top. So far (the run is not finished yet), MultiNest
+has found 14 modes, but unfortunately it does not seem to be any of the ones missed in the first run, but either points
+that lie close to one previously found, or just ``another finding of one same point source'' (if, for example, its amplitude
+has been underestimated in steps 1 to 3) : see figure \ref{fig:scatterplot46PSMNII}. We can hope to find the rest of the
+point sources in further iterations of steps 1-3 (with more live points/lower tolerance?), or perhaps when adding the low
 energy bins.
 \begin{figure}[h]
 \centering
@@ -682,9 +703,9 @@ energy bins.
 \FloatBarrier
 
 \subsubsection*{Step 5 (test 1 to 4)}
-(Andrea) The MultiNest run found 28 point sources, only 17 of which had Local Evidence strictly higher than the Global 
+(Andrea) The MultiNest run found 28 point sources, only 17 of which had Local Evidence strictly higher than the Global
 Evidence in the null hypothesis (3D MultiNest scan). Those point sources are shown in the Fig.~\ref{fig:17MN}. The adopted parameters are the following:
-\begin{itemize} 
+\begin{itemize}
 \item nCdims=2 (corresponding to $l,b$)
 \item live=3000
 \item eff=0.3
@@ -692,35 +713,50 @@ Evidence in the null hypothesis (3D MultiNest scan). Those point sources are sho
 \end{itemize}
 \begin{figure}[h]
 \centering
-\includegraphics[clip = true,width=1\textwidth]{figs/MNmodes_46TruePS.png}
-\caption{$\chi^{2}$ scatterplot of 17PS found after MultiNest 1st run against the 46 true PS}
+%\includegraphics[clip = true,width=1\textwidth]{figs/MNmodes_46TruePS.png}
+\caption{$\chi^{2}$ scatterplot of 17PS found after MultiNest 1st run against the 46 true PS. \ps{This plot was apparently never added to the repo.}}
 \label{fig:17MN}
 \end{figure}
-The 17 MultiNest-found point sources have then been input into Diver, which returned their best-fit parameters, separating 
-the 1/3 brightest of these in a different output file to be then used as model input in the next iteration of MultiNest. The result 
-of this run, for all 17 point sources, is shown in Fig.~\ref{fig:6Diver}. This figure clearly displays the presence of an issue with Diver as 
-some MultiNest (reasonably well) fit point sources' position are best-fit far away from the corresponding true point source position. 
-The probable underlying explanation is an attempt by Diver to simultaneously fit two nearby point sources with a single one accounting 
-for the emission of both. This problem can be due to the broadening of the IRF at low energies, leading to the overlap of two 
+The 17 MultiNest-found point sources have then been input into Diver, which returned their best-fit parameters, separating
+the 1/3 brightest of these in a different output file to be then used as model input in the next iteration of MultiNest. The result
+of this run, for all 17 point sources, is shown in Fig.~\ref{fig:6Diver}. This figure clearly displays the presence of an issue with Diver as
+some MultiNest (reasonably well) fit point sources' position are best-fit far away from the corresponding true point source position.
+The probable underlying explanation is an attempt by Diver to simultaneously fit two nearby point sources with a single one accounting
+for the emission of both. This problem can be due to the broadening of the IRF at low energies, leading to the overlap of two
 neighbouring point sources at the low energy bins which, differently from MultiNest, are examined by Diver. \newline
 \begin{figure}[h]
 \centering
-\includegraphics[clip = true,width=1\textwidth]{figs/MultiNest_Diver.png}
-\caption{$\chi^{2}$ scatterplot after MultiNest 1st run for the 46PS with simple (3D) BG}
+%\includegraphics[clip = true,width=1\textwidth]{figs/MultiNest_Diver.png}
+\caption{$\chi^{2}$ scatterplot after MultiNest 1st run for the 46PS with simple (3D) BG \ps{This plot was apparently never added to the repo.}}
 \label{fig:6Diver}
 \end{figure}
-This issue has urged the following modification in the UFS: Dicrease the dimensionality of the parameter space scanned for each 
-PS by Diver from 19D to 17D, where the position of each PS is to be kept fixed at the MultiNest-found values. This will avoid the point 
-sources from being shifted away from the true PS position while still providing an improved spectral fit. At the final iteration of 
-MultiNest - i.e. when no more found point source passes the Global Null Evidence - Diver is run one final time letting the full 
+This issue has urged the following modification in the UFS: Dicrease the dimensionality of the parameter space scanned for each
+PS by Diver from 19D to 17D, where the position of each PS is to be kept fixed at the MultiNest-found values. This will avoid the point
+sources from being shifted away from the true PS position while still providing an improved spectral fit. At the final iteration of
+MultiNest - i.e. when no more found point source passes the Global Null Evidence - Diver is run one final time letting the full
 19D parameter space of all point sources to be examined.
+
+\section{General comments about signal modelling and likelihood calculation}
+
+Alex has been working on a number of speed and accuracy improvements to the the likelihood setup.  He will write these up more fully, but until then, here is a short summary:
+\begin{itemize}
+\item General principle for designing the likelihood: do as much as possible in advance. Trade cpu time during scans for memory use by precomputing a bunch of things beforehand:\begin{enumerate}
+\item Templates will be convolved with instrument response in advance. During the likelihood the preconvovled templates will just be scaled with model parameters and added together. (There is minimal bias introduced when applying parameters that affect energy spectrum after convolution rather than before.)
+\item Point sources are added to expected counts map by just adding a scaled PSF template directly to the map at the appropriate location (the PSF templates are the PSF integrated over the spatial bins that we have chosen for the analysis; they are computed beforehand).
+\item Therefore, each likelihood evaluation requires scaling and adding a bunch of arrays - no convolutions need to be done.
+\end{enumerate}
+\item Some improvements:\begin{enumerate}
+\item Point sources now allowed to have continuous position rather than being constrained to lie at the center of a spatial bin. This is done in the context of point 2 above by creating a bunch of PSF templates where the point source is located at a grid of locations within the central pixel. Then, for an arbitrary point source location, these PSF templates can be interpolated to find the PSF centered at the arbitrary location. As the gridding of these templates becomes finer this procedure becomes more accurate (the cost is more memory needed to store all the templates).
+\item Uncertainty in effective area will be the same for all pixels at a given energy rather than there being an independent effective area uncertainty for every spatial pixel and energy bin. The maximum likelihood estimate for the effective area can be done analytically so does not increase number of nuisance parameters. This can be simply extended to allow for the effective area prior to be correlated for different energy bins (again without adding nuisance parameters that have to be scanned over).
+\end{enumerate}
+\end{itemize}
 
 \section{To do}
 
 \subsection{Things missing from these notes}
 \begin{itemize}
 \item Comment about treatment of extended sources in our ROI (such sources do show up in 2FGL catalogue)
-\item Add some information on DM profile parameters (3 generalised NFW, 1 local DM density)  
+\item Add some information on DM profile parameters (3 generalised NFW, 1 local DM density)
 \item Add brief results of the BG reconstructions Charlotte did
 \item Add brief results of the PS reconstructions Grace did
 \end{itemize}
